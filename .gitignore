@@ -31,11 +31,14 @@ hs_err_pid*
 /easy-tool-utils/target/
 /easy-access-authority/target/
 /easy-algorithm/target/
+/easy-excel/target/
 /easy-core/*.iml
 /easy-tool-utils/*.iml
 /easy-access-authority/*.iml
 /easy-algorithm/*.iml
+/easy-excel/.iml
 /easy-core/.idea/
 /easy-tool-utils/.idea/
 /easy-access-authority/.idea/
 /easy-algorithm/.idea/
+/easy-excel/.idea/
