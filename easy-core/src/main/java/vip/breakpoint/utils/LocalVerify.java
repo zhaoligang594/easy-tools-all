@@ -1,8 +1,7 @@
 package vip.breakpoint.utils;
 
 
-import vip.breakpoint.exception.BaseException;
-import org.apache.commons.lang3.StringUtils;
+import vip.breakpoint.exception.EasyToolException;
 
 /**
  * 检验一些相关的数据
@@ -46,24 +45,24 @@ public abstract class LocalVerify {
 
     }
 
-    public static void verifyString(String str, String message) throws BaseException {
-        if (StringUtils.isEmpty(str)) {
-            throw new BaseException(message + " 不能为空 ");
+    public static void verifyString(String str, String message) throws EasyToolException {
+        if (EasyStringUtils.isBlank(str)) {
+            throw new EasyToolException(message + " 不能为空 ");
         }
     }
 
-    public static void verifyObject(Object o, String message) throws BaseException {
+    public static void verifyObject(Object o, String message) throws EasyToolException {
         if (null == o) {
-            throw new BaseException(message + " is null ");
+            throw new EasyToolException(message + " is null ");
         }
     }
 
     // 检验是否为null  ""
-    public static void verifyStringIsNotNull(String... strs) throws BaseException {
+    public static void verifyStringIsNotNull(String... strs) throws EasyToolException {
         if (null != strs && strs.length > 0) {
             for (String str : strs) {
-                if (StringUtils.isEmpty(str)) {
-                    throw new BaseException("请求的参数存在空值");
+                if (EasyStringUtils.isBlank(str)) {
+                    throw new EasyToolException("请求的参数存在空值");
                 }
             }
         }

@@ -10,10 +10,10 @@ import java.security.NoSuchAlgorithmException;
  * @author :breakpoint/赵立刚
  * 2017/11/28
  */
-public final class LocalMD5Utils {
+public final class EasyMD5Utils {
 
     // refuse new object
-    private LocalMD5Utils() {
+    private EasyMD5Utils() {
     }
 
     private static final String ENCRYPTING_CODE = "MD5";
@@ -61,18 +61,13 @@ public final class LocalMD5Utils {
         return new String(encodeHex(md5DigestBytes(encryptingMessage)));
     }
 
-
     private static char[] encodeHex(byte[] bytes) {
-        char chars[] = new char[32];
+        char[] chars = new char[32];
         for (int i = 0; i < chars.length; i = i + 2) {
             byte b = bytes[i / 2];
             chars[i] = HEX_CHARS[(b >>> 0x4) & 0xf];
             chars[i + 1] = HEX_CHARS[b & 0xf];
         }
         return chars;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(md5DigestHexString("aaaa").length());
     }
 }

@@ -1,4 +1,4 @@
-package vip.breakpoint.dto;
+package vip.breakpoint.enums;
 
 /**
  * @author : breakpoint
@@ -7,7 +7,7 @@ package vip.breakpoint.dto;
  */
 public enum ResCodeEnum {
     SUCCESS(200, "成功"),
-    未登录(300, "未登录"),
+    NOT_LOGIN(300, "未登录"),
     EXCEPTION(400, "请求发生异常"),
     FAIL(500, "失败"),
     TO_MANNY_REQUEST(600, "不能在1s内连续请求该接口"),

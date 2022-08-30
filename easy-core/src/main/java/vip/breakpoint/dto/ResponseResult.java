@@ -1,8 +1,8 @@
 package vip.breakpoint.dto;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import vip.breakpoint.enums.ResCodeEnum;
 
 import java.io.Serializable;
 
@@ -12,8 +12,6 @@ import java.io.Serializable;
  * @author :breakpoint/赵立刚
  * create on 2017/11/15
  */
-@Data
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) // 返回值为null的不进行展示
 public class ResponseResult<D> implements Serializable {
     private static final long serialVersionUID = -5290436355400748988L;
     private int respCode;// 返回的操作码  200：说明操作成功  500：说明操作失败
@@ -51,5 +49,29 @@ public class ResponseResult<D> implements Serializable {
 
     public static <D> ResponseResult<D> createResult(ResCodeEnum retCodeConstant, String message, D data) {
         return new ResponseResult<>(retCodeConstant.getCode(), message, data);
+    }
+
+    public int getRespCode() {
+        return respCode;
+    }
+
+    public void setRespCode(int respCode) {
+        this.respCode = respCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public D getData() {
+        return data;
+    }
+
+    public void setData(D data) {
+        this.data = data;
     }
 }

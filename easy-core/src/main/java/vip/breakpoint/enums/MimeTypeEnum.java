@@ -1,4 +1,4 @@
-package vip.breakpoint.enumeration;
+package vip.breakpoint.enums;
 
 /**
  * MimeTypeEnum constants
