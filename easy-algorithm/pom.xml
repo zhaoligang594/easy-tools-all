@@ -62,12 +62,15 @@
     </distributionManagement>
 
     <dependencies>
+
+        <!--   self dependency     -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-core</artifactId>
+            <version>0.1.0</version>
         </dependency>
+
+        <!--    test    -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
