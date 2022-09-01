@@ -10,12 +10,14 @@
     </parent>
 
     <artifactId>easy-excel</artifactId>
-    <version>${project.parent.version}</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
-    <name>easy-excel</name>
-    <url>https://github.com/zhaoligang594/easy-excel</url>
-    <dependencies>
 
+    <name>easy-excel</name>
+
+    <url>https://github.com/zhaoligang594/easy-tools-all</url>
+
+    <dependencies>
         <dependency>
             <groupId>vip.breakpoint</groupId>
             <artifactId>easy-tool-utils</artifactId>
@@ -67,7 +69,9 @@
         <java.version>1.8</java.version>
         <poi-version>5.2.2</poi-version>
     </properties>
+
     <description>A Tool for Excel</description>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -75,16 +79,18 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <scm>
-        <url>git@github.com:zhaoligang594/easy-excel.git</url>
-        <connection>scm:git@github.com:zhaoligang594/easy-excel.git</connection>
-        <developerConnection>scm:git@github.com:zhaoligang594/easy-excel.git</developerConnection>
+        <url>git@github.com:zhaoligang594/easy-tools-all.git</url>
+        <connection>scm:git@github.com:zhaoligang594/easy-tools-all.git</connection>
+        <developerConnection>scm:git@github.com:zhaoligang594/easy-tools-all.git</developerConnection>
     </scm>
+
     <developers>
         <developer>
             <name>zhaoligang</name>
             <email>zlgtop@163.com</email>
-            <url>https://github.com/zhaoligang594/esay-excel</url>
+            <url>https://github.com/zhaoligang594/</url>
             <roles>
                 <role>Software Developer Engineer</role>
                 <role>Java Research Developer Engineer</role>
@@ -95,7 +101,7 @@
     </developers>
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/zhaoligang594/esay-excel/issues</url>
+        <url>https://github.com/zhaoligang594/easy-tools-all/issues</url>
     </issueManagement>
     <distributionManagement>
         <snapshotRepository>

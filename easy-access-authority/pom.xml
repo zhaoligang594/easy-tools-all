@@ -9,11 +9,11 @@
     </parent>
 
     <artifactId>easy-access-authority</artifactId>
-    <version>${project.parent.version}</version>
+    <version>0.1.0</version>
     <name>easy-access-authority</name>
     <packaging>jar</packaging>
 
-    <url>https://github.com/zhaoligang594/easy-access-authority</url>
+    <url>https://github.com/zhaoligang594/easy-tools-all</url>
 
     <description>A tool for web interfaces access authority.</description>
     <licenses>
@@ -24,15 +24,15 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:zhaoligang594/easy-access-authority.git</url>
-        <connection>scm:git@github.com:zhaoligang594/easy-access-authority.git</connection>
-        <developerConnection>scm:git@github.com:zhaoligang594/easy-access-authority.git</developerConnection>
+        <url>git@github.com:zhaoligang594/easy-tools-all.git</url>
+        <connection>scm:git@github.com:zhaoligang594/easy-tools-all.git</connection>
+        <developerConnection>scm:git@github.com:zhaoligang594/easy-tools-all.git</developerConnection>
     </scm>
     <developers>
         <developer>
             <name>zhaoligang</name>
             <email>zlgtop@163.com</email>
-            <url>https://github.com/zhaoligang594/easy-access-authority</url>
+            <url>https://github.com/zhaoligang594/</url>
             <roles>
                 <role>Software Developer Engineer</role>
                 <role>Java Research Developer Engineer</role>
@@ -41,10 +41,12 @@
             <timezone>+8:00</timezone>
         </developer>
     </developers>
+
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/zhaoligang594/easy-access-authority/issues</url>
+        <url>https://github.com/zhaoligang594/easy-tools-all/issues</url>
     </issueManagement>
+
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype</id>
