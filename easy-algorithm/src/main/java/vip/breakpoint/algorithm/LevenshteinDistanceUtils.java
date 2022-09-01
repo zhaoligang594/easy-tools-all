@@ -16,25 +16,31 @@ public class LevenshteinDistanceUtils {
     /**
      * 计算两个字符串的文本距离
      *
-     * @param text1 first
-     * @param text2 second
+     * @param word1 first
+     * @param word2 second
      * @return the distance between them
      */
-    public static int levenDistance(String text1, String text2) {
-        AssertUtils.text(text1, "text1");
-        AssertUtils.text(text2, "text2");
-        if ("".equals(text1)) {
-            return text2.length();
+    public static int levenDistance(String word1, String word2) {
+        AssertUtils.text(word1, "word1");
+        AssertUtils.text(word2, "word2");
+        if ("".equals(word1)) {
+            return word2.length();
         }
-        if ("".equals(text2)) {
-            return text1.length();
+        if ("".equals(word2)) {
+            return word1.length();
         }
-        int m = text1.length(), n = text2.length();
+        int m = word1.length(), n = word2.length();
         int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 int substitutionCost;
-                if (text1.charAt(i) == text2.charAt(j)) {
+                if (word1.charAt(i) == word2.charAt(j)) {
                     substitutionCost = 0;
                 } else {
                     substitutionCost = 1;
