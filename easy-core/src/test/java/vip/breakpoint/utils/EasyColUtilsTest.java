@@ -13,7 +13,7 @@ class EasyColUtilsTest {
 
     @Test
     public void test01() {
-        System.out.println(EasyColUtils.isNotEmpty(null));
+        // System.out.println(EasyColUtils.isNotEmpty(null));
         System.out.println(EasyColUtils.isNotEmpty(new ArrayList<>()));
         System.out.println(EasyColUtils.isEmpty(new ArrayList<>(null)));
     }

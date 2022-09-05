@@ -1,6 +1,7 @@
 package vip.breakpoint.utils;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 集合的操作
@@ -31,5 +32,28 @@ public class EasyColUtils {
      */
     public static <T> boolean isEmpty(Collection<T> collection) {
         return !isNotEmpty(collection);
+    }
+
+    /**
+     *
+     * @param map
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V> boolean isNotEmpty(Map<K, V> map) {
+        return null != map && !map.isEmpty();
+    }
+
+    /**
+     * 判断是否是空的
+     *
+     * @param map
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V> boolean isEmpty(Map<K, V> map) {
+        return !isNotEmpty(map);
     }
 }
