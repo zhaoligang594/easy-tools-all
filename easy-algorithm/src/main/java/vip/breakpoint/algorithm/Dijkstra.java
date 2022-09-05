@@ -41,7 +41,7 @@ public class Dijkstra {
             before = now;
             //寻找当前的最短路径
             //即在为获取最短路径的顶点中，找到离起点最近的顶点（k）
-            double min = Double.MAX_VALUE;
+            double min = Double.MAX_VALUE; 
             for (int j = 0; j < size; j++) {
                 if (flag[j] == false && distance[j] < min) {
                     min = distance[j];
