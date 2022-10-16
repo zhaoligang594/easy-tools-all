@@ -1,7 +1,6 @@
 package vip.breakpoint.resolver;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
  * @author breakpoint/赵先生
  * 2020/12/24
  */
-@Slf4j
 public class PageInfoResolver implements HandlerMethodArgumentResolver {
 
     // 判断参数类型
