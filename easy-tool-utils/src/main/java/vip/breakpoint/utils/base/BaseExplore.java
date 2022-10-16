@@ -1,6 +1,5 @@
 package vip.breakpoint.utils.base;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**

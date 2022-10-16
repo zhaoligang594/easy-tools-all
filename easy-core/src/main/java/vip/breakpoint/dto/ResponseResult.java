@@ -1,7 +1,6 @@
 package vip.breakpoint.dto;
 
 
-import lombok.Data;
 import vip.breakpoint.enums.ResCodeEnum;
 
 import java.io.Serializable;

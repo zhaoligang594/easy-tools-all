@@ -16,8 +16,7 @@ import java.util.Map;
 
 
 /**
- * 将对象进进行写回浏览器
- * Created by Administrator on 2018/4/29 0029.
+ * 下載文件操作
  */
 public abstract class ExcelDownloadUtils extends BaseExplore {
 

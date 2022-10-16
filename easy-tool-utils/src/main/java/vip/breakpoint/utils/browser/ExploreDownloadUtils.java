@@ -5,7 +5,6 @@ import vip.breakpoint.exception.EasyToolException;
 import vip.breakpoint.utils.EasyStringUtils;
 import vip.breakpoint.utils.base.BaseExplore;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,7 +23,8 @@ public abstract class ExploreDownloadUtils extends BaseExplore {
                                     String downFileName) throws IOException, EasyToolException {
         if (null == inputStream) throw new EasyToolException("输入流不能为空");
         preSetCommonHeader(response);
-        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(downFileName, "UTF-8"));
+        response.setHeader("Content-Disposition", "attachment; filename="
+                + URLEncoder.encode(downFileName, "UTF-8"));
         OutputStream out = null;
         try {
             int len = -1;
@@ -51,7 +51,8 @@ public abstract class ExploreDownloadUtils extends BaseExplore {
                                            String downFileName) throws IOException, EasyToolException {
         if (null == bytes || bytes.length == 0) throw new EasyToolException("输入流不能为空");
         preSetCommonHeader(response);
-        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(downFileName, "UTF-8"));
+        response.setHeader("Content-Disposition", "attachment; filename="
+                + URLEncoder.encode(downFileName, "UTF-8"));
         OutputStream out = null;
         try {
             out = response.getOutputStream();
@@ -80,7 +81,8 @@ public abstract class ExploreDownloadUtils extends BaseExplore {
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(fileAbsolutePath);
-            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(downFileName, "UTF-8"));
+            response.setHeader("Content-Disposition", "attachment; filename="
+                    + URLEncoder.encode(downFileName, "UTF-8"));
             int len = -1;
             byte buffer[] = new byte[10240];
             out = response.getOutputStream();

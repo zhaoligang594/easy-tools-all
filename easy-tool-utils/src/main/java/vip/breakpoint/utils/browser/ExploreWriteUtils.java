@@ -25,7 +25,8 @@ public abstract class ExploreWriteUtils extends BaseExplore {
         writeMessage(request, response, responseResult);
     }
 
-    public static <D> void writeMessage(HttpServletRequest request, HttpServletResponse response, D data) throws IOException {
+    public static <D> void writeMessage(HttpServletRequest request, HttpServletResponse response, D data)
+            throws IOException {
         preSetCommonHeader(response);
         response.setContentType(MimeTypeEnum.APPLICATION_JSON.getMimeType());
         String writeMessage = getMessage(data);
