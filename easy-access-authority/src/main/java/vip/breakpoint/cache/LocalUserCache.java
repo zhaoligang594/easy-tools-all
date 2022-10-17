@@ -2,7 +2,6 @@ package vip.breakpoint.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import vip.breakpoint.bean.User;
 import vip.breakpoint.utils.EasyStringUtils;
 
 /**
@@ -12,15 +11,15 @@ import vip.breakpoint.utils.EasyStringUtils;
  * create on 2022/09/07
  * 欢迎关注公众号 《代码废柴》
  */
-public class LocalUserCache {
+public class LocalUserCache<T> {
 
     // users
-    private static final Cache<String, User<Object>> cache = CacheBuilder.newBuilder().build();
+    private static final Cache<String, Object> cache = CacheBuilder.newBuilder().build();
 
     /**
      * 添加用户
      */
-    public static void addUser(String token, User<Object> user) {
+    public static void addUser(String token, Object user) {
         if (EasyStringUtils.isBlank(token) || null == user) {
             return;
         }
@@ -31,10 +30,17 @@ public class LocalUserCache {
      * 获取当前的登录用户
      */
     @SuppressWarnings("unchecked")
-    public static <T> User<T> getLoginUser(String token) {
+    public static <T> T getLoginUser(String token, Class<T> clazz) {
         if (EasyStringUtils.isBlank(token)) {
             return null;
         }
-        return (User<T>) cache.getIfPresent(token);
+        return (T) cache.getIfPresent(token);
+    }
+
+    public static Object getLoginUser(String token) {
+        if (EasyStringUtils.isBlank(token)) {
+            return null;
+        }
+        return cache.getIfPresent(token);
     }
 }

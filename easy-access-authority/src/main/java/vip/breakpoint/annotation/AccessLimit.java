@@ -15,15 +15,30 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AccessLimit {
-    long interval() default 1000L; // 两次点击间隔时间  默认时间1000ms  单位ms
 
-    boolean isEnableClickLimit() default true; // 是否启用限流防刷的操作
+    /**
+     * 两次点击间隔时间  默认时间1000ms  单位ms
+     */
+    long interval() default 1000L;
 
-    boolean isLogIn() default true; // 是否需要进行登录
+    /**
+     * 是否启用限流防刷的操作
+     */
+    boolean isEnableClickLimit() default false;
 
-    boolean freezeUserCanAccess() default false; // 冻结的账户是否可以进行通过   必须是 isLogIn 为true的情况下才有效
+    /**
+     * 接口访问是否需要进行登录
+     */
+    boolean isLogIn() default true;
 
-    boolean enable() default true; // 该接口是否可用  也可以说接口是否可达
+    /**
+     * 该接口是否可用
+     * 设置成 false 不可以进行访问
+     */
+    boolean enable() default true;
 
-    boolean isVerifyCode() default false; // 验证码是否需要进行验证
+    /**
+     * 验证码是否需要进行验证
+     */
+    boolean isVerifyCode() default false;
 }

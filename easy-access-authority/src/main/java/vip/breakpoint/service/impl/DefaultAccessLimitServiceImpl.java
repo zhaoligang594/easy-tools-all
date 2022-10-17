@@ -3,6 +3,7 @@ package vip.breakpoint.service.impl;
 import vip.breakpoint.annotation.AccessLimit;
 import vip.breakpoint.exception.EasyToolException;
 import vip.breakpoint.service.AccessLimitService;
+import vip.breakpoint.service.UserStoreService;
 
 /**
  * 用户校验的操作
@@ -12,6 +13,14 @@ import vip.breakpoint.service.AccessLimitService;
  * 欢迎关注公众号 《代码废柴》
  */
 public class DefaultAccessLimitServiceImpl implements AccessLimitService {
+
+    // 用户存储信息
+    private final UserStoreService userStoreService;
+
+    public DefaultAccessLimitServiceImpl(UserStoreService userStoreService) {
+        this.userStoreService = userStoreService;
+    }
+
     @Override
     public boolean isCanAccessByClickLimit(String requestURI, String ip, String Host,
                                            AccessLimit methodAnnotation) {
@@ -46,6 +55,11 @@ public class DefaultAccessLimitServiceImpl implements AccessLimitService {
 
     @Override
     public boolean checkUserLogin(String tokenKey) {
-        return true;
+        try {
+            Object ret = userStoreService.getUserMessageByUserToken(tokenKey);
+            return ret != null;
+        } catch (EasyToolException e) {
+            return false;
+        }
     }
 }

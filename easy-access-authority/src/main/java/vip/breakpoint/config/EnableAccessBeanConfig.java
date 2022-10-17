@@ -4,9 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import vip.breakpoint.condition.AccessLimitCondition;
-import vip.breakpoint.interceptor.AccessLimitInterceptor;
+import vip.breakpoint.condition.UserStoreCondition;
+import vip.breakpoint.handle.AccessLimitHandler;
+import vip.breakpoint.interceptor.WebLimitInterceptor;
 import vip.breakpoint.service.AccessLimitService;
+import vip.breakpoint.service.UserStoreService;
 import vip.breakpoint.service.impl.DefaultAccessLimitServiceImpl;
+import vip.breakpoint.service.impl.DefaultUserStoreServiceImpl;
 
 /**
  * @author : breakpoint
@@ -21,15 +25,32 @@ public class EnableAccessBeanConfig {
      */
     @Conditional({AccessLimitCondition.class})
     @Bean
-    public AccessLimitService getAccessLimitService() {
-        return new DefaultAccessLimitServiceImpl();
+    public AccessLimitService getAccessLimitService(UserStoreService userStoreService) {
+        return new DefaultAccessLimitServiceImpl(userStoreService);
     }
 
     /**
      * 用户请求的拦截器对象
      */
     @Bean
-    public AccessLimitInterceptor getAccessLimitInterceptor(AccessLimitService accessLimitService) {
-        return new AccessLimitInterceptor(accessLimitService);
+    public WebLimitInterceptor getAccessLimitInterceptor(AccessLimitHandler handler) {
+        WebLimitInterceptor webLimitInterceptor = new WebLimitInterceptor();
+        webLimitInterceptor.setHandler(handler);
+        return webLimitInterceptor;
     }
+
+    @Conditional({UserStoreCondition.class})
+    @Bean
+    public UserStoreService getUserStoreService() {
+        return new DefaultUserStoreServiceImpl();
+    }
+
+
+    @Bean
+    public AccessLimitHandler getAccessLimitInterceptorHandler(AccessLimitService accessLimitService) {
+        AccessLimitHandler handler = new AccessLimitHandler();
+        handler.setAccessLimitService(accessLimitService);
+        return handler;
+    }
+
 }

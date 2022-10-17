@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import vip.breakpoint.condition.WebConfigCondition;
-import vip.breakpoint.interceptor.AccessLimitInterceptor;
+import vip.breakpoint.interceptor.WebLimitInterceptor;
 import vip.breakpoint.resolver.PageInfoResolver;
 
 import javax.annotation.Resource;
@@ -27,12 +27,12 @@ import java.util.List;
 public class WebConfigAdapter extends WebMvcConfigurerAdapter {
 
     @Resource
-    private AccessLimitInterceptor accessLimitInterceptor;
+    private WebLimitInterceptor webLimitInterceptor;
 
     @Override
     public void addInterceptors(@NonNull InterceptorRegistry registry) {
         super.addInterceptors(registry);
-        registry.addInterceptor(accessLimitInterceptor);
+        registry.addInterceptor(webLimitInterceptor);
     }
 
     @Override
