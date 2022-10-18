@@ -6,16 +6,21 @@ import org.springframework.context.annotation.Configuration;
 import vip.breakpoint.condition.AccessLimitCondition;
 import vip.breakpoint.condition.ClickCondition;
 import vip.breakpoint.condition.UserStoreCondition;
+import vip.breakpoint.condition.VerifyCodeCondition;
 import vip.breakpoint.handler.AccessLimitHandler;
 import vip.breakpoint.interceptor.WebLimitInterceptor;
 import vip.breakpoint.service.AccessLimitService;
 import vip.breakpoint.service.ClickLimitService;
 import vip.breakpoint.service.UserStoreService;
+import vip.breakpoint.service.VerifyCodeService;
 import vip.breakpoint.service.impl.DefaultAccessLimitServiceImpl;
 import vip.breakpoint.service.impl.DefaultClickLimitServiceImpl;
 import vip.breakpoint.service.impl.DefaultUserStoreServiceImpl;
+import vip.breakpoint.service.impl.DefaultVerifyCodeServiceImpl;
 
 /**
+ * 权限控制的配置类
+ *
  * @author : breakpoint
  * create on 2022/10/16
  * 欢迎关注公众号 《代码废柴》
@@ -29,8 +34,9 @@ public class EnableAccessBeanConfig {
     @Conditional({AccessLimitCondition.class})
     @Bean
     public AccessLimitService getAccessLimitService(UserStoreService userStoreService,
-                                                    ClickLimitService clickLimitService) {
-        return new DefaultAccessLimitServiceImpl(userStoreService, clickLimitService);
+                                                    ClickLimitService clickLimitService,
+                                                    VerifyCodeService verifyCodeService) {
+        return new DefaultAccessLimitServiceImpl(userStoreService, clickLimitService, verifyCodeService);
     }
 
     /**
@@ -43,6 +49,9 @@ public class EnableAccessBeanConfig {
         return webLimitInterceptor;
     }
 
+    /**
+     * 用户存储服务
+     */
     @Conditional({UserStoreCondition.class})
     @Bean
     public UserStoreService getUserStoreService() {
@@ -50,6 +59,9 @@ public class EnableAccessBeanConfig {
     }
 
 
+    /**
+     * 访问控制处理类
+     */
     @Bean
     public AccessLimitHandler getAccessLimitInterceptorHandler(AccessLimitService accessLimitService) {
         AccessLimitHandler handler = new AccessLimitHandler();
@@ -57,10 +69,22 @@ public class EnableAccessBeanConfig {
         return handler;
     }
 
+    /**
+     * 点击限制服务
+     */
     @Conditional({ClickCondition.class})
     @Bean
     public ClickLimitService getClickLimitService() {
         return new DefaultClickLimitServiceImpl();
+    }
+
+    /**
+     * 验证码服务服务
+     */
+    @Conditional({VerifyCodeCondition.class})
+    @Bean
+    public VerifyCodeService getVerifyCodeService() {
+        return new DefaultVerifyCodeServiceImpl();
     }
 
 }

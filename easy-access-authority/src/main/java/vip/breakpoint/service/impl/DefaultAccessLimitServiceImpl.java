@@ -5,6 +5,7 @@ import vip.breakpoint.exception.EasyToolException;
 import vip.breakpoint.service.AccessLimitService;
 import vip.breakpoint.service.ClickLimitService;
 import vip.breakpoint.service.UserStoreService;
+import vip.breakpoint.service.VerifyCodeService;
 
 /**
  * 用户校验的操作
@@ -20,9 +21,14 @@ public class DefaultAccessLimitServiceImpl implements AccessLimitService {
 
     private final ClickLimitService clickLimitService;
 
-    public DefaultAccessLimitServiceImpl(UserStoreService userStoreService, ClickLimitService clickLimitService) {
+    private final VerifyCodeService verifyCodeService;
+
+    public DefaultAccessLimitServiceImpl(UserStoreService userStoreService,
+                                         ClickLimitService clickLimitService,
+                                         VerifyCodeService verifyCodeService) {
         this.userStoreService = userStoreService;
         this.clickLimitService = clickLimitService;
+        this.verifyCodeService = verifyCodeService;
     }
 
     @Override
@@ -33,28 +39,7 @@ public class DefaultAccessLimitServiceImpl implements AccessLimitService {
 
     @Override
     public boolean isVerifyCodeCorrect(String verifyCodeKey, String reqVerifyCode) throws EasyToolException {
-
-//        // 获取到存储的key
-//        String verifyCodeKey = "";//RedisUtils.getRedisKey(key);
-//        //  验证码的基本操作 1min 时间
-//        String verifyCode = "";//(String) valueOperations.get(verifyCodeKey);
-//
-//        if (EasyStringUtils.isBlank(verifyCode)) {
-//            ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
-//                    "请刷新验证码");
-//            return false;
-//        }
-//
-//        // 检验验证码是否一直
-//        String verifyCodeRedis = verifyCode.toLowerCase().trim();
-//        String verifyCodeReq = verifyCode1.toLowerCase().trim();
-//
-//        if (!verifyCodeRedis.equals(verifyCodeReq)) {
-//            ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
-//                    "验证码不正确");
-//            return false;
-//        }
-        return true;
+        return verifyCodeService.doVerifyCodeCorrect(verifyCodeKey, reqVerifyCode);
     }
 
     @Override
