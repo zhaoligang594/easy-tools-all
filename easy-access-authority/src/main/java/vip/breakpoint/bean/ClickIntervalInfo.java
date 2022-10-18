@@ -7,10 +7,19 @@ package vip.breakpoint.bean;
  * create on 2022/08/30
  * 欢迎关注公众号 《代码废柴》
  */
-public class IntervalClass {
-    private long preClickTime;// 上一次点击时间
-    private long firstClickTime; // 第一次点击时间
-    private int clickCount;// 点击次数
+public class ClickIntervalInfo {
+    /**
+     * 上一次点击时间
+     */
+    private long preClickTime;
+    /**
+     * 第一次点击时间
+     */
+    private long firstClickTime;
+    /**
+     * 点击次数
+     */
+    private int clickCount;
 
     public long getPreClickTime() {
         return preClickTime;

@@ -34,7 +34,11 @@ public class LocalUserCache<T> {
         if (EasyStringUtils.isBlank(token)) {
             return null;
         }
-        return (T) cache.getIfPresent(token);
+        Object ret = cache.getIfPresent(token);
+        if (null != ret && ret.getClass().isAssignableFrom(clazz)) {
+            return (T) ret;
+        }
+        return null;
     }
 
     public static Object getLoginUser(String token) {

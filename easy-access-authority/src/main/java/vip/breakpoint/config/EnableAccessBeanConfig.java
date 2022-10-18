@@ -4,12 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import vip.breakpoint.condition.AccessLimitCondition;
+import vip.breakpoint.condition.ClickCondition;
 import vip.breakpoint.condition.UserStoreCondition;
 import vip.breakpoint.handler.AccessLimitHandler;
 import vip.breakpoint.interceptor.WebLimitInterceptor;
 import vip.breakpoint.service.AccessLimitService;
+import vip.breakpoint.service.ClickLimitService;
 import vip.breakpoint.service.UserStoreService;
 import vip.breakpoint.service.impl.DefaultAccessLimitServiceImpl;
+import vip.breakpoint.service.impl.DefaultClickLimitServiceImpl;
 import vip.breakpoint.service.impl.DefaultUserStoreServiceImpl;
 
 /**
@@ -25,8 +28,9 @@ public class EnableAccessBeanConfig {
      */
     @Conditional({AccessLimitCondition.class})
     @Bean
-    public AccessLimitService getAccessLimitService(UserStoreService userStoreService) {
-        return new DefaultAccessLimitServiceImpl(userStoreService);
+    public AccessLimitService getAccessLimitService(UserStoreService userStoreService,
+                                                    ClickLimitService clickLimitService) {
+        return new DefaultAccessLimitServiceImpl(userStoreService, clickLimitService);
     }
 
     /**
@@ -51,6 +55,12 @@ public class EnableAccessBeanConfig {
         AccessLimitHandler handler = new AccessLimitHandler();
         handler.setAccessLimitService(accessLimitService);
         return handler;
+    }
+
+    @Conditional({ClickCondition.class})
+    @Bean
+    public ClickLimitService getClickLimitService() {
+        return new DefaultClickLimitServiceImpl();
     }
 
 }

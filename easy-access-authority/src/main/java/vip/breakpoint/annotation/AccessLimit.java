@@ -24,7 +24,7 @@ public @interface AccessLimit {
     /**
      * 是否启用限流防刷的操作
      */
-    boolean isEnableClickLimit() default false;
+    boolean enableClickLimit() default false;
 
     /**
      * 接口访问是否需要进行登录

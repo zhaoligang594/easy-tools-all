@@ -39,13 +39,12 @@ public class AccessLimitHandler {
             return false;
         }
         // 限流防刷
-        if (methodAnnotation.isEnableClickLimit()) {
+        if (methodAnnotation.enableClickLimit()) {
             String requestURI = request.getRequestURI();
             String ip = IpUtils.getRealIpAddr(request);
             String host = request.getHeader("Host");
             if (!accessLimitService.isCanAccessByClickLimit(requestURI, ip, host, methodAnnotation)) {
-                ExploreWriteUtils.writeMessage(ResCodeEnum.TO_MANNY_REQUEST, request, response,
-                        "您操作过于频繁，请间隔1s操作");
+                ExploreWriteUtils.writeMessage(ResCodeEnum.TO_MANNY_REQUEST, request, response, "操作过于频繁");
                 return false;
             }
         }

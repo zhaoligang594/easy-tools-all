@@ -17,11 +17,11 @@ public interface AccessLimitService {
      *
      * @param requestURI       request.getRequestURI();
      * @param ip               request IP
-     * @param Host             request.getHeader("Host");
+     * @param host             request.getHeader("Host");
      * @param methodAnnotation 注解信息
      * @return true or false
      */
-    boolean isCanAccessByClickLimit(String requestURI, String ip, String Host, AccessLimit methodAnnotation);
+    boolean isCanAccessByClickLimit(String requestURI, String ip, String host, AccessLimit methodAnnotation);
 
     /**
      * 验证验证码正确性
