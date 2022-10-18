@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import vip.breakpoint.condition.AccessLimitCondition;
 import vip.breakpoint.condition.UserStoreCondition;
-import vip.breakpoint.handle.AccessLimitHandler;
+import vip.breakpoint.handler.AccessLimitHandler;
 import vip.breakpoint.interceptor.WebLimitInterceptor;
 import vip.breakpoint.service.AccessLimitService;
 import vip.breakpoint.service.UserStoreService;

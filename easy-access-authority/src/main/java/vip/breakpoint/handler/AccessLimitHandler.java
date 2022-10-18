@@ -1,4 +1,4 @@
-package vip.breakpoint.handle;
+package vip.breakpoint.handler;
 
 import org.springframework.lang.NonNull;
 import vip.breakpoint.annotation.AccessLimit;

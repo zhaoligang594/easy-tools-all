@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import vip.breakpoint.annotation.AccessLimit;
 import vip.breakpoint.enums.ResCodeEnum;
-import vip.breakpoint.handle.AccessLimitHandler;
+import vip.breakpoint.handler.AccessLimitHandler;
 import vip.breakpoint.utils.EasyStringUtils;
 import vip.breakpoint.utils.browser.ExploreWriteUtils;
 
