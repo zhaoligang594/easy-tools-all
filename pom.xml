@@ -14,6 +14,7 @@
         <module>easy-tool-utils</module>
         <module>easy-core</module>
         <module>easy-log</module>
+        <module>easy-config</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -14,7 +14,13 @@ import java.util.Date;
  */
 public abstract class BaseDataSupport {
 
-    // 解析日期的操作
+    /**
+     * 解析日期的操作
+     *
+     * @param source 日期字符串
+     * @return 对应的日期
+     * @throws EasyToolException 解析失败抛出异常
+     */
     public static Date parseDateStr(@MParam("日期字符串") String source) throws EasyToolException {
         if (null == source || "".equals(source)) {
             return null;

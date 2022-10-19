@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>vip.breakpoint</groupId>
-    <artifactId>easy-log</artifactId>
+    <artifactId>easy-config</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
-    <name>easy-log</name>
+    <name>easy-config</name>
     <url>https://github.com/FREEZINGPOINT/logging-web</url>
-    <description>A tool for logging in our project</description>
+    <description>配置文件小工具，配置自动更新功能</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -17,24 +17,24 @@
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
-        <!--    spring    -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>5.1.9.RELEASE</version>
-            <scope>provided</scope>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.8.0</version>
         </dependency>
-        <!-- json   -->
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>2.0.12</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
         </dependency>
-        <!--  cglib  -->
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.3.0</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <licenses>
@@ -45,9 +45,9 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:zhaoligang594/logging-web.git</url>
-        <connection>scm:git@github.com:zhaoligang594/logging-web.git</connection>
-        <developerConnection>scm:git@github.com:zhaoligang594/logging-web.git</developerConnection>
+        <url>git@github.com:zhaoligang594/easy-tools-all.git</url>
+        <connection>scm:git@github.com:zhaoligang594/easy-tools-all.git</connection>
+        <developerConnection>scm:git@github.com:zhaoligang594/easy-tools-all.git</developerConnection>
     </scm>
     <developers>
         <developer>

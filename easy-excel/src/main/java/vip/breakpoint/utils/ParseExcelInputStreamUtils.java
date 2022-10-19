@@ -5,6 +5,7 @@ import vip.breakpoint.annotation.ExcelField;
 import vip.breakpoint.annotation.MParam;
 import vip.breakpoint.base.BaseDataSupport;
 import vip.breakpoint.exception.EasyExcelException;
+import vip.breakpoint.exception.EasyToolException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -158,7 +159,11 @@ public class ParseExcelInputStreamUtils {
                         if (val instanceof Date) {
                             value = val;
                         } else {
-                            value = BaseDataSupport.parseDateStr((String) val);
+                            try {
+                                value = BaseDataSupport.parseDateStr((String) val);
+                            } catch (EasyToolException e) {
+                                throw new EasyExcelException(e.getMessage());
+                            }
                         }
                     }
                     ReflectUtils.setFieldValue2Object(field, res, value);
