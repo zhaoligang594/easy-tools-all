@@ -26,7 +26,7 @@ public class ConfigFileMonitor {
     /**
      * 给文件添加监听
      *
-     * @param file     文件
+     * @param filePath 文件路径
      * @param listener 文件监听器
      */
     public void monitor(File filePath, FileFilter fileFilter, FileAlterationListener listener) {
