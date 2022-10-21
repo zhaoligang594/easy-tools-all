@@ -140,7 +140,7 @@ public class ConfigFileMonitorConfig {
 
     private boolean isCandidateFileType(File file, Set<FileTypeEnum> fileTypeEnumSet) {
         if (file.isFile()) {
-            boolean ret = false;
+            boolean ret;
             for (FileTypeEnum typeEnum : fileTypeEnumSet) {
                 ret = file.getName().endsWith(typeEnum.getFileType());
                 if (ret) {

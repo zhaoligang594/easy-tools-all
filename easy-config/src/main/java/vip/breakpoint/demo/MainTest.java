@@ -1,4 +1,4 @@
-package vip.breakpoint;
+package vip.breakpoint.demo;
 
 import vip.breakpoint.engine.ConfigFileMonitorEngine;
 import vip.breakpoint.enums.FileTypeEnum;

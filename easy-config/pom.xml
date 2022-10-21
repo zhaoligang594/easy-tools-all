@@ -17,6 +17,12 @@
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
+        <!--   easy-core     -->
+        <dependency>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
