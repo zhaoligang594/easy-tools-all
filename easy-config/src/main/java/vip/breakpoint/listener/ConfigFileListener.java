@@ -14,7 +14,7 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
 
     @Override
     public void onStart(final FileAlterationObserver observer) {
-        System.out.println("onStart");
+        // omit...
     }
 
     @Override
@@ -24,6 +24,6 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
 
     @Override
     public void onStop(final FileAlterationObserver observer) {
-        System.out.println("onStop");
+        // omit...
     }
 }

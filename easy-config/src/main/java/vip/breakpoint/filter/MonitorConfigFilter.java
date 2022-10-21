@@ -4,6 +4,7 @@ import vip.breakpoint.enums.FileTypeEnum;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Set;
 
 /**
  * @author : breakpoint
@@ -12,16 +13,28 @@ import java.io.FileFilter;
  */
 public class MonitorConfigFilter implements FileFilter {
 
-    private final FileTypeEnum fileType;
+    private final Set<FileTypeEnum> fileTypeEnumSet;
 
-    public MonitorConfigFilter(FileTypeEnum fileType) {
-        this.fileType = fileType;
+    public MonitorConfigFilter(Set<FileTypeEnum> fileTypeEnumSet) {
+        this.fileTypeEnumSet = fileTypeEnumSet;
     }
 
     @Override
     public boolean accept(File pathname) {
-        System.out.println(pathname.getName().endsWith(fileType.getFileType()));
-        return pathname.getName().endsWith(fileType.getFileType());
+        // 监听特殊的文件
+        return isCandidateFileType(pathname, fileTypeEnumSet);
     }
 
+    private boolean isCandidateFileType(File file, Set<FileTypeEnum> fileTypeEnumSet) {
+        if (file.isFile()) {
+            boolean ret;
+            for (FileTypeEnum typeEnum : fileTypeEnumSet) {
+                ret = file.getName().endsWith(typeEnum.getFileType());
+                if (ret) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

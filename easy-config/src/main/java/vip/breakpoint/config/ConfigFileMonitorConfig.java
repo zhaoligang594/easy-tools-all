@@ -7,10 +7,7 @@ import vip.breakpoint.listener.ConfigFileListener;
 import vip.breakpoint.monitor.ConfigFileMonitor;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 文件监听配置
@@ -68,18 +65,23 @@ public class ConfigFileMonitorConfig {
     /**
      * 增加监听文件
      *
-     * @param filePathArr 文件路径数组
-     * @param fileType    文件类型
+     * @param filePathArr     文件路径数组
+     * @param fileTypeEnumSet 文件类型
      */
-    public void addMonitorFile(String[] filePathArr, FileTypeEnum fileType) {
+    public void addMonitorFile(List<String> filePathArr, Set<FileTypeEnum> fileTypeEnumSet) {
         if (null == filePathArr) return;
-        MonitorConfigFilter monitorConfigFilter = new MonitorConfigFilter(fileType);
+        MonitorConfigFilter monitorConfigFilter = new MonitorConfigFilter(fileTypeEnumSet);
 
         for (String path : filePathArr) {
             File filePath = new File(path);
-            List<File> monitorCandidateFiles = getAllFileFromDirector(filePath, fileType);
+            List<File> monitorCandidateFiles = getAllFileFromDirector(filePath, fileTypeEnumSet);
+            Map<String, File> parentPath2FileMap = new HashMap<>();
             for (File monitorCandidateFile : monitorCandidateFiles) {
-                getMonitor().monitor(monitorCandidateFile.getParentFile(), monitorConfigFilter, listener);
+                parentPath2FileMap.put(monitorCandidateFile.getParentFile().getAbsolutePath(),
+                        monitorCandidateFile.getParentFile());
+            }
+            for (File monitorPath : parentPath2FileMap.values()) {
+                getMonitor().monitor(monitorPath, monitorConfigFilter, listener);
             }
         }
         try {
@@ -112,11 +114,11 @@ public class ConfigFileMonitorConfig {
     /**
      * 获取所有可以操作的文件
      *
-     * @param file     文件
-     * @param fileType 文件类型
+     * @param file            文件
+     * @param fileTypeEnumSet 文件类型
      * @return 符合文件的集合
      */
-    private List<File> getAllFileFromDirector(File file, FileTypeEnum fileType) {
+    private List<File> getAllFileFromDirector(File file, Set<FileTypeEnum> fileTypeEnumSet) {
         if (!file.exists()) {
             return new ArrayList<>();
         }
@@ -125,14 +127,27 @@ public class ConfigFileMonitorConfig {
             File[] files = file.listFiles();
             if (null != files) {
                 for (File subFile : files) {
-                    ret.addAll(getAllFileFromDirector(subFile, fileType));
+                    ret.addAll(getAllFileFromDirector(subFile, fileTypeEnumSet));
                 }
             }
         } else if (file.isFile()) {
-            if (!undoFiles.contains(file.getName()) && file.getName().endsWith(fileType.getFileType())) {
+            if (!undoFiles.contains(file.getName()) && isCandidateFileType(file, fileTypeEnumSet)) {
                 ret.add(file);
             }
         }
         return ret;
+    }
+
+    private boolean isCandidateFileType(File file, Set<FileTypeEnum> fileTypeEnumSet) {
+        if (file.isFile()) {
+            boolean ret = false;
+            for (FileTypeEnum typeEnum : fileTypeEnumSet) {
+                ret = file.getName().endsWith(typeEnum.getFileType());
+                if (ret) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
