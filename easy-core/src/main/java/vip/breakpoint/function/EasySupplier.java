@@ -14,8 +14,6 @@ public interface EasySupplier<T> extends Supplier<T> {
 
     /**
      * get value
-     *
-     * @return T
      */
     T get();
 }

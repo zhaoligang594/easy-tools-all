@@ -7,22 +7,26 @@ import vip.breakpoint.log.adaptor.Logger;
 import java.lang.reflect.Method;
 
 /**
+ * 日志组件工厂
+ *
  * @author 赵立刚
  * Created on 2021-02-05
  */
 public class WebLogFactory {
 
-    public static Logger getLogger(Class<?> clazz, LoggingLevel level) {
+    /**
+     * 获取相应的日志组件
+     */
+    public static Logger getLogger(Class<?> clazz) {
         try {
             Class<?> slf4jFactoryClazz = Class.forName("org.slf4j.LoggerFactory");
             Method getLogger = slf4jFactoryClazz.getMethod("getLogger", Class.class);
             Object invoke = getLogger.invoke(slf4jFactoryClazz, clazz);
-            return new DelegateLoggerImpl(invoke, clazz, level);
+            return new DelegateLoggerImpl(invoke, clazz, LoggingLevel.INFO);
         } catch (Exception e) {
-            //e.printStackTrace();
+            //  e.printStackTrace();
             // nothing to do
         }
-        return new ConsoleLoggerImpl(clazz, level);
+        return new ConsoleLoggerImpl(clazz, LoggingLevel.INFO);
     }
-
 }

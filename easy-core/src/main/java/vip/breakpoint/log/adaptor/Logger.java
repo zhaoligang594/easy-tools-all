@@ -1,13 +1,14 @@
 package vip.breakpoint.log.adaptor;
 
 /**
+ * 日志的操作
  *
  * @author 赵立刚
  * Created on 2021-02-05
  */
 public interface Logger {
 
-    String ROOT_LOGGER_NAME = "WEB_ROOT";
+    String ROOT_LOGGER_NAME = "easy-logger:";
 
     String getName();
 

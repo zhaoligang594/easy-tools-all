@@ -3,7 +3,10 @@ package vip.breakpoint.monitor;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import vip.breakpoint.config.ConfigFileMonitorConfig;
 import vip.breakpoint.filter.MonitorConfigFilter;
+import vip.breakpoint.log.WebLogFactory;
+import vip.breakpoint.log.adaptor.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -16,6 +19,10 @@ import java.io.FileFilter;
  * 欢迎关注公众号 《代码废柴》
  */
 public class ConfigFileMonitor {
+    /**
+     * 日志的操作
+     */
+    private static final Logger log = WebLogFactory.getLogger(ConfigFileMonitor.class);
 
     private final FileAlterationMonitor monitor;
 
@@ -36,12 +43,12 @@ public class ConfigFileMonitor {
     }
 
     public void stop() throws Exception {
-        System.out.println("stop the monitor");
+        log.info("stop the monitor");
         monitor.stop();
     }
 
     public void start() throws Exception {
-        System.out.println("start the monitor");
+        log.info("start the monitor");
         monitor.start();
     }
 

@@ -12,7 +12,6 @@ public class MainTest {
 
     public static void main(String[] args) throws Exception {
         ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
-
         engine.setMonitorDefaultClassPath();
         engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES);
         engine.startMonitorEngine();

@@ -2,6 +2,9 @@ package vip.breakpoint.listener;
 
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import vip.breakpoint.log.WebLogFactory;
+import vip.breakpoint.log.adaptor.Logger;
+import vip.breakpoint.supplier.base.ContextProperties;
 
 import java.io.File;
 
@@ -12,6 +15,11 @@ import java.io.File;
  */
 public class ConfigFileListener extends FileAlterationListenerAdaptor {
 
+    /**
+     * 日志的操作
+     */
+    private static final Logger log = WebLogFactory.getLogger(ConfigFileListener.class);
+
     @Override
     public void onStart(final FileAlterationObserver observer) {
         // omit...
@@ -19,7 +27,9 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
 
     @Override
     public void onFileChange(File file) {
-        System.out.println("文件已经更新");
+        log.info("config have some change:" + file.getAbsolutePath());
+        ContextProperties.refreshConfigFile(file);
+        log.info("the file have refresh done:" + file.getAbsolutePath());
     }
 
     @Override

@@ -4,7 +4,10 @@ import org.apache.commons.io.monitor.FileAlterationMonitor;
 import vip.breakpoint.enums.FileTypeEnum;
 import vip.breakpoint.filter.MonitorConfigFilter;
 import vip.breakpoint.listener.ConfigFileListener;
+import vip.breakpoint.log.WebLogFactory;
+import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.monitor.ConfigFileMonitor;
+import vip.breakpoint.supplier.base.ContextProperties;
 
 import java.io.File;
 import java.util.*;
@@ -17,6 +20,11 @@ import java.util.*;
  * 欢迎关注公众号 《代码废柴》
  */
 public class ConfigFileMonitorConfig {
+
+    /**
+     * 日志的操作
+     */
+    private static final Logger log = WebLogFactory.getLogger(ConfigFileMonitorConfig.class);
 
     /**
      * 监听器
@@ -75,6 +83,8 @@ public class ConfigFileMonitorConfig {
         for (String path : filePathArr) {
             File filePath = new File(path);
             List<File> monitorCandidateFiles = getAllFileFromDirector(filePath, fileTypeEnumSet);
+            // init the context value
+            ContextProperties.init(monitorCandidateFiles);
             Map<String, File> parentPath2FileMap = new HashMap<>();
             for (File monitorCandidateFile : monitorCandidateFiles) {
                 parentPath2FileMap.put(monitorCandidateFile.getParentFile().getAbsolutePath(),
@@ -87,7 +97,7 @@ public class ConfigFileMonitorConfig {
         try {
             getMonitor().start();
         } catch (Exception e) {
-            System.out.println("文件监听失败");
+            log.error("config file monitor failed");
         }
         // 停止监听
         Runtime.getRuntime().addShutdownHook(new StopMonitorHook(getMonitor()));
@@ -106,7 +116,7 @@ public class ConfigFileMonitorConfig {
             try {
                 monitor.stop();
             } catch (Exception e) {
-                System.out.println("停止监听失败");
+                log.error("stop the config file monitor failed");
             }
         }
     }

@@ -17,6 +17,11 @@
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
         <!--    spring    -->
         <dependency>
             <groupId>org.springframework</groupId>

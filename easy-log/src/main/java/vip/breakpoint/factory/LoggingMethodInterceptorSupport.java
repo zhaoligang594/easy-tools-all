@@ -26,7 +26,7 @@ public abstract class LoggingMethodInterceptorSupport {
     private final ObjectMethodDefinition methodDefinition; // 对象的定义
     private final Object delegate; //真正的对象
     private final EasyLoggingHandle easyLoggingHandle; // 自定义的handle
-    protected final Logger logger = WebLogFactory.getLogger(getClass(), LoggingLevel.TRACE);
+    protected final Logger logger = WebLogFactory.getLogger(getClass());
 
     public LoggingMethodInterceptorSupport(ObjectMethodDefinition methodDefinition, Object delegate,
                                            EasyLoggingHandle easyLoggingHandle) {

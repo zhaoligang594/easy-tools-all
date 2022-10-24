@@ -16,7 +16,7 @@ public final class WeblogThreadPoolExecutor {
 
     private WeblogThreadPoolExecutor() {/*refuse new project*/}
 
-    private static final Logger logger = WebLogFactory.getLogger(WeblogThreadPoolExecutor.class, LoggingLevel.INFO);
+    private static final Logger logger = WebLogFactory.getLogger(WeblogThreadPoolExecutor.class);
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     static {

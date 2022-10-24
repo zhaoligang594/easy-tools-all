@@ -2,8 +2,12 @@ package vip.breakpoint.utils;
 
 import vip.breakpoint.annotation.MParam;
 import vip.breakpoint.exception.EasyToolException;
+import vip.breakpoint.log.LoggingLevel;
+import vip.breakpoint.log.WebLogFactory;
+import vip.breakpoint.log.adaptor.Logger;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 写入文件以及读取文件
@@ -12,6 +16,11 @@ import java.io.*;
  * 2020/09/03
  */
 public abstract class FileUtils {
+
+    /**
+     * 日志的操作
+     */
+    private static final Logger log = WebLogFactory.getLogger(FileUtils.class);
 
     // 将数据写入文件
     public static boolean writeBytesToFile(@MParam("二进制数据") byte[] bytes,
@@ -157,11 +166,50 @@ public abstract class FileUtils {
         return true;
     }
 
-    // 删除文件
-    public static boolean deleteFile(final File file)
-            throws EasyToolException {
+    /**
+     * 删除文件
+     */
+    public static boolean deleteFile(final File file) throws EasyToolException {
         LocalVerify.verifyObject(file, file.getName());
         return file.exists() && file.delete();
+    }
+
+    /**
+     * 获取字符串 从文件中
+     */
+    public static String getStringFromFile(@MParam("文件名") String fileName,
+                                           @MParam("文件路径") String filePath) {
+        return getStringFromFile(filePath + File.separator + fileName);
+    }
+
+    /**
+     * 获取字符串重文件中
+     */
+    public static String getStringFromFile(@MParam("文件名") String absolutePath) {
+        StringBuilder jsonStr = new StringBuilder();
+        Reader reader = null;
+        try {
+            // 获取到文件
+            File file = new File(absolutePath);
+            if (!file.exists()) return null;
+            reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
+            int ch = 0;
+            while ((ch = reader.read()) != -1) {
+                jsonStr.append((char) ch);
+            }
+            return jsonStr.toString();
+        } catch (IOException e) {
+            log.error("文件读取失败 [{}]", e.getMessage());
+            return null;
+        } finally {
+            if (null != reader) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    // nothing to do
+                }
+            }
+        }
     }
 
 }

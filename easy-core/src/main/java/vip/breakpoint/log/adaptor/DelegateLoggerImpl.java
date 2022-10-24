@@ -16,9 +16,15 @@ public class DelegateLoggerImpl extends LoggerSupport {
 
     private final Class<?> clazz;
 
+    /**
+     * 日志的输出级别 当前是没有意义的 后期会做处理的
+     */
     private final LoggingLevel level;
 
-    private static Map<String, Method> methodMap = new ConcurrentHashMap<String, Method>();
+    /**
+     * 方法的集合
+     */
+    private static final Map<String, Method> methodMap = new ConcurrentHashMap<String, Method>();
 
     public DelegateLoggerImpl(Object delegate, Class<?> clazz, LoggingLevel level) {
         this.delegate = delegate;
