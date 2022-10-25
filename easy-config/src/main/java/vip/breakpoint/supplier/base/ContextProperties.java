@@ -59,8 +59,19 @@ public final class ContextProperties {
     static {
         // 刷新当前的值
         refreshValues();
+        // start
+        startFileMonitorEngine();
+    }
+
+    /**
+     * start the file monitor
+     */
+    private static void startFileMonitorEngine() {
+        // to set the default path
         engine.setMonitorDefaultClassPath();
-        engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES);
+        // monitor file type
+        engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES, FileTypeEnum.JSON, FileTypeEnum.YAML);
+        // start the file monitor engine
         engine.startMonitorEngine();
     }
 
@@ -292,7 +303,9 @@ public final class ContextProperties {
         if (configFile.getName().endsWith(FileTypeEnum.PROPERTIES.getFileType())) {
             refreshValueProperties(configFile.getAbsolutePath());
         } else if (configFile.getName().endsWith(FileTypeEnum.JSON.getFileType())) {
-            //refreshValueJSON(configFile.getAbsolutePath());
+            int idx = configFile.getName().lastIndexOf(FileTypeEnum.JSON.getFileType());
+            String valueKey = configFile.getName().substring(0, idx);
+            refreshValueJSON(valueKey, configFile.getAbsolutePath());
         } else if (configFile.getName().endsWith(FileTypeEnum.YAML.getFileType())) {
             refreshValueYaml(configFile.getAbsolutePath());
         }

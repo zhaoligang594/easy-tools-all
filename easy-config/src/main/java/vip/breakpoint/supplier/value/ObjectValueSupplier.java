@@ -1,6 +1,5 @@
 package vip.breakpoint.supplier.value;
 
-import vip.breakpoint.exception.OptNotSupportException;
 import vip.breakpoint.supplier.ValueSupplierFactory;
 
 /**
@@ -14,7 +13,8 @@ public interface ObjectValueSupplier<T> extends ValueSupplier<T, T> {
 
     @Override
     default Class<T> valueClass() {
-        throw new OptNotSupportException("this have to set somethings");
+        //throw new OptNotSupportException("this have to set somethings");
+        return null;
     }
 
     @Override
