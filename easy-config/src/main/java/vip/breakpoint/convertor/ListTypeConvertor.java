@@ -4,10 +4,9 @@ import vip.breakpoint.convertor.base.TypeConvertor;
 import vip.breakpoint.utils.ObjectMapperUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * Short 转换器
+ * List 转换器
  *
  * @author : breakpoint/赵先生 <zlgtop@163.com>
  * create on 2022/10/26

@@ -1,6 +1,6 @@
 package vip.breakpoint.utils;
 
-import vip.breakpoint.StringTypeConvertor;
+import vip.breakpoint.convertor.StringTypeConvertor;
 import vip.breakpoint.convertor.*;
 import vip.breakpoint.convertor.base.TypeConvertor;
 import vip.breakpoint.enums.JavaTypeEnum;
@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * define the java type convertor
+ *
  * @author : breakpoint/赵先生 <zlgtop@163.com>
  * create on 2022/10/26
  * 欢迎关注公众号:代码废柴

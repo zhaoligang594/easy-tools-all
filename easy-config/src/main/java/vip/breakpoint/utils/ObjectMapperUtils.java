@@ -83,6 +83,6 @@ public abstract class ObjectMapperUtils {
      * 返回对象
      */
     public static <C> C getObject(String text, Class<C> clazz) throws Exception {
-        return (C) objectMapper.readValue(text, clazz);
+        return objectMapper.readValue(text, clazz);
     }
 }

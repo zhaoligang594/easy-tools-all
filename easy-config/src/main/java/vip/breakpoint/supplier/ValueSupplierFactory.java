@@ -37,6 +37,9 @@ public abstract class ValueSupplierFactory {
                 return typeConvertor.doConvert(ret);
             } else {
                 // mot the primitive type
+                if (null == supplier.getDefaultValue()) {
+                    throw new OptNotSupportException("the default value is not null for this config");
+                }
                 Class<?> retClazz = supplier.getDefaultValue().getClass();
                 // get the real class for collection
                 Class<C> innerClazz = supplier.valueClass();

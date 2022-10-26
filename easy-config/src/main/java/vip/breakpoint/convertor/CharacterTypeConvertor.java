@@ -3,7 +3,7 @@ package vip.breakpoint.convertor;
 import vip.breakpoint.convertor.base.TypeConvertor;
 
 /**
- * Double 转换器
+ * Character 转换器
  *
  * @author : breakpoint/赵先生 <zlgtop@163.com>
  * create on 2022/10/26
@@ -13,6 +13,6 @@ public class CharacterTypeConvertor implements TypeConvertor<String, Character> 
 
     @Override
     public Character doConvert(String s) throws Exception {
-        return (Character) s.charAt(0);
+        return s.charAt(0);
     }
 }
