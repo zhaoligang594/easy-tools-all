@@ -170,5 +170,6 @@ public class ConsoleLoggerImpl extends LoggerSupport {
     @Override
     public void error(String var1, Throwable var2) {
         System.err.println(getPrintMessage(getName(), getPrintStr(var1, var2.getMessage())));
+        var2.printStackTrace();
     }
 }

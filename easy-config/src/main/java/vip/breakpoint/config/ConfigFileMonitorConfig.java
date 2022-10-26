@@ -7,7 +7,7 @@ import vip.breakpoint.listener.ConfigFileListener;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.monitor.ConfigFileMonitor;
-import vip.breakpoint.supplier.base.ContextProperties;
+import vip.breakpoint.supplier.base.PropertiesContextPool;
 
 import java.io.File;
 import java.util.*;
@@ -84,7 +84,7 @@ public class ConfigFileMonitorConfig {
             File filePath = new File(path);
             List<File> monitorCandidateFiles = getAllFileFromDirector(filePath, fileTypeEnumSet);
             // init the context value
-            ContextProperties.init(monitorCandidateFiles);
+            PropertiesContextPool.init(monitorCandidateFiles);
             Map<String, File> parentPath2FileMap = new HashMap<>();
             for (File monitorCandidateFile : monitorCandidateFiles) {
                 parentPath2FileMap.put(monitorCandidateFile.getParentFile().getAbsolutePath(),

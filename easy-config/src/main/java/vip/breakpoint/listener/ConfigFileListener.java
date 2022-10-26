@@ -4,7 +4,7 @@ import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
-import vip.breakpoint.supplier.base.ContextProperties;
+import vip.breakpoint.supplier.base.PropertiesContextPool;
 
 import java.io.File;
 
@@ -28,7 +28,7 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
     @Override
     public void onFileChange(File file) {
         log.info("config have some change:" + file.getAbsolutePath());
-        ContextProperties.refreshConfigFile(file);
+        PropertiesContextPool.refreshConfigFile(file);
         log.info("the file have refresh done:" + file.getAbsolutePath());
     }
 

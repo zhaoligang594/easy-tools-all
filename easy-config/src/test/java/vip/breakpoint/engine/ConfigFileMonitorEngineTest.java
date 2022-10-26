@@ -11,10 +11,5 @@ class ConfigFileMonitorEngineTest {
 
     @Test
     public void test01() throws Exception {
-        ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
-        engine.setMonitorDefaultClassPath();
-        while (true) {
-            Thread.sleep(50000);
-        }
     }
 }

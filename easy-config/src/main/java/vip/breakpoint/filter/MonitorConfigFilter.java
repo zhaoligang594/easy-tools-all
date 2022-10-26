@@ -26,10 +26,9 @@ public class MonitorConfigFilter implements FileFilter {
     }
 
     private boolean isCandidateFileType(File file, Set<FileTypeEnum> fileTypeEnumSet) {
-        if (file.isFile()) {
-            boolean ret;
+        if (null != file && file.isFile()) {
             for (FileTypeEnum typeEnum : fileTypeEnumSet) {
-                ret = file.getName().endsWith(typeEnum.getFileType());
+                boolean ret = file.getName().endsWith(typeEnum.getFileType());
                 if (ret) {
                     return true;
                 }

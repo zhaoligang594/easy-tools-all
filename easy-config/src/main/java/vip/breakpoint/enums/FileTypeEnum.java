@@ -11,7 +11,7 @@ public enum FileTypeEnum {
     /**
      * PROPERTIES
      */
-    PROPERTIES(".properties", "key value 配置文件"),
+    PROPERTIES(".properties", "properties 配置文件"),
     /**
      * YAML
      */

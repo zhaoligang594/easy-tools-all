@@ -40,19 +40,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * create on 2021/01/20
  * @see #getContextVal 获取上下文具体的代码逻辑
  */
-public final class ContextProperties {
-    private ContextProperties() {/*reject new object*/}
+public final class PropertiesContextPool {
+
+    private PropertiesContextPool() {/*reject new object*/}
 
     /**
      * 1
      * 获取这个类的 class loader 获取文件流 加载一些配置
      */
-    private static final ClassLoader classLoader = ContextProperties.class.getClassLoader();
+    private static final ClassLoader classLoader = PropertiesContextPool.class.getClassLoader();
 
     /**
      * 日志的操作
      */
-    private static final Logger log = WebLogFactory.getLogger(ContextProperties.class);
+    private static final Logger log = WebLogFactory.getLogger(PropertiesContextPool.class);
 
     private static final ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
 
@@ -270,16 +271,6 @@ public final class ContextProperties {
     }
 
     /**
-     * 更新配置的操作
-     * 当前系统支持 动态的更新配置的操作
-     * 具体请看  com.bupt.config.corn.ContextPropertiesCorn.refreshCurrentContext 里面的调用
-     */
-    public static synchronized void updateValue() {
-        // 重新加载数据
-        refreshValues();
-    }
-
-    /**
      * 获取上下文的环境 变量值
      *
      * @param valueSupplier 值提供器
@@ -316,14 +307,7 @@ public final class ContextProperties {
      */
     public static void init(List<File> monitorCandidateFiles) {
         if (null != monitorCandidateFiles) {
-            monitorCandidateFiles.forEach(ContextProperties::refreshConfigFile);
+            monitorCandidateFiles.forEach(PropertiesContextPool::refreshConfigFile);
         }
-    }
-
-    // 测试对象 直接静态引入 ContextIntegerConfig.DEMAND_PROJECT_CACHE_SIZE
-    // 之后调用 get 方法 就可以得到 我们的数值
-    public static void main(String[] args) {
-//        ContextPathConfig pathConfig = ContextJsonObjectConfig.CONTEXT_PATH_CONFIG.getObject();
-//        System.out.println(pathConfig);
     }
 }

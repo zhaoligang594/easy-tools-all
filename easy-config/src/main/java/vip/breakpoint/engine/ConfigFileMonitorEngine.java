@@ -42,11 +42,6 @@ public class ConfigFileMonitorEngine {
         monitorFilePathSet.add(basePath);
     }
 
-
-    public List<String> getFileSystemPath() {
-        return new ArrayList<>();
-    }
-
     /**
      * 设置监听文件的类型
      */

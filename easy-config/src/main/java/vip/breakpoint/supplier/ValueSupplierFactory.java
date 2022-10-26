@@ -1,17 +1,15 @@
 package vip.breakpoint.supplier;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import vip.breakpoint.convertor.ListTypeConvertor;
+import vip.breakpoint.convertor.MapTypeConvertor;
+import vip.breakpoint.convertor.ObjectTypeConvertor;
+import vip.breakpoint.convertor.base.TypeConvertor;
 import vip.breakpoint.enums.JavaTypeEnum;
 import vip.breakpoint.exception.OptNotSupportException;
-import vip.breakpoint.supplier.base.ContextProperties;
+import vip.breakpoint.supplier.base.PropertiesContextPool;
 import vip.breakpoint.supplier.value.ValueSupplier;
+import vip.breakpoint.utils.TypeConvertorUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,20 +21,6 @@ import java.util.Map;
 public abstract class ValueSupplierFactory {
 
     /**
-     * 类型转换器
-     */
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-        // 转换为格式化的json
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        // 如果json中有新增的字段并且是实体类类中不存在的，不报错
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        //修改日期格式
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-    }
-
-    /**
      * 获取值
      *
      * @param supplier 类型提供器
@@ -45,54 +29,23 @@ public abstract class ValueSupplierFactory {
      */
     @SuppressWarnings("unchecked")
     public static <T, C> T get(ValueSupplier<T, C> supplier, Class<T> clazz) {
-        String ret = ContextProperties.getContextVal(supplier);
+        String ret = PropertiesContextPool.getContextVal(supplier);
         try {
             if (null != clazz && isPrimitiveType(clazz)) {
-                switch (JavaTypeEnum.getByClazz(clazz)) {
-                    case INTEGER:
-                        return (T) Integer.valueOf(ret);
-                    case BYTE:
-                        return (T) Byte.valueOf(ret);
-                    case SHORT:
-                        return (T) Short.valueOf(ret);
-                    case LONG:
-                        return (T) Long.valueOf(ret);
-                    case DOUBLE:
-                        return (T) Double.valueOf(ret);
-                    case FLOAT:
-                        return (T) Float.valueOf(ret);
-                    case CHARACTER:
-                        return (T) (Character) ret.charAt(0);
-                    case BOOLEAN:
-                        return (T) Boolean.valueOf(ret);
-                    default:
-                        return (T) ret;
-                }
+                TypeConvertor<String, T> typeConvertor =
+                        TypeConvertorUtils.getTypeConvertor(JavaTypeEnum.getByClazz(clazz));
+                return typeConvertor.doConvert(ret);
             } else {
                 // mot the primitive type
                 Class<?> retClazz = supplier.getDefaultValue().getClass();
+                // get the real class for collection
                 Class<C> innerClazz = supplier.valueClass();
                 if (Map.class.isAssignableFrom(retClazz)) {
-                    Map<String, C> tempMap = objectMapper.readValue(ret, new TypeReference<Map<String, C>>() {
-                        // nothing to do
-                    });
-                    Map<String, C> retMap = new HashMap<>();
-                    for (Map.Entry<String, C> entry : tempMap.entrySet()) {
-                        retMap.put(entry.getKey(),
-                                getObject(objectMapper.writeValueAsString(entry.getValue()), innerClazz));
-                    }
-                    return (T) retMap;
+                    return (T) new MapTypeConvertor<>(innerClazz).doConvert(ret);
                 } else if (List.class.isAssignableFrom(retClazz)) {
-                    List<C> cs = objectMapper.readValue(ret, new TypeReference<List<C>>() {
-                        // nothing to do
-                    });
-                    List<C> retList = new ArrayList<>();
-                    for (C c : cs) {
-                        retList.add(getObject(objectMapper.writeValueAsString(c), innerClazz));
-                    }
-                    return (T) retList;
+                    return (T) new ListTypeConvertor<>(innerClazz).doConvert(ret);
                 } else {
-                    return (T) getObject(ret, retClazz);//objectMapper.readValue(ret, retClazz);
+                    return (T) new ObjectTypeConvertor<>(retClazz).doConvert(ret);
                 }
             }
         } catch (OptNotSupportException e2) {
@@ -102,9 +55,6 @@ public abstract class ValueSupplierFactory {
         }
     }
 
-    private static <C> C getObject(String text, Class<C> clazz) throws Exception {
-        return (C) objectMapper.readValue(text, clazz);
-    }
 
     /**
      * 是否为基本的数据类型

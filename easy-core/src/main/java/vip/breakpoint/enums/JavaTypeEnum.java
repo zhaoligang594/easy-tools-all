@@ -1,5 +1,6 @@
 package vip.breakpoint.enums;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,6 +48,14 @@ public enum JavaTypeEnum {
      * String
      */
     STRING(String.class, 9),
+    /**
+     * map
+     */
+    MAP(Map.class, 10),
+    /**
+     * list
+     */
+    LIST(List.class, 11),
     ;
 
     private final Class<?> type;
