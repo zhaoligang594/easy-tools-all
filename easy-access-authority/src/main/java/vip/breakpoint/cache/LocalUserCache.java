@@ -16,9 +16,7 @@ public class LocalUserCache<T> {
     // users
     private static final Cache<String, Object> cache = CacheBuilder.newBuilder().build();
 
-    /**
-     * 添加用户
-     */
+    // 添加用户
     public static void addUser(String token, Object user) {
         if (EasyStringUtils.isBlank(token) || null == user) {
             return;
@@ -26,9 +24,7 @@ public class LocalUserCache<T> {
         cache.put(token, user);
     }
 
-    /**
-     * 获取当前的登录用户
-     */
+    // 获取当前的登录用户
     @SuppressWarnings("unchecked")
     public static <T> T getLoginUser(String token, Class<T> clazz) {
         if (EasyStringUtils.isBlank(token)) {

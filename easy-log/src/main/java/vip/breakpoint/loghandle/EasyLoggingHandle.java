@@ -35,7 +35,9 @@ public interface EasyLoggingHandle {
      * @param methodArgs  is req args
      * @param e           is throws exception
      * @param annotations is annotations
+     * @throws Throwable
      */
-    void invokeOnThrowing(String methodName, Object[] methodArgs, Annotation[] annotations, Throwable e) throws Throwable;
+    void invokeOnThrowing(String methodName, Object[] methodArgs, Annotation[] annotations, Throwable e)
+            throws Throwable;
 
 }

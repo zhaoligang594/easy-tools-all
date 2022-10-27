@@ -22,9 +22,7 @@ public class UserClickCache {
                     .expireAfterAccess(10L, TimeUnit.SECONDS)
                     .build();
 
-    /**
-     * 添加用户
-     */
+    // 添加点击信息
     public static void add(String token, ClickIntervalInfo clickIntervalInfo) {
         if (EasyStringUtils.isBlank(token) || null == clickIntervalInfo) {
             return;
@@ -32,9 +30,7 @@ public class UserClickCache {
         cache.put(token, clickIntervalInfo);
     }
 
-    /**
-     * 获取点击的时间
-     */
+    // 获取上一次点击信息
     public static ClickIntervalInfo get(String token) {
         if (EasyStringUtils.isBlank(token)) {
             return null;

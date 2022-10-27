@@ -16,6 +16,9 @@ public class WebLogFactory {
 
     /**
      * 获取相应的日志组件
+     *
+     * @param clazz 日志记录类
+     * @return 日志操作实例
      */
     public static Logger getLogger(Class<?> clazz) {
         try {

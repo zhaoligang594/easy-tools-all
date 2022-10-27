@@ -28,9 +28,7 @@ import vip.breakpoint.service.impl.DefaultVerifyCodeServiceImpl;
 @Configuration
 public class EnableAccessBeanConfig {
 
-    /**
-     * 获取操作限制的业务服务
-     */
+    // 获取操作限制的业务服务
     @Conditional({AccessLimitCondition.class})
     @Bean
     public AccessLimitService getAccessLimitService(UserStoreService userStoreService,
@@ -39,9 +37,7 @@ public class EnableAccessBeanConfig {
         return new DefaultAccessLimitServiceImpl(userStoreService, clickLimitService, verifyCodeService);
     }
 
-    /**
-     * 用户请求的拦截器对象
-     */
+    // 用户请求的拦截器对象
     @Bean
     public WebLimitInterceptor getAccessLimitInterceptor(AccessLimitHandler handler) {
         WebLimitInterceptor webLimitInterceptor = new WebLimitInterceptor();
@@ -49,9 +45,7 @@ public class EnableAccessBeanConfig {
         return webLimitInterceptor;
     }
 
-    /**
-     * 用户存储服务
-     */
+    // 用户存储服务
     @Conditional({UserStoreCondition.class})
     @Bean
     public UserStoreService getUserStoreService() {
@@ -59,9 +53,7 @@ public class EnableAccessBeanConfig {
     }
 
 
-    /**
-     * 访问控制处理类
-     */
+    // 访问控制处理类
     @Bean
     public AccessLimitHandler getAccessLimitInterceptorHandler(AccessLimitService accessLimitService) {
         AccessLimitHandler handler = new AccessLimitHandler();
@@ -69,18 +61,14 @@ public class EnableAccessBeanConfig {
         return handler;
     }
 
-    /**
-     * 点击限制服务
-     */
+    // 点击限制服务
     @Conditional({ClickCondition.class})
     @Bean
     public ClickLimitService getClickLimitService() {
         return new DefaultClickLimitServiceImpl();
     }
 
-    /**
-     * 验证码服务服务
-     */
+    // 验证码服务服务
     @Conditional({VerifyCodeCondition.class})
     @Bean
     public VerifyCodeService getVerifyCodeService() {

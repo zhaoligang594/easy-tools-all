@@ -166,25 +166,19 @@ public abstract class FileUtils {
         return true;
     }
 
-    /**
-     * 删除文件
-     */
+    // 删除文件
     public static boolean deleteFile(final File file) throws EasyToolException {
         LocalVerify.verifyObject(file, file.getName());
         return file.exists() && file.delete();
     }
 
-    /**
-     * 获取字符串 从文件中
-     */
+    // 获取字符串 从文件中
     public static String getStringFromFile(@MParam("文件名") String fileName,
                                            @MParam("文件路径") String filePath) {
         return getStringFromFile(filePath + File.separator + fileName);
     }
 
-    /**
-     * 获取字符串重文件中
-     */
+    // 获取字符串重文件中
     public static String getStringFromFile(@MParam("文件名") String absolutePath) {
         StringBuilder jsonStr = new StringBuilder();
         Reader reader = null;

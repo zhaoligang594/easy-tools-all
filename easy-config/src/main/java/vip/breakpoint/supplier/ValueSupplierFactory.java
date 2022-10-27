@@ -25,6 +25,7 @@ public abstract class ValueSupplierFactory {
      *
      * @param supplier 类型提供器
      * @param <T>      返回的类型
+     * @param clazz    类型
      * @return 返回特定的值
      */
     @SuppressWarnings("unchecked")

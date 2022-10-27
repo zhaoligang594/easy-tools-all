@@ -9,17 +9,15 @@ import vip.breakpoint.function.EasySupplier;
  * create on 2022/10/21
  * 欢迎关注公众号 《代码废柴》
  */
-public interface ValueSupplier<T,C> extends EasySupplier<T> {
-    /**
-     * 值的 key
-     */
+public interface ValueSupplier<T, C> extends EasySupplier<T> {
+
+    // 值的 key
     String valueKey();
 
     // 获取默认的方法
     T getDefaultValue();
-    /**
-     * 值的类型
-     */
+
+    // 值的类型
     Class<C> valueClass();
 
 }

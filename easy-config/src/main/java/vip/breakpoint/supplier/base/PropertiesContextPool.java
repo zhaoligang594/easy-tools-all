@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *                size: 200
  * </pre>
  *
- * @author breakpoint/赵先生 <zlgtop@163.com>
+ * @author breakpoint/赵先生
  * create on 2021/01/20
  * @see #getContextVal 获取上下文具体的代码逻辑
  */
@@ -101,9 +101,7 @@ public final class PropertiesContextPool {
             return res;
         }
 
-        /**
-         * 设置系统的属性
-         */
+        // 设置系统的属性
         private static void putSystemInfo(Properties properties) {
             properties.forEach((key, value) -> {
                 systemConfig.put((String) key, (String) value);
@@ -123,9 +121,7 @@ public final class PropertiesContextPool {
 
     }
 
-    /**
-     * 解析json的参数
-     */
+    // 解析json的参数
     public static void refreshValueJSON(String valueKey, @MParam("获取到配置文件的地址") String absolutePath) {
         // 读取文件的内容
         String value = null;
@@ -302,9 +298,7 @@ public final class PropertiesContextPool {
         }
     }
 
-    /**
-     * 初始化配置
-     */
+    // 初始化配置
     public static void init(List<File> monitorCandidateFiles) {
         if (null != monitorCandidateFiles) {
             monitorCandidateFiles.forEach(PropertiesContextPool::refreshConfigFile);

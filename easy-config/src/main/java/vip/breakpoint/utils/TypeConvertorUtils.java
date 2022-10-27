@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * define the java type convertor
  *
- * @author : breakpoint/赵先生 <zlgtop@163.com>
+ * @author : breakpoint/赵先生
  * create on 2022/10/26
  * 欢迎关注公众号:代码废柴
  */
@@ -31,9 +31,7 @@ public abstract class TypeConvertorUtils {
         clazz2ConvertorMap.put(JavaTypeEnum.STRING, new StringTypeConvertor());
     }
 
-    /**
-     * 获取转换器
-     */
+    // 获取转换器
     @SuppressWarnings("unchecked")
     public static <T, R> TypeConvertor<T, R> getTypeConvertor(JavaTypeEnum javaTypeEnum) {
         return (TypeConvertor<T, R>) clazz2ConvertorMap.getOrDefault(javaTypeEnum, new StringTypeConvertor());

@@ -28,6 +28,7 @@ public class ExcelWriteLocalStoreUtils {
      * @param sheetName         sheet name
      * @param data              the data
      * @param <T>               java class
+     * @throws EasyExcelException
      */
     public static <T> void writeJavaObjectToExcelFile(String absoluteStorePath, String fileName, String sheetName,
                                                       List<T> data) throws EasyExcelException {
@@ -52,6 +53,7 @@ public class ExcelWriteLocalStoreUtils {
      * @param fileName          file name
      * @param data              the data
      * @param <T>               java class
+     * @throws EasyExcelException
      */
     public static <T> void writeJavaObjectToExcelFile(String absoluteStorePath, String fileName,
                                                       List<T> data) throws EasyExcelException {

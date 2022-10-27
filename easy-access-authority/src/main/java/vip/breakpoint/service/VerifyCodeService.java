@@ -14,6 +14,9 @@ public interface VerifyCodeService {
     /**
      * 验证验证码
      *
+     * @param reqVerifyCode 验证码
+     * @param verifyCodeKey key
+     * @return true or false
      * @throws EasyToolException 不满足的时候 可以抛出特定的信息
      */
     boolean doVerifyCodeCorrect(String verifyCodeKey, String reqVerifyCode) throws EasyToolException;

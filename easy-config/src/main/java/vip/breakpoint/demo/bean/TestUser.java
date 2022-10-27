@@ -1,7 +1,7 @@
 package vip.breakpoint.demo.bean;
 
 /**
- * @author : breakpoint/赵先生 <zlgtop@163.com>
+ * @author : breakpoint/赵先生
  * create on 2022/10/24
  * 欢迎关注公众号:代码废柴
  */

@@ -84,6 +84,9 @@ public enum JavaTypeEnum {
 
     /**
      * 获取类型
+     *
+     * @param type type
+     * @return JavaTypeEnum
      */
     public static JavaTypeEnum getByClazz(Class<?> type) {
         return map.getOrDefault(type, STRING);

@@ -42,9 +42,7 @@ public class ConfigFileMonitorEngine {
         monitorFilePathSet.add(basePath);
     }
 
-    /**
-     * 设置监听文件的类型
-     */
+    // 设置监听文件的类型
     public void setMonitorFileTypes(Set<FileTypeEnum> monitorFileTypeSet) {
         if (null == monitorFileTypeSet) return;
         this.monitorFileTypeSet.addAll(monitorFileTypeSet);

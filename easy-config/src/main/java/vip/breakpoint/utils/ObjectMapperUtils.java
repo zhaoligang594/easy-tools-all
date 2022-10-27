@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * json 数据的工具类
  *
- * @author : breakpoint/赵先生 <zlgtop@163.com>
+ * @author : breakpoint/赵先生
  * create on 2022/10/26
  * 欢迎关注公众号:代码废柴
  */
@@ -42,9 +42,7 @@ public abstract class ObjectMapperUtils {
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
     }
 
-    /**
-     * 返回 map 实例
-     */
+    // 返回 map 实例
     public static <C> Map<String, C> getMap(String jsonStr, Class<C> clazz) {
         Map<String, C> retMap = new HashMap<>();
         try {
@@ -61,9 +59,7 @@ public abstract class ObjectMapperUtils {
         return retMap;
     }
 
-    /**
-     * 获取 list 实例
-     */
+    // 获取 list 实例
     public static <C> List<C> getList(String jsonStr, Class<C> clazz) {
         List<C> retList = new ArrayList<>();
         try {
@@ -79,9 +75,7 @@ public abstract class ObjectMapperUtils {
         return retList;
     }
 
-    /**
-     * 返回对象
-     */
+    // 返回对象
     public static <C> C getObject(String text, Class<C> clazz) throws Exception {
         return objectMapper.readValue(text, clazz);
     }
