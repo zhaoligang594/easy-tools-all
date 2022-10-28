@@ -11,13 +11,13 @@ import org.springframework.lang.NonNull;
  * create on 2022/10/16
  * 欢迎关注公众号 《代码废柴》
  */
-public class EnableAutoConfigsBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
+public class EnableAutoConfigBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
     // 定义自己的组件
     @Override
     public void registerBeanDefinitions(@NonNull AnnotationMetadata importingClassMetadata,
                                         BeanDefinitionRegistry registry) {
-        registry.registerBeanDefinition(EnableAccessBeanConfig.class.getName(),
-                new RootBeanDefinition(EnableAccessBeanConfig.class));
+        registry.registerBeanDefinition(EnableAutoConfig.class.getName(),
+                new RootBeanDefinition(EnableAutoConfig.class));
     }
 }
