@@ -6,6 +6,8 @@ import vip.breakpoint.convertor.ObjectTypeConvertor;
 import vip.breakpoint.convertor.base.TypeConvertor;
 import vip.breakpoint.enums.JavaTypeEnum;
 import vip.breakpoint.exception.OptNotSupportException;
+import vip.breakpoint.log.WebLogFactory;
+import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.supplier.base.PropertiesContextPool;
 import vip.breakpoint.supplier.value.ValueSupplier;
 import vip.breakpoint.utils.TypeConvertorUtils;
@@ -19,6 +21,11 @@ import java.util.Map;
  * 欢迎关注公众号 《代码废柴》
  */
 public abstract class ValueSupplierFactory {
+
+    /**
+     * 日志的操作
+     */
+    private static final Logger log = WebLogFactory.getLogger(ValueSupplierFactory.class);
 
     /**
      * 获取值
@@ -55,6 +62,7 @@ public abstract class ValueSupplierFactory {
         } catch (OptNotSupportException e2) {
             throw e2;
         } catch (Exception e) {
+            log.warn("use the default value");
             return supplier.getDefaultValue();
         }
     }

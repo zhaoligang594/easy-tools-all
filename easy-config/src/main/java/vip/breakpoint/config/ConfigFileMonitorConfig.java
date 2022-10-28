@@ -2,8 +2,10 @@ package vip.breakpoint.config;
 
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import vip.breakpoint.enums.FileTypeEnum;
+import vip.breakpoint.executor.FileChangeListener;
 import vip.breakpoint.filter.MonitorConfigFilter;
 import vip.breakpoint.listener.ConfigFileListener;
+import vip.breakpoint.listener.PoolConfigFileChangeListener;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.monitor.ConfigFileMonitor;
@@ -27,13 +29,16 @@ public class ConfigFileMonitorConfig {
     private static final Logger log = WebLogFactory.getLogger(ConfigFileMonitorConfig.class);
 
     /**
-     * 监听器
-     */
-    private volatile ConfigFileMonitor monitor;
-    /**
      * 文件事件通知监听
      */
     private final ConfigFileListener listener = new ConfigFileListener();
+
+    private List<FileChangeListener> fileChangeListeners;
+
+    public void setFileChangeListeners(List<FileChangeListener> fileChangeListeners) {
+        this.fileChangeListeners = fileChangeListeners;
+    }
+
     /**
      * 监听文件变化时间间隔
      */
@@ -48,11 +53,17 @@ public class ConfigFileMonitorConfig {
 
     static {
         undoFiles.add("pom.properties");
+        undoFiles.add("maven-wrapper.properties");
     }
 
     public ConfigFileMonitorConfig(long interval) {
         this.interval = interval;
     }
+
+    /**
+     * 监听器
+     */
+    private volatile ConfigFileMonitor monitor;
 
     /**
      * DCL 获取 配置文件坚挺者
@@ -78,10 +89,14 @@ public class ConfigFileMonitorConfig {
      */
     public void addMonitorFile(List<String> filePathArr, Set<FileTypeEnum> fileTypeEnumSet) {
         if (null == filePathArr) return;
+        // create the new MonitorConfigFilter object
         MonitorConfigFilter monitorConfigFilter = new MonitorConfigFilter(fileTypeEnumSet);
-
         for (String path : filePathArr) {
             File filePath = new File(path);
+            if (!filePath.exists()) {
+                log.error("the path is not exist path is:{}", path);
+                continue;
+            }
             List<File> monitorCandidateFiles = getAllFileFromDirector(filePath, fileTypeEnumSet);
             // init the context value
             PropertiesContextPool.init(monitorCandidateFiles);
@@ -90,6 +105,7 @@ public class ConfigFileMonitorConfig {
                 parentPath2FileMap.put(monitorCandidateFile.getParentFile().getAbsolutePath(),
                         monitorCandidateFile.getParentFile());
             }
+            listener.addFileChangeListener(fileChangeListeners);
             for (File monitorPath : parentPath2FileMap.values()) {
                 getMonitor().monitor(monitorPath, monitorConfigFilter, listener);
             }

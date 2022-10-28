@@ -55,25 +55,16 @@ public final class PropertiesContextPool {
      */
     private static final Logger log = WebLogFactory.getLogger(PropertiesContextPool.class);
 
-    private static final ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
 
     static {
         // 刷新当前的值
         refreshValues();
-        // start
-        startFileMonitorEngine();
-    }
-
-    /**
-     * start the file monitor
-     */
-    private static void startFileMonitorEngine() {
-        // to set the default path
-        engine.setMonitorDefaultClassPath();
-        // monitor file type
-        engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES, FileTypeEnum.JSON, FileTypeEnum.YAML);
-        // start the file monitor engine
-        engine.startMonitorEngine();
+        try {
+            Class.forName("org.springframework.context.ApplicationContext");
+        } catch (ClassNotFoundException e) {
+            log.info("use the default config!");
+            ConfigFileMonitorEngine.startFileMonitorEngine(null);
+        }
     }
 
     // 系统信息

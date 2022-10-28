@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import vip.breakpoint.config.ConfigFileMonitorConfig;
-import vip.breakpoint.log.WebLogFactory;
-import vip.breakpoint.log.adaptor.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,11 +21,6 @@ import java.util.Map;
 public abstract class ObjectMapperUtils {
 
     /**
-     * 日志的操作
-     */
-    private static final Logger log = WebLogFactory.getLogger(ConfigFileMonitorConfig.class);
-
-    /**
      * 类型转换器
      */
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -43,34 +35,26 @@ public abstract class ObjectMapperUtils {
     }
 
     // 返回 map 实例
-    public static <C> Map<String, C> getMap(String jsonStr, Class<C> clazz) {
+    public static <C> Map<String, C> getMap(String jsonStr, Class<C> clazz) throws Exception {
         Map<String, C> retMap = new HashMap<>();
-        try {
-            Map<String, C> tempMap = objectMapper.readValue(jsonStr, new TypeReference<Map<String, C>>() {
-                // nothing to do
-            });
-            for (Map.Entry<String, C> entry : tempMap.entrySet()) {
-                retMap.put(entry.getKey(),
-                        getObject(objectMapper.writeValueAsString(entry.getValue()), clazz));
-            }
-        } catch (Exception e) {
-            log.error("[getMap]", e);
+        Map<String, C> tempMap = objectMapper.readValue(jsonStr, new TypeReference<Map<String, C>>() {
+            // nothing to do
+        });
+        for (Map.Entry<String, C> entry : tempMap.entrySet()) {
+            retMap.put(entry.getKey(),
+                    getObject(objectMapper.writeValueAsString(entry.getValue()), clazz));
         }
         return retMap;
     }
 
     // 获取 list 实例
-    public static <C> List<C> getList(String jsonStr, Class<C> clazz) {
+    public static <C> List<C> getList(String jsonStr, Class<C> clazz) throws Exception {
         List<C> retList = new ArrayList<>();
-        try {
-            List<C> cs = objectMapper.readValue(jsonStr, new TypeReference<List<C>>() {
-                // nothing to do
-            });
-            for (C c : cs) {
-                retList.add(getObject(objectMapper.writeValueAsString(c), clazz));
-            }
-        } catch (Exception e) {
-            log.error("[getList]", e);
+        List<C> cs = objectMapper.readValue(jsonStr, new TypeReference<List<C>>() {
+            // nothing to do
+        });
+        for (C c : cs) {
+            retList.add(getObject(objectMapper.writeValueAsString(c), clazz));
         }
         return retList;
     }

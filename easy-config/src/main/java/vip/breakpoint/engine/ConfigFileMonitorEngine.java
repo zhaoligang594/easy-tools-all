@@ -2,6 +2,8 @@ package vip.breakpoint.engine;
 
 import vip.breakpoint.config.ConfigFileMonitorConfig;
 import vip.breakpoint.enums.FileTypeEnum;
+import vip.breakpoint.executor.FileChangeListener;
+import vip.breakpoint.utils.EasyStringUtils;
 
 import java.util.*;
 
@@ -15,6 +17,8 @@ import java.util.*;
  * 欢迎关注公众号 《代码废柴》
  */
 public class ConfigFileMonitorEngine {
+
+    private ConfigFileMonitorEngine() {/* refuse the new object */}
 
     private final ConfigFileMonitorConfig monitorConfig =
             new ConfigFileMonitorConfig(ConfigFileMonitorConfig.DEFAULT_INTERVAL);
@@ -34,7 +38,7 @@ public class ConfigFileMonitorEngine {
     /**
      * 默认设置监听项目里面所有符合配置的文件
      */
-    public void setMonitorDefaultClassPath() {
+    private void setMonitorDefaultClassPath() {
         String basePath = ConfigFileMonitorEngine.class.getResource("/").getPath();
         if (basePath.contains("target")) {
             basePath = basePath.substring(0, basePath.indexOf("target"));
@@ -42,13 +46,25 @@ public class ConfigFileMonitorEngine {
         monitorFilePathSet.add(basePath);
     }
 
+    /**
+     * 添加监控路径
+     *
+     * @param path 监控文件的路径
+     */
+    private void addMonitorFilePath(String path) {
+        if (EasyStringUtils.isNotBlank(path)) {
+            monitorFilePathSet.add(path);
+        }
+    }
+
     // 设置监听文件的类型
-    public void setMonitorFileTypes(Set<FileTypeEnum> monitorFileTypeSet) {
+    private void setMonitorFileTypes(Set<FileTypeEnum> monitorFileTypeSet) {
         if (null == monitorFileTypeSet) return;
         this.monitorFileTypeSet.addAll(monitorFileTypeSet);
     }
 
-    public void setMonitorFileTypes(FileTypeEnum... monitorFileTypes) {
+    // 设置监听文件的类型
+    private void setMonitorFileTypes(FileTypeEnum... monitorFileTypes) {
         if (null == monitorFileTypes) return;
         this.monitorFileTypeSet.addAll(Arrays.asList(monitorFileTypes));
     }
@@ -57,7 +73,35 @@ public class ConfigFileMonitorEngine {
      * 启动监听引擎
      * 监听指定的文件的更改路径以及文件的文件的类型
      */
-    public void startMonitorEngine() {
+    private void startMonitorEngine() {
         monitorConfig.addMonitorFile(new ArrayList<>(monitorFilePathSet), monitorFileTypeSet);
+    }
+
+    /**
+     * start the file monitor
+     */
+    public static void startFileMonitorEngine(List<FileChangeListener> fileChangeListeners) {
+        startFileMonitorEngine(new ArrayList<>(), fileChangeListeners);
+    }
+
+    public void setFileChangeListeners(List<FileChangeListener> fileChangeListeners) {
+        monitorConfig.setFileChangeListeners(fileChangeListeners);
+    }
+
+    /**
+     * start the file monitor
+     */
+    public static void startFileMonitorEngine(List<String> monitorPaths, List<FileChangeListener> fileChangeListeners) {
+        // create the ConfigFileMonitorEngine
+        ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
+        // to set the default path
+        engine.setMonitorDefaultClassPath();
+        // add file to the engine
+        monitorPaths.forEach(engine::addMonitorFilePath);
+        // monitor file type
+        engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES, FileTypeEnum.JSON, FileTypeEnum.YAML);
+        // start the file monitor engine
+        engine.setFileChangeListeners(fileChangeListeners);
+        engine.startMonitorEngine();
     }
 }
