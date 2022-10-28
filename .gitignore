@@ -34,13 +34,17 @@ hs_err_pid*
 /easy-excel/target/
 /easy-log/target/
 /easy-config/target/
+/easy-config-spring/target/
+
 /easy-core/*.iml
 /easy-tool-utils/*.iml
 /easy-access-authority/*.iml
 /easy-algorithm/*.iml
 /easy-excel/.iml
 /easy-log/.iml
-/easy-config/.iml
+/easy-config/
+/easy-config-spring/.iml
+
 /easy-core/.idea/
 /easy-tool-utils/.idea/
 /easy-access-authority/.idea/
@@ -48,3 +52,4 @@ hs_err_pid*
 /easy-excel/.idea/
 /easy-log/.idea/
 /easy-config/.idea/
+/easy-config-spring/.idea/
