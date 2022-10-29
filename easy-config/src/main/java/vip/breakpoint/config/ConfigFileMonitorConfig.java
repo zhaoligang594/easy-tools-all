@@ -12,6 +12,7 @@ import vip.breakpoint.supplier.base.PropertiesContextPool;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.Executor;
 
 /**
  * 文件监听配置
@@ -36,6 +37,12 @@ public class ConfigFileMonitorConfig {
 
     public void setFileChangeListeners(List<FileChangeListener> fileChangeListeners) {
         this.fileChangeListeners = fileChangeListeners;
+    }
+
+    private Executor executor;
+
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
     }
 
     /**
@@ -105,6 +112,7 @@ public class ConfigFileMonitorConfig {
                         monitorCandidateFile.getParentFile());
             }
             listener.addFileChangeListener(fileChangeListeners);
+            listener.setExecutor(executor);
             for (File monitorPath : parentPath2FileMap.values()) {
                 getMonitor().monitor(monitorPath, monitorConfigFilter, listener);
             }

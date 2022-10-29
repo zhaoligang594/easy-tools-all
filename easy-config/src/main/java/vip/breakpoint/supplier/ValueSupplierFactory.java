@@ -10,6 +10,7 @@ import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.supplier.base.PropertiesContextPool;
 import vip.breakpoint.supplier.value.ValueSupplier;
+import vip.breakpoint.utils.JavaTypeUtils;
 import vip.breakpoint.utils.TypeConvertorUtils;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public abstract class ValueSupplierFactory {
     public static <T, C> T get(ValueSupplier<T, C> supplier, Class<T> clazz) {
         String ret = PropertiesContextPool.getContextVal(supplier);
         try {
-            if (null != clazz && isPrimitiveType(clazz)) {
+            if (null != clazz && JavaTypeUtils.isPrimitiveType(clazz)) {
                 TypeConvertor<String, T> typeConvertor =
                         TypeConvertorUtils.getTypeConvertor(JavaTypeEnum.getByClazz(clazz));
                 return typeConvertor.doConvert(ret);
@@ -65,25 +66,5 @@ public abstract class ValueSupplierFactory {
             log.warn("use the default value");
             return supplier.getDefaultValue();
         }
-    }
-
-
-    /**
-     * 是否为基本的数据类型
-     *
-     * @param clazz 类型
-     * @param <T>   类型
-     * @return true or false
-     */
-    private static <T> boolean isPrimitiveType(Class<T> clazz) {
-        return clazz == Integer.class
-                || clazz == Byte.class
-                || clazz == Short.class
-                || clazz == Long.class
-                || clazz == Double.class
-                || clazz == Float.class
-                || clazz == Boolean.class
-                || clazz == Character.class
-                || clazz == String.class;
     }
 }

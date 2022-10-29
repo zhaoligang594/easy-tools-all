@@ -6,6 +6,7 @@ import vip.breakpoint.listener.FileChangeListener;
 import vip.breakpoint.utils.EasyStringUtils;
 
 import java.util.*;
+import java.util.concurrent.Executor;
 
 /**
  * 文件监听执行引擎
@@ -81,17 +82,22 @@ public class ConfigFileMonitorEngine {
      * start the file monitor
      */
     public static void startFileMonitorEngine(List<FileChangeListener> fileChangeListeners) {
-        startFileMonitorEngine(new ArrayList<>(), fileChangeListeners);
+        startFileMonitorEngine(new ArrayList<>(), fileChangeListeners, null);
     }
 
     public void setFileChangeListeners(List<FileChangeListener> fileChangeListeners) {
         monitorConfig.setFileChangeListeners(fileChangeListeners);
     }
 
+    public void setFileChangeExecutor(Executor executor) {
+        monitorConfig.setExecutor(executor);
+    }
+
     /**
      * start the file monitor
      */
-    public static void startFileMonitorEngine(List<String> monitorPaths, List<FileChangeListener> fileChangeListeners) {
+    public static void startFileMonitorEngine(List<String> monitorPaths,
+                                              List<FileChangeListener> fileChangeListeners, Executor executor) {
         // create the ConfigFileMonitorEngine
         ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
         // to set the default path
@@ -102,6 +108,7 @@ public class ConfigFileMonitorEngine {
         engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES, FileTypeEnum.JSON, FileTypeEnum.YAML);
         // start the file monitor engine
         engine.setFileChangeListeners(fileChangeListeners);
+        engine.setFileChangeExecutor(executor);
         engine.startMonitorEngine();
     }
 }

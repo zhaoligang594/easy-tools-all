@@ -25,7 +25,9 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
     private Executor executor;
 
     public void setExecutor(Executor executor) {
-        this.executor = executor;
+        if (null != executor) {
+            this.executor = executor;
+        }
     }
 
     /**

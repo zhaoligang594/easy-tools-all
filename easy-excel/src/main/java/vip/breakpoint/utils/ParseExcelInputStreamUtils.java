@@ -121,13 +121,13 @@ public class ParseExcelInputStreamUtils {
                     Class<?> type = field.getType();
                     Object value = null;
                     if (type == Integer.class || type == int.class) {
-                        value = JavaTypeUtils.getTargetValue(oriValue, Integer.class);
+                        value = ExcelJavaTypeUtils.getTargetValue(oriValue, Integer.class);
                     }
                     if (type == Long.class || type == long.class) {
-                        value = JavaTypeUtils.getTargetValue(oriValue, Long.class);
+                        value = ExcelJavaTypeUtils.getTargetValue(oriValue, Long.class);
                     }
                     if (type == Double.class || type == double.class) {
-                        value = JavaTypeUtils.getTargetValue(oriValue, Double.class);
+                        value = ExcelJavaTypeUtils.getTargetValue(oriValue, Double.class);
                     }
                     if (type == String.class) {
                         String targetVal = null;

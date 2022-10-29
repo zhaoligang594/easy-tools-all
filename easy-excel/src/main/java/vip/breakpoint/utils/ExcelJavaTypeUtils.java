@@ -5,7 +5,7 @@ package vip.breakpoint.utils;
  * create on 2022/08/27
  * 欢迎关注公众号 《代码废柴》
  */
-public class JavaTypeUtils {
+public class ExcelJavaTypeUtils {
 
     // GET VALUE
     @SuppressWarnings("unchecked")
