@@ -16,9 +16,7 @@ import java.util.List;
  * 欢迎关注公众号:代码废柴
  */
 public class SpringContextStartedListener implements ApplicationListener<ContextRefreshedEvent> {
-    /**
-     * 日志的操作
-     */
+
     private static final Logger log = WebLogFactory.getLogger(SpringContextStartedListener.class);
 
     @Autowired

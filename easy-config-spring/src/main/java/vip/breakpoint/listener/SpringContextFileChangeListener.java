@@ -4,6 +4,7 @@ import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * spring的配置
@@ -14,13 +15,10 @@ import java.io.File;
  */
 public class SpringContextFileChangeListener implements FileChangeListener {
 
-    /**
-     * 日志的操作
-     */
     private static final Logger log = WebLogFactory.getLogger(SpringContextFileChangeListener.class);
 
     @Override
-    public void doChangedConfigFileRefresh(File file) {
+    public void doChangedConfigFileRefresh(File file, Map<String, String> changeFileKeyValueMap) {
         log.info("the file have changed!! the path is:{}", file.getAbsolutePath());
     }
 }

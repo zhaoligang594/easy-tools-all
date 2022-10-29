@@ -15,6 +15,8 @@ public class ConfigTest {
         while (true) {
             String integer = StringConfigEnum.TEST.get();
             System.out.println(integer);
+            String name = StringConfigEnum.TEST_NAME.get();
+            System.out.println(name);
             List<TestUser> list = StringListEnum.TEST.get();
             System.out.println(list);
             TestUser testUser = ObjectConfigEnum.TEST.get();

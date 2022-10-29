@@ -14,7 +14,7 @@ import vip.breakpoint.listener.SpringContextStartedListener;
  * 欢迎关注公众号:代码废柴
  */
 @Configuration
-public class EnableAutoConfig {
+public class EnableSpringAutoConfig {
 
     @Bean
     public ApplicationListener<ContextRefreshedEvent> getSpringContextStartedListener() {
@@ -24,5 +24,10 @@ public class EnableAutoConfig {
     @Bean
     public FileChangeListener getSpringContextFileChangeListener() {
         return new SpringContextFileChangeListener();
+    }
+
+    @Bean
+    public MySpringBeanPostProcessor getValueAndBeanPoolContext() {
+        return new MySpringBeanPostProcessor();
     }
 }

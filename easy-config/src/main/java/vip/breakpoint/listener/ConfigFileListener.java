@@ -4,11 +4,13 @@ import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
+import vip.breakpoint.utils.FetchKeyValueUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 /**
@@ -37,15 +39,16 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
     }
 
     @Override
-    public void onFileChange(File file) {
+    public void onFileChange(final File file) {
         log.info("config have some change:" + file.getAbsolutePath());
+        final Map<String, String> key2ValueMap = FetchKeyValueUtils.getKey2ValueMap(file);
         if (null != executor) {
             for (FileChangeListener fileChangeListener : fileChangeListeners) {
-                executor.execute(() -> fileChangeListener.doChangedConfigFileRefresh(file));
+                executor.execute(() -> fileChangeListener.doChangedConfigFileRefresh(file, key2ValueMap));
             }
         } else {
             for (FileChangeListener fileChangeListener : fileChangeListeners) {
-                fileChangeListener.doChangedConfigFileRefresh(file);
+                fileChangeListener.doChangedConfigFileRefresh(file, key2ValueMap);
             }
         }
         log.info("the file have refresh done:" + file.getAbsolutePath());

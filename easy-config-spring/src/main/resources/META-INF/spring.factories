@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-vip.breakpoint.config.EnableAutoConfig
+vip.breakpoint.config.EnableSpringAutoConfig

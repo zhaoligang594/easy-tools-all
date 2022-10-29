@@ -1,17 +1,13 @@
 package vip.breakpoint.supplier.base;
 
-import com.alibaba.fastjson2.JSONObject;
-import org.yaml.snakeyaml.Yaml;
-import vip.breakpoint.annotation.MParam;
 import vip.breakpoint.engine.ConfigFileMonitorEngine;
-import vip.breakpoint.enums.FileTypeEnum;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.supplier.value.ValueSupplier;
 import vip.breakpoint.utils.EasyStringUtils;
-import vip.breakpoint.utils.FileUtils;
+import vip.breakpoint.utils.FetchKeyValueUtils;
 
-import java.io.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +40,6 @@ public final class PropertiesContextPool {
 
     private PropertiesContextPool() {/*reject new object*/}
 
-    /**
-     * 1
-     * 获取这个类的 class loader 获取文件流 加载一些配置
-     */
-    private static final ClassLoader classLoader = PropertiesContextPool.class.getClassLoader();
-
-    /**
-     * 日志的操作
-     */
     private static final Logger log = WebLogFactory.getLogger(PropertiesContextPool.class);
 
 
@@ -112,145 +99,6 @@ public final class PropertiesContextPool {
 
     }
 
-    // 解析json的参数
-    public static void refreshValueJSON(String valueKey, @MParam("获取到配置文件的地址") String absolutePath) {
-        // 读取文件的内容
-        String value = null;
-        try {
-            log.info("config file location：{}", absolutePath);
-            value = FileUtils.getStringFromFile(absolutePath);
-            if (null == value || "".equals(value)) value = FileUtils.getStringFromFile(absolutePath);
-        } catch (Exception e) {
-            value = FileUtils.getStringFromFile(absolutePath);
-        }
-        if (null != value) {
-            SystemContextInfo.putPropertyInfo(valueKey, value);
-        }
-    }
-
-
-    // 刷新 Properties 文件的属性
-    public static synchronized void refreshValueProperties(@MParam("获取到配置文件的地址") String absolutePath) {
-        // 定义文件流属性
-        InputStream inputStream = null;
-        try {
-            log.info("config file location:{}", absolutePath);
-            // 获取配置的文件
-            inputStream = classLoader.getResourceAsStream(absolutePath);
-            // 定义
-            Properties properties = new Properties();
-            // 加载文件流里面的属性
-            properties.load(inputStream);
-            // 设置配置文件的属性值
-            setVal(properties);
-        } catch (Exception e) {
-            try {
-                // 出现异常 说明 没有那个配置文件 这个时候采用 二进制 文件流的方式 获取文件的配置
-                inputStream = new FileInputStream(absolutePath);
-                Properties properties = new Properties();
-                properties.load(inputStream);
-                // 设置配置文件的属性值
-                setVal(properties);
-            } catch (FileNotFoundException e1) {
-                log.warn("文件 " + absolutePath + " 没有找到");
-            } catch (Exception e1) {
-                log.error("启动时候，发生严重错误 [{}]", e.getMessage(), e);
-                throw new IllegalArgumentException("启动时候，发生严重错误" + e.getMessage());
-            }
-        } finally {
-            if (null != inputStream) {
-                try {
-                    // 关闭文件流
-                    inputStream.close();
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // 设置 配置信息 到 系统上下文的 环境中
-    private static synchronized void setVal(Properties properties) {
-        // 设置值的操作
-        properties.forEach((key, value) -> {
-            SystemContextInfo.putPropertyInfo((String) key, (String) value);
-        });
-    }
-
-    // 刷新 Yaml 文件的属性
-    public static synchronized void refreshValueYaml(@MParam("获取到配置文件的地址") String absolutePath) {
-        // 定义文件流属性
-        InputStream inputStream = null;
-        try {
-            log.info("config file location:{}", absolutePath);
-            // 获取配置的文件
-            inputStream = classLoader.getResourceAsStream(absolutePath);
-            // 设置值的操作
-            Map<String, Object> valueMap = new Yaml().load(inputStream);
-            // 设置值
-            setYamlValues(valueMap, "");
-        } catch (Exception e) {
-            try {
-                // 出现异常 说明 没有那个配置文件 这个时候采用 二进制 文件流的方式 获取文件的配置
-                inputStream = new FileInputStream(absolutePath);
-                // 设置值的操作
-                Map<String, Object> valueMap = new Yaml().load(inputStream);
-                // 设置值
-                setYamlValues(valueMap, "");
-            } catch (FileNotFoundException e1) {
-                log.warn("文件 " + absolutePath + " 没有找到");
-            } catch (Exception e1) {
-                log.error("启动时候，发生严重错误 [{}]", e.getMessage(), e);
-                throw new IllegalArgumentException("启动时候，发生严重错误" + e.getMessage());
-            }
-        } finally {
-            if (null != inputStream) {
-                try {
-                    // 关闭文件流
-                    inputStream.close();
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // 设置新的值
-    @SuppressWarnings("unchecked")
-    private static synchronized void setYamlValues(@MParam("数值信息") Map<String, Object> valueMap,
-                                                   @MParam("前缀信息") String prefix) {
-        if (null != valueMap) {
-            final String format = EasyStringUtils.isNotBlank(prefix) ? "%s.%s" : "%s%s";
-            // 循环遍历设置新值
-            valueMap.forEach((key, value) -> {
-                if (isPrimitiveVal(value)) {
-                    String valueKey = String.format(format, prefix, key);
-                    SystemContextInfo.putPropertyInfo(valueKey, String.valueOf(value));
-                } else if (value instanceof Map) {
-                    // @SuppressWarnings("unchecked")
-                    setYamlValues((Map<String, Object>) value, String.format(format, prefix, key));
-                } else if (value instanceof List) {
-                    String valueKey = String.format(format, prefix, key);
-                    SystemContextInfo.putPropertyInfo(valueKey, JSONObject.toJSONString(value));
-                }
-            });
-        }
-    }
-
-    // 判断是否属于基本数据类型
-    private static boolean isPrimitiveVal(Object val) {
-        return null == val
-                || val instanceof Byte
-                || val instanceof Character
-                || val instanceof Short
-                || val instanceof Integer
-                || val instanceof Boolean
-                || val instanceof Long
-                || val instanceof Float
-                || val instanceof Double
-                || val instanceof String;
-    }
-
     // 更新系统的配置文件
     private static synchronized void refreshValues() {
         // 设置系统的数值
@@ -278,14 +126,19 @@ public final class PropertiesContextPool {
     }
 
     public static void refreshConfigFile(File configFile) {
-        if (configFile.getName().endsWith(FileTypeEnum.PROPERTIES.getFileType())) {
-            refreshValueProperties(configFile.getAbsolutePath());
-        } else if (configFile.getName().endsWith(FileTypeEnum.JSON.getFileType())) {
-            int idx = configFile.getName().lastIndexOf(FileTypeEnum.JSON.getFileType());
-            String valueKey = configFile.getName().substring(0, idx);
-            refreshValueJSON(valueKey, configFile.getAbsolutePath());
-        } else if (configFile.getName().endsWith(FileTypeEnum.YAML.getFileType())) {
-            refreshValueYaml(configFile.getAbsolutePath());
+        Map<String, String> key2ValueMap = FetchKeyValueUtils.getKey2ValueMap(configFile);
+        if (null != key2ValueMap) {
+            for (Map.Entry<String, String> e : key2ValueMap.entrySet()) {
+                SystemContextInfo.putPropertyInfo(e.getKey(), e.getValue());
+            }
+        }
+    }
+
+    public static void refreshConfigValue(Map<String, String> key2ValueMap) {
+        if (null != key2ValueMap) {
+            for (Map.Entry<String, String> e : key2ValueMap.entrySet()) {
+                SystemContextInfo.putPropertyInfo(e.getKey(), e.getValue());
+            }
         }
     }
 

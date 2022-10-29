@@ -8,16 +8,15 @@ import org.springframework.lang.NonNull;
 
 /**
  * @author : breakpoint
- * create on 2022/10/16
+ * create on 2022/10/28
  * 欢迎关注公众号 《代码废柴》
  */
 public class EnableAutoConfigBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
-    // 定义自己的组件
     @Override
     public void registerBeanDefinitions(@NonNull AnnotationMetadata importingClassMetadata,
                                         BeanDefinitionRegistry registry) {
-        registry.registerBeanDefinition(EnableAutoConfig.class.getName(),
-                new RootBeanDefinition(EnableAutoConfig.class));
+        registry.registerBeanDefinition(EnableSpringAutoConfig.class.getName(),
+                new RootBeanDefinition(EnableSpringAutoConfig.class));
     }
 }
