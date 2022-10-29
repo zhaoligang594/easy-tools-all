@@ -13,6 +13,8 @@ public class SpringBeanWrapperPool {
 
     private static final Map<String, Set<SpringBeanWrapper>> valueKey2BeanMap = new HashMap<>();
 
+    private static final Map<String, Set<SpringBeanWrapper>> backUpBeanMap = new HashMap<>();
+
     // add item to the valueKey2BeanMap
     public static void addSpringBeanWrapper(String valueKey, SpringBeanWrapper wrapper) {
         Set<SpringBeanWrapper> wrappers = valueKey2BeanMap.getOrDefault(valueKey, new HashSet<>());
@@ -20,8 +22,25 @@ public class SpringBeanWrapperPool {
         valueKey2BeanMap.put(valueKey, wrappers);
     }
 
+    public static void addSpringBeanWrapper2BackUp(String valueKey, SpringBeanWrapper wrapper) {
+        Set<SpringBeanWrapper> wrappers = backUpBeanMap.getOrDefault(valueKey, new HashSet<>());
+        wrappers.add(wrapper);
+        backUpBeanMap.put(valueKey, wrappers);
+    }
+
+    public static void addSpringBeanWrapper(String valueKey, Set<SpringBeanWrapper> springBeanWrappers) {
+        Set<SpringBeanWrapper> wrappers = valueKey2BeanMap.getOrDefault(valueKey, new HashSet<>());
+        wrappers.addAll(springBeanWrappers);
+        valueKey2BeanMap.put(valueKey, wrappers);
+    }
+
     @NonNull
     public static Set<SpringBeanWrapper> getSpringBeanWrapperByKey(String valueKey) {
         return valueKey2BeanMap.getOrDefault(valueKey, new HashSet<>());
+    }
+
+    @NonNull
+    public static Map<String, Set<SpringBeanWrapper>> getBackUpBeanMap() {
+        return backUpBeanMap;
     }
 }

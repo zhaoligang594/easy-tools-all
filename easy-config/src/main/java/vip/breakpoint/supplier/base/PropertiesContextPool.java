@@ -123,6 +123,10 @@ public final class PropertiesContextPool {
         res.put("systemConfig", SystemContextInfo.systemConfig);
         res.put("configValues", SystemContextInfo.valueKey2Config);
         return res;
+    }    // 获取系统的信息
+
+    public static synchronized Map<String, String> getConfigValuesMap() {
+        return SystemContextInfo.valueKey2Config;
     }
 
     public static void refreshConfigFile(File configFile) {

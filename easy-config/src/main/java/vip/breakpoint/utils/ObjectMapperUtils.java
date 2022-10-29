@@ -20,9 +20,6 @@ import java.util.Map;
  */
 public abstract class ObjectMapperUtils {
 
-    /**
-     * 类型转换器
-     */
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {

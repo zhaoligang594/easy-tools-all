@@ -1,6 +1,7 @@
 package vip.breakpoint.wrapper;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 /**
  * @author : breakpoint/赵先生
@@ -15,15 +16,17 @@ public class SpringBeanWrapper {
 
     private String valueKey;
 
-    private Class<?> valueType;
+    private Class<?> type;
 
     private Field valueField;
 
-    public SpringBeanWrapper(Object bean, String beanName, String valueKey, Class<?> valueType, Field valueField) {
+    private Class<?> valueType;
+
+    public SpringBeanWrapper(Object bean, String beanName, String valueKey, Class<?> type, Field valueField) {
         this.bean = bean;
         this.beanName = beanName;
         this.valueKey = valueKey;
-        this.valueType = valueType;
+        this.type = type;
         this.valueField = valueField;
     }
 
@@ -51,12 +54,12 @@ public class SpringBeanWrapper {
         this.valueKey = valueKey;
     }
 
-    public Class<?> getValueType() {
-        return valueType;
+    public Class<?> getType() {
+        return type;
     }
 
-    public void setValueType(Class<?> valueType) {
-        this.valueType = valueType;
+    public void setType(Class<?> type) {
+        this.type = type;
     }
 
     public Field getValueField() {
@@ -65,5 +68,27 @@ public class SpringBeanWrapper {
 
     public void setValueField(Field valueField) {
         this.valueField = valueField;
+    }
+
+    public Class<?> getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(Class<?> valueType) {
+        this.valueType = valueType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpringBeanWrapper wrapper = (SpringBeanWrapper) o;
+        return Objects.equals(bean, wrapper.bean) && Objects.equals(beanName, wrapper.beanName)
+                && Objects.equals(valueKey, wrapper.valueKey) && Objects.equals(type, wrapper.type) && Objects.equals(valueField, wrapper.valueField);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bean, beanName, valueKey, type, valueField);
     }
 }

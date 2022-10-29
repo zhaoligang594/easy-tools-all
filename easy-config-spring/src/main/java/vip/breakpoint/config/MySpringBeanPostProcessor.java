@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import vip.breakpoint.annontation.EasyConfig;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.utils.EasyStringUtils;
@@ -45,6 +46,20 @@ public class MySpringBeanPostProcessor implements BeanPostProcessor {
                     log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
                     SpringBeanWrapperPool.addSpringBeanWrapper(valueKey, wrapper);
+                }
+            }
+            EasyConfig easyConfigAnn = field.getAnnotation(EasyConfig.class);
+            if (null != easyConfigAnn) {
+                String key = easyConfigAnn.value();
+                if (EasyStringUtils.isBlank(key)) {
+                    key = easyConfigAnn.key();
+                }
+                String valueKey = getRealKey(key);
+                if (EasyStringUtils.isNotBlank(valueKey)) {
+                    log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
+                    SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
+                    wrapper.setValueType(easyConfigAnn.valueClass());
+                    SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(valueKey, wrapper);
                 }
             }
         }
