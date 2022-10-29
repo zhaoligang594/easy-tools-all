@@ -27,6 +27,13 @@ public class SpringChangeValueUtils {
     public static void updateTheBeanValues(String value, Set<SpringBeanWrapper> beanWrappers) {
         for (SpringBeanWrapper beanWrapper : beanWrappers) {
             Class<?> clazz = beanWrapper.getType();
+            if (EasyStringUtils.isBlank(value)) {
+                // use default value
+                value = beanWrapper.getDefaultValue();
+            }
+            if (EasyStringUtils.isBlank(value)) {
+                continue;
+            }
             if (null != clazz && JavaTypeUtils.isPrimitiveType(clazz)) {
                 TypeConvertor<String, ?> typeConvertor =
                         TypeConvertorUtils.getTypeConvertor(JavaTypeEnum.getByClazz(clazz));

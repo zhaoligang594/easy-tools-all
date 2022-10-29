@@ -5,12 +5,11 @@
     <parent>
         <artifactId>easy-tools-all</artifactId>
         <groupId>vip.breakpoint</groupId>
-        <version>0.1.0</version>
+        <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>easy-config-spring</artifactId>
-    <version>0.1.0</version>
+    <version>${easy.version}</version>
     <name>easy-config-spring</name>
     <packaging>jar</packaging>
 
@@ -64,7 +63,7 @@
         <dependency>
             <groupId>vip.breakpoint</groupId>
             <artifactId>easy-config</artifactId>
-            <version>0.1.0</version>
+            <version>${easy.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
         <dependency>

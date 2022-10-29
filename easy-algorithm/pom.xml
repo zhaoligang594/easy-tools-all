@@ -5,11 +5,11 @@
     <parent>
         <artifactId>easy-tools-all</artifactId>
         <groupId>vip.breakpoint</groupId>
-        <version>0.1.0</version>
+        <version>1.0.0.RELEASE</version>
     </parent>
 
     <artifactId>easy-algorithm</artifactId>
-    <version>0.1.0</version>
+    <version>${easy.version}</version>
     <name>easy-algorithm</name>
     <packaging>jar</packaging>
 
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>vip.breakpoint</groupId>
             <artifactId>easy-core</artifactId>
-            <version>0.1.0</version>
+            <version>${easy.version}</version>
         </dependency>
 
         <!--    test    -->

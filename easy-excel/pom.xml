@@ -6,11 +6,11 @@
     <parent>
         <artifactId>easy-tools-all</artifactId>
         <groupId>vip.breakpoint</groupId>
-        <version>0.1.0</version>
+        <version>1.0.0.RELEASE</version>
     </parent>
 
     <artifactId>easy-excel</artifactId>
-    <version>0.1.0</version>
+    <version>${easy.version}</version>
     <packaging>jar</packaging>
 
     <name>easy-excel</name>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>vip.breakpoint</groupId>
             <artifactId>easy-tool-utils</artifactId>
-            <version>0.1.0</version>
+            <version>${easy.version}</version>
         </dependency>
 
         <!-- 引入poi，解析workbook视图 -->

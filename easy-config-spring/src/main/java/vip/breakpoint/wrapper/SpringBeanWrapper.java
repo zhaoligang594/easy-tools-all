@@ -9,18 +9,40 @@ import java.util.Objects;
  * 欢迎关注公众号:代码废柴
  */
 public class SpringBeanWrapper {
-
+    /**
+     * 对象
+     */
     private Object bean;
 
+    /**
+     * name
+     */
     private String beanName;
 
+    /**
+     * key
+     */
     private String valueKey;
 
+    /**
+     * type
+     */
     private Class<?> type;
 
+    /**
+     * field
+     */
     private Field valueField;
 
+    /**
+     * 复杂类型的值的类型
+     */
     private Class<?> valueType;
+
+    /**
+     * 默认值
+     */
+    private String defaultValue;
 
     public SpringBeanWrapper(Object bean, String beanName, String valueKey, Class<?> type, Field valueField) {
         this.bean = bean;
@@ -76,6 +98,14 @@ public class SpringBeanWrapper {
 
     public void setValueType(Class<?> valueType) {
         this.valueType = valueType;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     @Override

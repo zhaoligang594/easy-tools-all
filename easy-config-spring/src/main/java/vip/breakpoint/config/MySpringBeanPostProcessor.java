@@ -43,8 +43,11 @@ public class MySpringBeanPostProcessor implements BeanPostProcessor {
             if (null != valueAnn) {
                 String valueKey = getRealKey(valueAnn.value());
                 if (EasyStringUtils.isNotBlank(valueKey)) {
+                    String[] keyAndDefaultValue = getKeyAndDefaultValue(valueKey);
+                    valueKey = keyAndDefaultValue[0];
                     log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
+                    wrapper.setDefaultValue(keyAndDefaultValue[1]);
                     SpringBeanWrapperPool.addSpringBeanWrapper(valueKey, wrapper);
                 }
             }
@@ -56,13 +59,24 @@ public class MySpringBeanPostProcessor implements BeanPostProcessor {
                 }
                 String valueKey = getRealKey(key);
                 if (EasyStringUtils.isNotBlank(valueKey)) {
+                    String[] keyAndDefaultValue = getKeyAndDefaultValue(valueKey);
+                    valueKey = keyAndDefaultValue[0];
                     log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
                     wrapper.setValueType(easyConfigAnn.valueClass());
+                    wrapper.setDefaultValue(keyAndDefaultValue[1]);
                     SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(valueKey, wrapper);
                 }
             }
         }
+    }
+
+    private String[] getKeyAndDefaultValue(String valueKey) {
+        if (valueKey.contains(":")) {
+            int idx = valueKey.indexOf(":");
+            return new String[]{valueKey.substring(0, idx), valueKey.substring(idx + 1)};
+        }
+        return new String[]{valueKey, null};
     }
 
     private String getRealKey(String valueKey) {
