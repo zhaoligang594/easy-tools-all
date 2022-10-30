@@ -36,7 +36,7 @@ public class ReflectUtils {
     // get field value from special object
     public static Object getFieldValueFromObj(Field field, Object object) throws
             IllegalArgumentException, IllegalAccessException {
-        Object res = null;
+        Object res;
         if (field.isAccessible()) {
             res = field.get(object);
         } else {
@@ -51,7 +51,6 @@ public class ReflectUtils {
     public static void setFieldValue2Object(Field field, Object object, Object value) throws
             IllegalArgumentException, IllegalAccessException {
         if (value == null) return;
-        Object res = null;
         if (field.isAccessible()) {
             field.set(object, value);
         } else {

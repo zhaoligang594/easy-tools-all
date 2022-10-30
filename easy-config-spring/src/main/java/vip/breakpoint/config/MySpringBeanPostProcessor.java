@@ -9,12 +9,16 @@ import vip.breakpoint.annontation.EasyConfig;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.utils.EasyStringUtils;
+import vip.breakpoint.utils.JavaTypeUtils;
 import vip.breakpoint.utils.ReflectUtils;
 import vip.breakpoint.wrapper.SpringBeanWrapper;
 import vip.breakpoint.wrapper.SpringBeanWrapperPool;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 记录每一个bean的值的情况
@@ -41,14 +45,11 @@ public class MySpringBeanPostProcessor implements BeanPostProcessor {
         for (Field field : declaredFields) {
             Value valueAnn = field.getAnnotation(Value.class);
             if (null != valueAnn) {
-                String valueKey = getRealKey(valueAnn.value());
-                if (EasyStringUtils.isNotBlank(valueKey)) {
-                    String[] keyAndDefaultValue = getKeyAndDefaultValue(valueKey);
-                    valueKey = keyAndDefaultValue[0];
+                String value2DefaultValue = getRealKey(valueAnn.value());
+                SpringBeanWrapper beanWrapper = getBeanWrapper(value2DefaultValue, bean, beanName, field);
+                if (null != beanWrapper) {
                     log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
-                    SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
-                    wrapper.setDefaultValue(keyAndDefaultValue[1]);
-                    SpringBeanWrapperPool.addSpringBeanWrapper(valueKey, wrapper);
+                    SpringBeanWrapperPool.addSpringBeanWrapper(beanWrapper.getValueKey(), beanWrapper);
                 }
             }
             EasyConfig easyConfigAnn = field.getAnnotation(EasyConfig.class);
@@ -57,18 +58,52 @@ public class MySpringBeanPostProcessor implements BeanPostProcessor {
                 if (EasyStringUtils.isBlank(key)) {
                     key = easyConfigAnn.key();
                 }
-                String valueKey = getRealKey(key);
-                if (EasyStringUtils.isNotBlank(valueKey)) {
-                    String[] keyAndDefaultValue = getKeyAndDefaultValue(valueKey);
-                    valueKey = keyAndDefaultValue[0];
+                String value2DefaultValue = getRealKey(key);
+                SpringBeanWrapper beanWrapper = getBeanWrapper(value2DefaultValue, bean, beanName, field);
+                if (null != beanWrapper) {
                     log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
-                    SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
-                    wrapper.setValueType(easyConfigAnn.valueClass());
-                    wrapper.setDefaultValue(keyAndDefaultValue[1]);
-                    SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(valueKey, wrapper);
+                    SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(beanWrapper.getValueKey(), beanWrapper);
                 }
             }
         }
+    }
+
+    private SpringBeanWrapper getBeanWrapper(String valueKey, Object bean, String beanName, Field field) {
+        if (EasyStringUtils.isNotBlank(valueKey)) {
+            String[] keyAndDefaultValue = getKeyAndDefaultValue(valueKey);
+            valueKey = keyAndDefaultValue[0];
+            SpringBeanWrapper wrapper = new SpringBeanWrapper(bean, beanName, valueKey, field.getType(), field);
+            // wrapper.setValueType(easyConfigAnn.valueClass());
+            wrapper.setDefaultValue(keyAndDefaultValue[1]);
+            if (!JavaTypeUtils.isPrimitiveType(field.getType())) {
+                // this type is not primitive type
+                Type[] typeByField = getTypeByField(field);
+                wrapper.setValueType(typeByField[1]);
+            }
+            return wrapper;
+        }
+        return null;
+    }
+
+    private Type[] getTypeByField(Field field) {
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if (Map.class.isAssignableFrom(field.getType())) {
+                if (actualTypeArguments.length > 1) {
+                    return new Type[]{field.getType(), actualTypeArguments[1]};
+                }
+            } else if (List.class.isAssignableFrom(field.getType())) {
+                if (actualTypeArguments.length > 0) {
+                    return new Type[]{field.getType(), actualTypeArguments[0]};
+                }
+            } else {
+                return new Type[]{field.getType(), Object.class};
+            }
+            return actualTypeArguments;
+        }
+        return new Type[]{field.getType(), Object.class};
     }
 
     private String[] getKeyAndDefaultValue(String valueKey) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public abstract class ObjectMapperUtils {
     }
 
     // 返回 map 实例
-    public static <C> Map<String, C> getMap(String jsonStr, Class<C> clazz) throws Exception {
+    public static <C> Map<String, C> getMap(String jsonStr, Type clazz) throws Exception {
         Map<String, C> retMap = new HashMap<>();
         Map<String, C> tempMap = objectMapper.readValue(jsonStr, new TypeReference<Map<String, C>>() {
             // nothing to do
@@ -45,7 +46,7 @@ public abstract class ObjectMapperUtils {
     }
 
     // 获取 list 实例
-    public static <C> List<C> getList(String jsonStr, Class<C> clazz) throws Exception {
+    public static <C> List<C> getList(String jsonStr, Type clazz) throws Exception {
         List<C> retList = new ArrayList<>();
         List<C> cs = objectMapper.readValue(jsonStr, new TypeReference<List<C>>() {
             // nothing to do
@@ -57,7 +58,12 @@ public abstract class ObjectMapperUtils {
     }
 
     // 返回对象
-    public static <C> C getObject(String text, Class<C> clazz) throws Exception {
-        return objectMapper.readValue(text, clazz);
+    public static <C> C getObject(String text, final Type clazz) throws Exception {
+        return objectMapper.readValue(text, new TypeReference<C>() {
+            @Override
+            public Type getType() {
+                return clazz;
+            }
+        });
     }
 }

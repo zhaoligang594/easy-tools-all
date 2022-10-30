@@ -19,7 +19,4 @@ public @interface EasyConfig {
 
     @AliasFor("value")
     String key() default "";
-
-    // 复杂类型值的类型 仅仅 map 或者 list ，自定义的类型 需要配置 其他的不需要 配置
-    Class<?> valueClass() default Object.class;
 }

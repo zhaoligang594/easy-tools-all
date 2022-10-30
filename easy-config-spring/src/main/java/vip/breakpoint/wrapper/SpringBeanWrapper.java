@@ -1,6 +1,7 @@
 package vip.breakpoint.wrapper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -37,7 +38,7 @@ public class SpringBeanWrapper {
     /**
      * 复杂类型的值的类型
      */
-    private Class<?> valueType;
+    private Type valueType;
 
     /**
      * 默认值
@@ -92,11 +93,11 @@ public class SpringBeanWrapper {
         this.valueField = valueField;
     }
 
-    public Class<?> getValueType() {
+    public Type getValueType() {
         return valueType;
     }
 
-    public void setValueType(Class<?> valueType) {
+    public void setValueType(Type valueType) {
         this.valueType = valueType;
     }
 

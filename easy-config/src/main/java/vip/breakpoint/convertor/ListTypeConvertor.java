@@ -3,6 +3,7 @@ package vip.breakpoint.convertor;
 import vip.breakpoint.convertor.base.TypeConvertor;
 import vip.breakpoint.utils.ObjectMapperUtils;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -14,9 +15,9 @@ import java.util.List;
  */
 public class ListTypeConvertor<C> implements TypeConvertor<String, List<C>> {
 
-    private final Class<C> valueClazz;
+    private final Type valueClazz;
 
-    public ListTypeConvertor(Class<C> valueClazz) {
+    public ListTypeConvertor(Type valueClazz) {
         this.valueClazz = valueClazz;
     }
 

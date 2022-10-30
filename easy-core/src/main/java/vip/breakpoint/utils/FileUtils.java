@@ -2,7 +2,6 @@ package vip.breakpoint.utils;
 
 import vip.breakpoint.annotation.MParam;
 import vip.breakpoint.exception.EasyToolException;
-import vip.breakpoint.log.LoggingLevel;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 
@@ -28,7 +27,7 @@ public abstract class FileUtils {
                                            @MParam("文件地址") String filePath) throws EasyToolException {
         if (null == bytes || bytes.length == 0) return false;
         try {
-            LocalVerify.verifyStringIsNotNull(fileName, filePath);
+            EasyVerifyUtils.verifyStringIsNotNull(fileName, filePath);
         } catch (EasyToolException e) {
             return false;
         }
@@ -63,7 +62,8 @@ public abstract class FileUtils {
     }
 
     // 从文件流里面读取我们的数据 注意 ：已经将文件流进行了关闭的操作
-    public static byte[] readBytesFromInputStream(@MParam("文件的输入流") InputStream inputStream) throws EasyToolException {
+    public static byte[] readBytesFromInputStream(@MParam("文件的输入流") InputStream inputStream)
+            throws EasyToolException {
         if (null == inputStream) throw new EasyToolException("输入流不能为空");
         ByteArrayOutputStream bos = null;
         try {
@@ -91,7 +91,7 @@ public abstract class FileUtils {
     // 读取文件数据
     public static byte[] readBytesFromFile(@MParam("文件名") String fileName,
                                            @MParam("文件路径") String filePath) throws EasyToolException {
-        LocalVerify.verifyStringIsNotNull(fileName, filePath);
+        EasyVerifyUtils.verifyStringIsNotNull(fileName, filePath);
         File file = new File(filePath, fileName);
         if (!file.exists()) return null;
         FileInputStream fis = null;
@@ -130,10 +130,10 @@ public abstract class FileUtils {
     public static boolean copyFile(@MParam("源文件名称") String oriFileName, @MParam("源文件地址") String oriFilePath,
                                    @MParam("目标文件名字") String sinkFileName, @MParam("目标文件地址") String sinkFilePath)
             throws EasyToolException {
-        LocalVerify.verifyString(oriFileName, "oriFileName");
-        LocalVerify.verifyString(oriFilePath, "oriFilePath");
-        LocalVerify.verifyString(sinkFileName, "sinkFileName");
-        LocalVerify.verifyString(sinkFilePath, "sinkFilePath");
+        EasyVerifyUtils.verifyString(oriFileName, "oriFileName");
+        EasyVerifyUtils.verifyString(oriFilePath, "oriFilePath");
+        EasyVerifyUtils.verifyString(sinkFileName, "sinkFileName");
+        EasyVerifyUtils.verifyString(sinkFilePath, "sinkFilePath");
         byte[] bytes = readBytesFromFile(oriFileName, oriFilePath);
         if (null != bytes && bytes.length > 0) {
             try {
@@ -157,8 +157,8 @@ public abstract class FileUtils {
     // 文件的删除操作
     public static boolean deleteFile(@MParam("文件名") String fileName, @MParam("文件路径") String filePath)
             throws EasyToolException {
-        LocalVerify.verifyString(fileName, "fileName");
-        LocalVerify.verifyString(filePath, "filePath");
+        EasyVerifyUtils.verifyString(fileName, "fileName");
+        EasyVerifyUtils.verifyString(filePath, "filePath");
         final File file = new File(filePath, fileName);
         if (file.exists()) {
             return file.delete();
@@ -168,7 +168,7 @@ public abstract class FileUtils {
 
     // 删除文件
     public static boolean deleteFile(final File file) throws EasyToolException {
-        LocalVerify.verifyObject(file, file.getName());
+        EasyVerifyUtils.verifyObject(file, file.getName());
         return file.exists() && file.delete();
     }
 
@@ -205,5 +205,4 @@ public abstract class FileUtils {
             }
         }
     }
-
 }

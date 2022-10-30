@@ -3,7 +3,6 @@ package vip.breakpoint.utils;
 import org.apache.poi.ss.usermodel.*;
 import vip.breakpoint.annotation.ExcelField;
 import vip.breakpoint.annotation.MParam;
-import vip.breakpoint.base.BaseDataSupport;
 import vip.breakpoint.exception.EasyExcelException;
 import vip.breakpoint.exception.EasyToolException;
 
@@ -160,7 +159,7 @@ public class ParseExcelInputStreamUtils {
                             value = val;
                         } else {
                             try {
-                                value = BaseDataSupport.parseDateStr((String) val);
+                                value = EasyDateUtils.parseDateStr((String) val);
                             } catch (EasyToolException e) {
                                 throw new EasyExcelException(e.getMessage());
                             }

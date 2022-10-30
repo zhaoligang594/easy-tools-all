@@ -9,7 +9,7 @@ public enum ResCodeEnum {
     SUCCESS(200, "成功"),
     NOT_LOGIN(300, "未登录"),
     EXCEPTION(400, "请求发生异常"),
-    FAIL(500, "失败"),
+    FAIL(0, "失败"),
     TO_MANNY_REQUEST(600, "不能在1s内连续请求该接口"),
     ALERT(700, "弹出提示");
     // return code

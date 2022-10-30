@@ -1,5 +1,4 @@
-package vip.breakpoint.base;
-
+package vip.breakpoint.utils;
 
 import vip.breakpoint.annotation.MParam;
 import vip.breakpoint.exception.EasyToolException;
@@ -9,10 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author breakpoint/赵先生
- * 2020/10/13
+ * @author : breakpoint/赵先生
+ * create on 2022/10/30
+ * 欢迎关注公众号:代码废柴
  */
-public abstract class BaseDataSupport {
+public class EasyDateUtils {
 
     /**
      * 解析日期的操作

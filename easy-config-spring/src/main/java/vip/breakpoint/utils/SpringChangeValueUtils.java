@@ -9,6 +9,7 @@ import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.wrapper.SpringBeanWrapper;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,9 +21,7 @@ import java.util.Set;
  */
 public class SpringChangeValueUtils {
 
-
     private static final Logger log = WebLogFactory.getLogger(SpringChangeValueUtils.class);
-
 
     public static void updateTheBeanValues(String value, Set<SpringBeanWrapper> beanWrappers) {
         for (SpringBeanWrapper beanWrapper : beanWrappers) {
@@ -41,13 +40,14 @@ public class SpringChangeValueUtils {
                     Object targetValue = typeConvertor.doConvert(value);
                     ReflectUtils.setFieldValue2Object(beanWrapper.getValueField(), beanWrapper.getBean(), targetValue);
                 } catch (Exception e) {
-                    log.error("配置转换发生异常 beanName:{} target value:{}", beanWrapper.getBeanName(), value, e);
+                    log.error("配置转换发生异常 beanName:{} field:{} target value:{}",
+                            beanWrapper.getBeanName(), beanWrapper.getValueField().getName(), value, e);
                 }
             } else {
                 try {
                     if (null != clazz) {
                         Object targetValue = null;
-                        Class<?> valueType = beanWrapper.getValueType();
+                        Type valueType = beanWrapper.getValueType();
                         if (Map.class.isAssignableFrom(clazz)) {
                             targetValue = new MapTypeConvertor<>(valueType).doConvert(value);
                         } else if (List.class.isAssignableFrom(clazz)) {
@@ -58,7 +58,8 @@ public class SpringChangeValueUtils {
                         ReflectUtils.setFieldValue2Object(beanWrapper.getValueField(), beanWrapper.getBean(), targetValue);
                     }
                 } catch (Exception e) {
-                    log.error("配置转换发生异常 beanName:{} target value:{}", beanWrapper.getBeanName(), value, e);
+                    log.error("配置转换发生异常 beanName:{} field:{} target value:{}",
+                            beanWrapper.getBeanName(), beanWrapper.getValueField().getName(), value, e);
                 }
             }
         }

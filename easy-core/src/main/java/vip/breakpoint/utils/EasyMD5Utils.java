@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
  * MD5加密
  *
  * @author :breakpoint/赵立刚
- * 2017/11/28
+ * create on 2017/11/28
  */
 public final class EasyMD5Utils {
 
@@ -23,10 +23,7 @@ public final class EasyMD5Utils {
 
     private static final String DEFAULT_CHARSET = "UTF-8";
 
-    /**
-     * @param encryptingCode
-     * @return
-     */
+    // 获取 MessageDigest
     private static MessageDigest getMessageDigest(String encryptingCode) {
         try {
             return MessageDigest.getInstance(encryptingCode);
