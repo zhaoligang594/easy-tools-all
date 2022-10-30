@@ -3,6 +3,9 @@ package vip.breakpoint.engine;
 import vip.breakpoint.config.ConfigFileMonitorConfig;
 import vip.breakpoint.enums.FileTypeEnum;
 import vip.breakpoint.listener.FileChangeListener;
+import vip.breakpoint.log.WebLogFactory;
+import vip.breakpoint.log.adaptor.Logger;
+import vip.breakpoint.supplier.ValueSupplierFactory;
 import vip.breakpoint.utils.EasyStringUtils;
 
 import java.util.*;
@@ -20,6 +23,8 @@ import java.util.concurrent.Executor;
 public class ConfigFileMonitorEngine {
 
     private ConfigFileMonitorEngine() {/* refuse the new object */}
+
+    private static final Logger log = WebLogFactory.getLogger(ConfigFileMonitorEngine.class);
 
     private final ConfigFileMonitorConfig monitorConfig =
             new ConfigFileMonitorConfig(ConfigFileMonitorConfig.DEFAULT_INTERVAL);
@@ -44,6 +49,7 @@ public class ConfigFileMonitorEngine {
         if (basePath.contains("target")) {
             basePath = basePath.substring(0, basePath.indexOf("target"));
         }
+        log.info("default monitor base path is:{}", basePath);
         monitorFilePathSet.add(basePath);
     }
 

@@ -2,24 +2,25 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>easy-tools-all</artifactId>
-        <groupId>vip.breakpoint</groupId>
-        <version>1.0.0.RELEASE</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>vip.breakpoint</groupId>
     <artifactId>easy-log</artifactId>
-    <version>${easy.version}</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>easy-log</name>
     <url>https://github.com/FREEZINGPOINT/logging-web</url>
+
     <description>A tool for logging in our project</description>
+
     <properties>
+        <easy.version>1.0.1</easy.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>vip.breakpoint</groupId>
@@ -46,6 +47,7 @@
             <version>3.3.0</version>
         </dependency>
     </dependencies>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>

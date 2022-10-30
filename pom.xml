@@ -5,8 +5,9 @@
 
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-tools-all</artifactId>
-    <version>${easy.version}</version>
+    <version>1.0.1</version>
     <name>easy-tools-all</name>
+
     <modules>
         <module>easy-access-authority</module>
         <module>easy-excel</module>
@@ -17,6 +18,7 @@
         <module>easy-config</module>
         <module>easy-config-spring</module>
     </modules>
+
     <packaging>pom</packaging>
 
     <description>Easy Tool All</description>
@@ -24,121 +26,10 @@
     <url>https://github.com/zhaoligang594/easy-tools-all</url>
 
     <properties>
-        <easy.version>1.0.0.RELEASE</easy.version>
+        <easy.version>1.0.1</easy.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
     </properties>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <url>git@github.com:zhaoligang594/easy-tools-all.git</url>
-        <connection>scm:git@github.com:zhaoligang594/easy-tools-all.git</connection>
-        <developerConnection>scm:git@github.com:zhaoligang594/easy-tools-all.git</developerConnection>
-    </scm>
-
-    <developers>
-        <developer>
-            <name>zhaoligang</name>
-            <email>zlgtop@163.com</email>
-            <url>https://github.com/zhaoligang594/</url>
-            <roles>
-                <role>Software Developer Engineer</role>
-                <role>Java Research Developer Engineer</role>
-            </roles>
-            <organization>Meituan tech company, Beijing, China</organization>
-            <timezone>+8:00</timezone>
-        </developer>
-    </developers>
-
-    <issueManagement>
-        <system>Github Issue</system>
-        <url>https://github.com/zhaoligang594/easy-tools-all/issues</url>
-    </issueManagement>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-            </plugin>
-            <!-- Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Gpg Signature -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

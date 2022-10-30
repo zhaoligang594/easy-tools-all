@@ -23,9 +23,6 @@ import java.util.Map;
  */
 public abstract class ValueSupplierFactory {
 
-    /**
-     * 日志的操作
-     */
     private static final Logger log = WebLogFactory.getLogger(ValueSupplierFactory.class);
 
     /**
