@@ -74,7 +74,7 @@ public class MyController {
 
 ```json
 {
-    "respCode":700,
+    "code":700,
     "message":"操作失败",
     "data":"请在该接口方法上使用注解： @AccessLimit()"
 }
@@ -110,7 +110,7 @@ public class MyController {
 如果点击频繁，就会返回下面的信息：
 
 ```json
-{"respCode":600,"message":"操作失败","data":"操作过于频繁"}
+{"code":600,"message":"操作失败","data":"操作过于频繁"}
 ```
 
 ### 3.2 开启登录功能
@@ -239,7 +239,7 @@ public class MyController {
 ` @AccessLimit(enable = false)`表明，这个接口已经不会对外面进行提供服务了。接口返回如下的信息。
 
 ```json
-{"respCode":0,"message":"操作失败","data":"该接口不可用"}
+{"code":0,"message":"操作失败","data":"该接口不可用"}
 ```
 
 ### 3.3 开启Swagger功能
