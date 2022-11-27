@@ -178,7 +178,7 @@ java -jar xxx.jar -DconfigFilePath=C:\work\idea_work,XXX,XXXX,XXX
   </tr>
 </table>
 
->  以上就是 `easy-access-authority` 组件的全部功能，由于作者水平有限，肯定会存在需要歧义的地方，如果你有任何的疑问，都可以联系本作者。同时也欢迎关注《代码废柴》公众号。
+>  以上就是 `easy-config` 组件的全部功能，由于作者水平有限，肯定会存在需要歧义的地方，如果你有任何的疑问，都可以联系本作者。同时也欢迎关注《代码废柴》公众号。
 
 **{docsify-updated}** 
 
