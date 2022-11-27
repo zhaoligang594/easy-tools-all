@@ -23,8 +23,11 @@ public class SpringChangeValueUtils {
 
     private static final Logger log = WebLogFactory.getLogger(SpringChangeValueUtils.class);
 
-    public static void updateTheBeanValues(String value, Set<SpringBeanWrapper> beanWrappers) {
+    public static void updateTheBeanValues(String value, Set<SpringBeanWrapper> beanWrappers, boolean startEnded) {
         for (SpringBeanWrapper beanWrapper : beanWrappers) {
+            if (!startEnded && beanWrapper.isStatic()) {
+                continue;
+            }
             Class<?> clazz = beanWrapper.getType();
             if (EasyStringUtils.isBlank(value)) {
                 // use default value

@@ -1,7 +1,9 @@
 package vip.breakpoint.annotation;
 
 import org.springframework.context.annotation.Import;
+import vip.breakpoint.annontation.EnableAutoConfig;
 import vip.breakpoint.config.EnableAccessBeanDefinitionRegistrar;
+import vip.breakpoint.config.EnableAccessAnnBeanDefinitionRegistrar;
 import vip.breakpoint.config.WebConfigAdapter;
 
 import java.lang.annotation.*;
@@ -16,6 +18,34 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({EnableAccessBeanDefinitionRegistrar.class, WebConfigAdapter.class})
+@EnableAutoConfig
+@Import({EnableAccessBeanDefinitionRegistrar.class, EnableAccessAnnBeanDefinitionRegistrar.class, WebConfigAdapter.class})
 public @interface EnableAccessLimit {
+
+    /**
+     * enable the swagger api
+     *
+     * @return true or  false
+     */
+    boolean enableSwagger() default true;
+
+    /**
+     * 开启请求参数的 日期的解析
+     */
+    boolean enableDateParamParser() default true;
+
+    /**
+     * 文件系统的监听路径 与 @EnableAutoConfig 中的
+     *
+     * @return 文件系统的监听
+     * @see vip.breakpoint.annontation.EnableAutoConfig fileSystemPaths 作用一致
+     */
+    String[] configFileSystemPaths() default {};
+
+    /**
+     * 可以不需要注解进行请求的路径
+     *
+     * @return 可以忽略的路径集合
+     */
+    String[] ignorePaths() default {};
 }

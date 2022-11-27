@@ -9,6 +9,11 @@ import vip.breakpoint.condition.UserStoreCondition;
 import vip.breakpoint.condition.VerifyCodeCondition;
 import vip.breakpoint.handler.AccessLimitHandler;
 import vip.breakpoint.interceptor.WebLimitInterceptor;
+import vip.breakpoint.kaptcha.EasyKaptchaService;
+import vip.breakpoint.kaptcha.EasyKaptchaServiceImpl;
+import vip.breakpoint.kaptcha.EasyVerifyCodeController;
+import vip.breakpoint.monitor.EasyMonitorController;
+import vip.breakpoint.remote.ConfigChangeController;
 import vip.breakpoint.service.AccessLimitService;
 import vip.breakpoint.service.ClickLimitService;
 import vip.breakpoint.service.UserStoreService;
@@ -17,6 +22,8 @@ import vip.breakpoint.service.impl.DefaultAccessLimitServiceImpl;
 import vip.breakpoint.service.impl.DefaultClickLimitServiceImpl;
 import vip.breakpoint.service.impl.DefaultUserStoreServiceImpl;
 import vip.breakpoint.service.impl.DefaultVerifyCodeServiceImpl;
+
+import java.util.ArrayList;
 
 /**
  * 权限控制的配置类
@@ -42,6 +49,7 @@ public class EnableAccessBeanConfig {
     public WebLimitInterceptor getAccessLimitInterceptor(AccessLimitHandler handler) {
         WebLimitInterceptor webLimitInterceptor = new WebLimitInterceptor();
         webLimitInterceptor.setHandler(handler);
+        webLimitInterceptor.addIgnorePaths(new ArrayList<>(AnnConfig.ignorePaths));
         return webLimitInterceptor;
     }
 
@@ -75,4 +83,29 @@ public class EnableAccessBeanConfig {
         return new DefaultVerifyCodeServiceImpl();
     }
 
+
+    @Bean
+    public EasyVerifyCodeController getEasyVerifyCodeController() {
+        return new EasyVerifyCodeController();
+    }
+
+    @Bean
+    public EasyKaptchaService getEasyKaptchaService() {
+        return new EasyKaptchaServiceImpl();
+    }
+
+    @Bean
+    public SystemConfigController getSystemConfigController() {
+        return new SystemConfigController();
+    }
+
+    @Bean
+    public ConfigChangeController getConfigChangeController() {
+        return new ConfigChangeController();
+    }
+
+    @Bean
+    public EasyMonitorController getEasyMonitorController() {
+        return new EasyMonitorController();
+    }
 }

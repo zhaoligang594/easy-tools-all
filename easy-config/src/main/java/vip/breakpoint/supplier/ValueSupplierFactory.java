@@ -9,8 +9,10 @@ import vip.breakpoint.exception.OptNotSupportException;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.supplier.base.PropertiesContextPool;
+import vip.breakpoint.supplier.local.LocalStaticValuePool;
 import vip.breakpoint.supplier.value.ValueSupplier;
 import vip.breakpoint.utils.JavaTypeUtils;
+import vip.breakpoint.utils.ObjectsUtils;
 import vip.breakpoint.utils.TypeConvertorUtils;
 
 import java.util.List;
@@ -33,14 +35,35 @@ public abstract class ValueSupplierFactory {
      * @param clazz    类型
      * @return 返回特定的值
      */
-    @SuppressWarnings("unchecked")
     public static <T, C> T get(ValueSupplier<T, C> supplier, Class<T> clazz) {
+        T retValue = null;
+        if (supplier.isStatic()) {
+            retValue = LocalStaticValuePool.getValue(supplier);
+        }
+        if (null == retValue) {
+            synchronized (ValueSupplierFactory.class) {
+                if (supplier.isStatic()) {
+                    retValue = LocalStaticValuePool.getValue(supplier);
+                }
+                if (null == retValue) {
+                    retValue = getRealRetValue(supplier, clazz);
+                    if (supplier.isStatic()) {
+                        LocalStaticValuePool.addValueToLocal(supplier, retValue);
+                    }
+                }
+            }
+        }
+        return retValue;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, C> T getRealRetValue(ValueSupplier<T, C> supplier, Class<T> clazz) {
         String ret = PropertiesContextPool.getContextVal(supplier);
         try {
             if (null != clazz && JavaTypeUtils.isPrimitiveType(clazz)) {
                 TypeConvertor<String, T> typeConvertor =
                         TypeConvertorUtils.getTypeConvertor(JavaTypeEnum.getByClazz(clazz));
-                return typeConvertor.doConvert(ret);
+                return ObjectsUtils.defaultIfNull(typeConvertor.doConvert(ret), supplier.getDefaultValue());
             } else {
                 // mot the primitive type
                 if (null == supplier.getDefaultValue()) {
@@ -50,11 +73,14 @@ public abstract class ValueSupplierFactory {
                 // get the real class for collection
                 Class<C> innerClazz = supplier.valueClass();
                 if (Map.class.isAssignableFrom(retClazz)) {
-                    return (T) new MapTypeConvertor<>(innerClazz).doConvert(ret);
+                    return ObjectsUtils.defaultIfNull((T) new MapTypeConvertor<>(innerClazz).doConvert(ret),
+                            supplier.getDefaultValue());
                 } else if (List.class.isAssignableFrom(retClazz)) {
-                    return (T) new ListTypeConvertor<>(innerClazz).doConvert(ret);
+                    return ObjectsUtils.defaultIfNull((T) new ListTypeConvertor<>(innerClazz).doConvert(ret),
+                            supplier.getDefaultValue());
                 } else {
-                    return (T) new ObjectTypeConvertor<>(retClazz).doConvert(ret);
+                    return ObjectsUtils.defaultIfNull((T) new ObjectTypeConvertor<>(retClazz).doConvert(ret),
+                            supplier.getDefaultValue());
                 }
             }
         } catch (OptNotSupportException e2) {

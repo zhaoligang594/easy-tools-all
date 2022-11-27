@@ -2,7 +2,7 @@ package vip.breakpoint.config;
 
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import vip.breakpoint.enums.FileTypeEnum;
-import vip.breakpoint.listener.FileChangeListener;
+import vip.breakpoint.listener.ConfigChangeListener;
 import vip.breakpoint.filter.MonitorConfigFilter;
 import vip.breakpoint.listener.ConfigFileListener;
 import vip.breakpoint.log.WebLogFactory;
@@ -33,10 +33,10 @@ public class ConfigFileMonitorConfig {
      */
     private final ConfigFileListener listener = new ConfigFileListener();
 
-    private List<FileChangeListener> fileChangeListeners;
+    private List<ConfigChangeListener> configChangeListeners;
 
-    public void setFileChangeListeners(List<FileChangeListener> fileChangeListeners) {
-        this.fileChangeListeners = fileChangeListeners;
+    public void setFileChangeListeners(List<ConfigChangeListener> configChangeListeners) {
+        this.configChangeListeners = configChangeListeners;
     }
 
     private Executor executor;
@@ -111,7 +111,7 @@ public class ConfigFileMonitorConfig {
                 parentPath2FileMap.put(monitorCandidateFile.getParentFile().getAbsolutePath(),
                         monitorCandidateFile.getParentFile());
             }
-            listener.addFileChangeListener(fileChangeListeners);
+            listener.addFileChangeListener(configChangeListeners);
             listener.setExecutor(executor);
             for (File monitorPath : parentPath2FileMap.values()) {
                 getMonitor().monitor(monitorPath, monitorConfigFilter, listener);

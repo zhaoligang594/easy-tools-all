@@ -6,7 +6,7 @@
 
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-excel</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
     <name>easy-excel</name>
     <url>https://github.com/zhaoligang594/easy-tools-all</url>
@@ -14,7 +14,7 @@
     <description>A Tool for Excel</description>
 
     <properties>
-        <easy.version>1.0.1</easy.version>
+        <easy.version>1.1.0</easy.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

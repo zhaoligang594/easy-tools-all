@@ -20,7 +20,10 @@ public class XmlEnableLoggingConfiguration implements BeanDefinitionRegistryPost
     }
 
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        registry.registerBeanDefinition(LoggingBeanPostProcessor.class.getName(), new RootBeanDefinition(LoggingBeanPostProcessor.class));
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)
+            throws BeansException {
+
+        registry.registerBeanDefinition(LoggingBeanPostProcessor.class.getName(),
+                new RootBeanDefinition(LoggingBeanPostProcessor.class));
     }
 }

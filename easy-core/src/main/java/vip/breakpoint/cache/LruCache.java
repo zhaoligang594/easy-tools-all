@@ -76,7 +76,7 @@ public class LruCache<T> implements Cache<T> {
 
     @Override
     public ReadWriteLock getReadWriteLock() {
-        return null;
+        return delegate.getReadWriteLock();
     }
 
     private void cycleKeyList(String key) {

@@ -1,6 +1,7 @@
 package vip.breakpoint.handler;
 
 import org.springframework.lang.NonNull;
+import vip.breakpoint.annontation.EasyConfig;
 import vip.breakpoint.annotation.AccessLimit;
 import vip.breakpoint.enums.ResCodeEnum;
 import vip.breakpoint.exception.EasyToolException;
@@ -8,7 +9,7 @@ import vip.breakpoint.service.AccessLimitService;
 import vip.breakpoint.utils.EasyStringUtils;
 import vip.breakpoint.utils.IpUtils;
 import vip.breakpoint.utils.TokenUtils;
-import vip.breakpoint.utils.browser.ExploreWriteUtils;
+import vip.breakpoint.utils.ExploreWriteUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,9 @@ public class AccessLimitHandler {
         this.accessLimitService = accessLimitService;
     }
 
+    @EasyConfig("easy.access.authority.inf.token:admin")
+    private String configInfToken;
+
     public boolean doAccessLimitHandler(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                         AccessLimit methodAnnotation) throws Exception {
         // 判断接口的可用性
@@ -38,6 +42,17 @@ public class AccessLimitHandler {
                     "该接口不可用");
             return false;
         }
+
+        if (methodAnnotation.needToken()) {
+            String infToken =
+                    TokenUtils.getTokenFromHeaderOrRequestParamOrCookie(request, TokenUtils.INF_TOKEN_NAME);
+            if (EasyStringUtils.isNotBlank(configInfToken) && !configInfToken.equals(infToken)) {
+                ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
+                        "访问接口的infToken不正确，无法访问接口！");
+                return false;
+            }
+        }
+
         // 限流防刷
         if (methodAnnotation.enableClickLimit()) {
             String requestURI = request.getRequestURI();

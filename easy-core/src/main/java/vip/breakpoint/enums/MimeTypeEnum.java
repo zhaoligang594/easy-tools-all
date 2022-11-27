@@ -36,7 +36,7 @@ public enum MimeTypeEnum {
      *
      * @return MimeTypeEnum
      */
-    public static MimeTypeEnum getDefaultMimeTypeEnum() {
+    public static MimeTypeEnum getDefaultMimeType() {
         return TEXT_PLAIN;
     }
 

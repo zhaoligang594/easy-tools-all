@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  * 获取特定的线程池
  * 默认的拒绝策略是 使用调用线程执行这个任务
  *
- * @author 赵立刚 <zlgtop@163.com>
+ * @author 赵立刚
  * Created on 2021-02-26
  */
 public final class ExecutorServiceUtils {
@@ -51,19 +51,19 @@ public final class ExecutorServiceUtils {
                                                            Supplier<String> threadName) {
         // 获取线程池的操作
         return new ThreadPoolExecutor(1, 1, keepAliveTime.get(), unit,
-                new LinkedBlockingQueue<Runnable>(1), new EasyThreadFactory(threadName.get()),
+                new LinkedBlockingQueue<Runnable>(50), new EasyThreadFactory(threadName.get()),
                 new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
     // 自定义线程工厂
     static class EasyThreadFactory implements ThreadFactory {
-
+        // 线程池的版本
         private static final AtomicInteger poolNumber = new AtomicInteger(1);
-
+        // 线程组 实际上 是管理线程的
         private final ThreadGroup group;
-
+        // 线程编号
         private final AtomicInteger threadNumber = new AtomicInteger(1);
-
+        // 名字前缀
         private final String namePrefix;
 
         EasyThreadFactory() {
@@ -79,12 +79,12 @@ public final class ExecutorServiceUtils {
             SecurityManager s = System.getSecurityManager();
             group = (s != null) ? s.getThreadGroup() :
                     Thread.currentThread().getThreadGroup();
-            this.namePrefix = namePrefix;
+            this.namePrefix = "pool-" + namePrefix;
         }
 
         public Thread newThread(Runnable r) {
             Thread t = new Thread(group, r,
-                    namePrefix + threadNumber.getAndIncrement(),
+                    namePrefix + "-" + threadNumber.getAndIncrement(),
                     0);
             if (t.isDaemon())
                 t.setDaemon(false);
@@ -92,6 +92,5 @@ public final class ExecutorServiceUtils {
                 t.setPriority(Thread.NORM_PRIORITY);
             return t;
         }
-
     }
 }

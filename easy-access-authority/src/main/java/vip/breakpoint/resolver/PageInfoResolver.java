@@ -37,7 +37,7 @@ public class PageInfoResolver implements HandlerMethodArgumentResolver {
         PageInfo<Object> pageInfo = new PageInfo<>();
         String currentPage = "1";
         String pageSize = "10";
-        if (null == request) {
+        if (null != request) {
             currentPage = request.getParameter("currentPage");
             pageSize = request.getParameter("pageSize");
         }

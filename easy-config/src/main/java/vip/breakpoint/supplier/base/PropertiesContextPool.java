@@ -1,18 +1,20 @@
 package vip.breakpoint.supplier.base;
 
+import vip.breakpoint.bean.StreamVo;
 import vip.breakpoint.engine.ConfigFileMonitorEngine;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.supplier.value.ValueSupplier;
 import vip.breakpoint.utils.EasyStringUtils;
+import vip.breakpoint.utils.ExecutorServiceUtils;
 import vip.breakpoint.utils.FetchKeyValueUtils;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.io.InputStream;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -47,11 +49,33 @@ public final class PropertiesContextPool {
         // 刷新当前的值
         refreshValues();
         try {
+            // fix the spring
             Class.forName("org.springframework.context.ApplicationContext");
         } catch (ClassNotFoundException e) {
+            String configFilePath = System.getProperty("configFilePath");
             log.info("use the default config!");
-            ConfigFileMonitorEngine.startFileMonitorEngine(null);
+            List<String> monitorPaths = getCandidateConfigPaths(configFilePath);
+            ExecutorService singleExecutorService =
+                    ExecutorServiceUtils.getSingleExecutorService(() -> 200L, TimeUnit.MILLISECONDS,
+                            () -> "config-java-thread-pool");
+            ConfigFileMonitorEngine.startFileMonitorEngine(monitorPaths, new ArrayList<>(), singleExecutorService);
+            //ConfigFileMonitorEngine.startFileMonitorEngine(null);
         }
+    }
+
+    private static List<String> getCandidateConfigPaths(String configFilePath) {
+        List<String> monitorPaths = new ArrayList<>();
+        if (EasyStringUtils.isNotBlank(configFilePath)) {
+            String[] configFilePaths = configFilePath.split(",");
+            if (configFilePaths.length > 0) {
+                for (String filePath : configFilePaths) {
+                    if (EasyStringUtils.isNotBlank(filePath)) {
+                        monitorPaths.add(filePath);
+                    }
+                }
+            }
+        }
+        return monitorPaths;
     }
 
     // 系统信息
@@ -138,6 +162,15 @@ public final class PropertiesContextPool {
         }
     }
 
+    public static void refreshConfigFile(StreamVo streamVo) {
+        Map<String, String> key2ValueMap = FetchKeyValueUtils.getKey2ValueMap(streamVo);
+        if (null != key2ValueMap) {
+            for (Map.Entry<String, String> e : key2ValueMap.entrySet()) {
+                SystemContextInfo.putPropertyInfo(e.getKey(), e.getValue());
+            }
+        }
+    }
+
     public static void refreshConfigValue(Map<String, String> key2ValueMap) {
         if (null != key2ValueMap) {
             for (Map.Entry<String, String> e : key2ValueMap.entrySet()) {
@@ -150,6 +183,12 @@ public final class PropertiesContextPool {
     public static void init(List<File> monitorCandidateFiles) {
         if (null != monitorCandidateFiles) {
             monitorCandidateFiles.forEach(PropertiesContextPool::refreshConfigFile);
+        }
+    }
+
+    public static void initProperties(List<StreamVo> streamVoList) {
+        if (null != streamVoList) {
+            streamVoList.forEach(PropertiesContextPool::refreshConfigFile);
         }
     }
 }

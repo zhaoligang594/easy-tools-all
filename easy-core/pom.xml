@@ -7,7 +7,7 @@
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-core</artifactId>
     <name>easy-core</name>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <url>https://github.com/zhaoligang594/easy-tools-all</url>
@@ -15,7 +15,7 @@
     <description>the core for easy tools.</description>
 
     <properties>
-        <easy.version>1.0.1</easy.version>
+        <easy.version>1.1.0</easy.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -67,11 +67,27 @@
     </distributionManagement>
 
     <dependencies>
-        <!--   lombok    -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <!--    cache    -->
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->

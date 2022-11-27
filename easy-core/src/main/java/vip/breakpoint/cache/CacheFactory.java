@@ -17,6 +17,12 @@ public final class CacheFactory {
     private CacheFactory() { /*refuse new obj*/}
 
     // 获取缓存
+    public static <T> Cache<T> newPerpetualCacheInstance(@MParam("存储类型") Class<T> T) {
+        // 返回LRU CACHE
+        return new PerpetualCache<>(EasyIDUtils.generateIdStr());
+    }
+
+    // 获取缓存
     public static <T> Cache<T> newCacheInstance(@MParam("存储类型") Class<T> T,
                                                 @MParam("大小") Supplier<Integer> size) {
         // 返回LRU CACHE
@@ -36,13 +42,13 @@ public final class CacheFactory {
         );
     }
 
-    public static <T> VersionCache<T> newVersionCacheInstance(@MParam("大小") Supplier<Integer> size) {
+    public static <T> TtlCache<T> newVersionCacheInstance(@MParam("大小") Supplier<Integer> size) {
         // 返回操作的cache
-        return new ExpireWithVersionCache<>(size);
+        return new ExpireWithTtlCache<>(size);
     }
 
-    public static <T> VersionCache<T> newVersionCacheInstance(@MParam("大小") Integer size) {
+    public static <T> TtlCache<T> newVersionCacheInstance(@MParam("大小") Integer size) {
         // 返回操作的cache
-        return new ExpireWithVersionCache<>(() -> size);
+        return new ExpireWithTtlCache<>(() -> size);
     }
 }

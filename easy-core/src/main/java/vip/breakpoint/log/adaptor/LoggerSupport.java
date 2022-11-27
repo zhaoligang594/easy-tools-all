@@ -7,7 +7,7 @@ package vip.breakpoint.log.adaptor;
 public abstract class LoggerSupport implements Logger {
 
     protected String getPrintMessage(String prefix, String printStr) {
-        return String.format("%s %s : %s", ROOT_LOGGER_NAME, prefix, printStr);
+        return String.format("%s [%s] %s : %s", ROOT_LOGGER_NAME, Thread.currentThread().getName(), prefix, printStr);
     }
 
     protected StringBuilder getPrintStringBuilder(Object... vars) {

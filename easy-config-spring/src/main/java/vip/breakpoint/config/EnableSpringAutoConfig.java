@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import vip.breakpoint.condition.ThreadPoolCondition;
-import vip.breakpoint.listener.FileChangeListener;
-import vip.breakpoint.listener.SpringContextFileChangeListener;
+import vip.breakpoint.listener.ConfigChangeListener;
+import vip.breakpoint.listener.ConfigChangeListenerPool;
+import vip.breakpoint.listener.SpringContextConfigChangeListener;
 import vip.breakpoint.listener.SpringContextStartedListener;
+import vip.breakpoint.remote.ConfigChangeService;
+import vip.breakpoint.remote.impl.ConfigChangeServiceImpl;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -27,13 +30,13 @@ public class EnableSpringAutoConfig {
     }
 
     @Bean
-    public FileChangeListener getSpringContextFileChangeListener() {
-        return new SpringContextFileChangeListener();
+    public ConfigChangeListener getSpringContextFileChangeListener() {
+        return new SpringContextConfigChangeListener();
     }
 
     @Bean
-    public MySpringBeanPostProcessor getValueAndBeanPoolContext() {
-        return new MySpringBeanPostProcessor();
+    public EasyConfigSpringBeanPostProcessor getValueAndBeanPoolContext() {
+        return new EasyConfigSpringBeanPostProcessor();
     }
 
     @Conditional({ThreadPoolCondition.class})
@@ -46,5 +49,16 @@ public class EnableSpringAutoConfig {
         res.setKeepAliveSeconds(300);
         res.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return res;
+    }
+
+    @Bean
+    public ConfigChangeListenerPool getConfigChangeListenerPool() {
+        return new ConfigChangeListenerPool();
+    }
+
+    @Bean
+    public ConfigChangeService getConfigChangeService(ThreadPoolTaskExecutor executor,
+                                                      ConfigChangeListenerPool configChangeListenerPool) {
+        return new ConfigChangeServiceImpl(executor, configChangeListenerPool);
     }
 }

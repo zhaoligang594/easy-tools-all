@@ -47,8 +47,16 @@ public @interface AccessLimit {
 
     /**
      * 验证码是否需要进行验证
+     * 默认不需要验证码
      *
      * @return 验证码是否验证
      */
     boolean isVerifyCode() default false;
+
+    /**
+     * 接口访问是否需要 token
+     *
+     * @return 访问接口的 token
+     */
+    boolean needToken() default false;
 }

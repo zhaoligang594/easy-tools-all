@@ -11,6 +11,11 @@ import vip.breakpoint.function.EasySupplier;
  */
 public interface ValueSupplier<T, C> extends EasySupplier<T> {
 
+    // 是否是不变的量
+    default boolean isStatic() {
+        return false;
+    }
+
     // 值的 key
     String valueKey();
 

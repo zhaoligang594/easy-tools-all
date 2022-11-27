@@ -14,12 +14,14 @@ import java.lang.reflect.Method;
  */
 public class LoggingCGlibMethodInterceptor extends LoggingMethodInterceptorSupport implements MethodInterceptor {
 
-    public LoggingCGlibMethodInterceptor(ObjectMethodDefinition methodDefinition, Object target, EasyLoggingHandle easyLoggingHandle) {
+    public LoggingCGlibMethodInterceptor(ObjectMethodDefinition methodDefinition, Object target,
+                                         EasyLoggingHandle easyLoggingHandle) {
         super(methodDefinition, target, easyLoggingHandle);
     }
 
     @Override
-    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+    public Object intercept(Object o, Method method, Object[] objects,
+                            MethodProxy methodProxy) throws Throwable {
         return super.invokeMethod(o, method, objects);
     }
 }

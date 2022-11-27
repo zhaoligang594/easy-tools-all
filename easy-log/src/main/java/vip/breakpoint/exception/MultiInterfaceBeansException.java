@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
  * @author :breakpoint/赵立刚
  */
 public class MultiInterfaceBeansException extends BeansException {
+
     public MultiInterfaceBeansException(String msg) {
         super(msg);
     }

@@ -204,5 +204,30 @@ public abstract class FileUtils {
                 }
             }
         }
+    }    // 获取字符串重文件中
+
+    public static String getStringFromFile(InputStream inputStream) {
+        StringBuilder jsonStr = new StringBuilder();
+        Reader reader = null;
+        try {
+            // 获取到文件
+            reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            int ch = 0;
+            while ((ch = reader.read()) != -1) {
+                jsonStr.append((char) ch);
+            }
+            return jsonStr.toString();
+        } catch (IOException e) {
+            log.error("文件读取失败 [{}]", e.getMessage());
+            return null;
+        } finally {
+            if (null != reader) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    // nothing to do
+                }
+            }
+        }
     }
 }

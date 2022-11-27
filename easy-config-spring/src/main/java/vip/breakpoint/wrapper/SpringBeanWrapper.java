@@ -45,12 +45,19 @@ public class SpringBeanWrapper {
      */
     private String defaultValue;
 
-    public SpringBeanWrapper(Object bean, String beanName, String valueKey, Class<?> type, Field valueField) {
+    /**
+     * the ann on field
+     */
+    private boolean isStatic;
+
+    public SpringBeanWrapper(Object bean, String beanName, String valueKey, Class<?> type,
+                             Field valueField, boolean isStatic) {
         this.bean = bean;
         this.beanName = beanName;
         this.valueKey = valueKey;
         this.type = type;
         this.valueField = valueField;
+        this.isStatic = isStatic;
     }
 
     public Object getBean() {
@@ -109,13 +116,22 @@ public class SpringBeanWrapper {
         this.defaultValue = defaultValue;
     }
 
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SpringBeanWrapper wrapper = (SpringBeanWrapper) o;
         return Objects.equals(bean, wrapper.bean) && Objects.equals(beanName, wrapper.beanName)
-                && Objects.equals(valueKey, wrapper.valueKey) && Objects.equals(type, wrapper.type) && Objects.equals(valueField, wrapper.valueField);
+                && Objects.equals(valueKey, wrapper.valueKey) && Objects.equals(type, wrapper.type)
+                && Objects.equals(valueField, wrapper.valueField);
     }
 
     @Override

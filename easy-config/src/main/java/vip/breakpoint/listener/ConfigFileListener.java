@@ -2,6 +2,7 @@ package vip.breakpoint.listener;
 
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import vip.breakpoint.enums.ChangeTypeEnum;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.utils.FetchKeyValueUtils;
@@ -20,7 +21,7 @@ import java.util.concurrent.Executor;
  */
 public class ConfigFileListener extends FileAlterationListenerAdaptor {
 
-    private final List<FileChangeListener> fileChangeListeners = new ArrayList<>();
+    private final List<ConfigChangeListener> configChangeListeners = new ArrayList<>();
 
     private Executor executor;
 
@@ -45,12 +46,12 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
         log.info("config have some change:" + file.getAbsolutePath());
         final Map<String, String> key2ValueMap = FetchKeyValueUtils.getKey2ValueMap(file);
         if (null != executor) {
-            for (FileChangeListener fileChangeListener : fileChangeListeners) {
-                executor.execute(() -> fileChangeListener.doChangedConfigFileRefresh(file, key2ValueMap));
+            for (ConfigChangeListener configChangeListener : configChangeListeners) {
+                executor.execute(() -> configChangeListener.doChangedConfigFileRefresh(ChangeTypeEnum.FILE, file, key2ValueMap));
             }
         } else {
-            for (FileChangeListener fileChangeListener : fileChangeListeners) {
-                fileChangeListener.doChangedConfigFileRefresh(file, key2ValueMap);
+            for (ConfigChangeListener configChangeListener : configChangeListeners) {
+                configChangeListener.doChangedConfigFileRefresh(ChangeTypeEnum.FILE, file, key2ValueMap);
             }
         }
         log.info("the file have refresh done:" + file.getAbsolutePath());
@@ -62,11 +63,11 @@ public class ConfigFileListener extends FileAlterationListenerAdaptor {
     }
 
     // 添加文件的监听器
-    public void addFileChangeListener(Collection<FileChangeListener> listeners) {
+    public void addFileChangeListener(Collection<ConfigChangeListener> listeners) {
         if (null != listeners && listeners.size() > 0) {
-            fileChangeListeners.addAll(listeners);
+            configChangeListeners.addAll(listeners);
         }
         // default the fileChangeListener
-        fileChangeListeners.add(new PoolConfigFileChangeListener());
+        configChangeListeners.add(new PoolConfigConfigChangeListener());
     }
 }

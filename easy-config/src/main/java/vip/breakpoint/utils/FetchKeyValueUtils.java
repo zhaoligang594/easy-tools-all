@@ -3,11 +3,13 @@ package vip.breakpoint.utils;
 import com.alibaba.fastjson2.JSONObject;
 import org.yaml.snakeyaml.Yaml;
 import vip.breakpoint.annotation.MParam;
+import vip.breakpoint.bean.StreamVo;
 import vip.breakpoint.enums.FileTypeEnum;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +42,64 @@ public class FetchKeyValueUtils {
             retMap.put(valueKey, value);
         }
         return retMap;
+    }    // 解析json的参数
+
+    private static Map<String, String> getKey2ValueMapFromJSONFile(String valueKey,
+                                                                   InputStream inputStream) {
+        Map<String, String> retMap = new HashMap<>();
+        String value = null;
+        try {
+            value = FileUtils.getStringFromFile(inputStream);
+        } catch (Exception e) {
+            value = FileUtils.getStringFromFile(inputStream);
+        }
+        if (null != value) {
+            retMap.put(valueKey, value);
+        }
+        return retMap;
     }
 
+    private static synchronized InputStream getInputStreamFromFileSystem(@MParam("获取到配置文件的地址") String absolutePath)
+            throws FileNotFoundException {
+        // 出现异常 说明 没有那个配置文件 这个时候采用 二进制 文件流的方式 获取文件的配置
+        return new FileInputStream(absolutePath);
+    }
+
+    private static synchronized InputStream getInputStreamByClassLoader(@MParam("获取到配置文件的地址") String absolutePath)
+            throws FileNotFoundException {
+        // 出现异常 说明 没有那个配置文件 这个时候采用 二进制 文件流的方式 获取文件的配置
+        return classLoader.getResourceAsStream(absolutePath);
+    }
+
+
     // get the config values from properties
+    private static synchronized Map<String, String> getKey2ValueMapFromPropertiesFile(
+            @MParam("获取到配置文件的地址") InputStream inputStream) {
+        Map<String, String> retMap = new HashMap<>();
+        try {
+            // 定义
+            Properties properties = new Properties();
+            properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            // 加载文件流里面的属性
+            // 设置配置文件的属性值
+            properties.forEach((key, value) -> {
+                retMap.put((String) key, (String) value);
+            });
+        } catch (Exception e) {
+            // omit...
+        } finally {
+            if (null != inputStream) {
+                try {
+                    // 关闭文件流
+                    inputStream.close();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+            }
+        }
+        return retMap;
+    }
+
     private static synchronized Map<String, String> getKey2ValueMapFromPropertiesFile(
             @MParam("获取到配置文件的地址") String absolutePath) {
         Map<String, String> retMap = new HashMap<>();
@@ -51,31 +108,17 @@ public class FetchKeyValueUtils {
         try {
             log.info("config file location:{}", absolutePath);
             // 获取配置的文件
-            inputStream = classLoader.getResourceAsStream(absolutePath);
+            inputStream = getInputStreamFromFileSystem(absolutePath);
             // 定义
             Properties properties = new Properties();
+            properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             // 加载文件流里面的属性
-            properties.load(inputStream);
             // 设置配置文件的属性值
             properties.forEach((key, value) -> {
                 retMap.put((String) key, (String) value);
             });
         } catch (Exception e) {
-            try {
-                // 出现异常 说明 没有那个配置文件 这个时候采用 二进制 文件流的方式 获取文件的配置
-                inputStream = new FileInputStream(absolutePath);
-                Properties properties = new Properties();
-                properties.load(inputStream);
-                // 设置配置文件的属性值
-                properties.forEach((key, value) -> {
-                    retMap.put((String) key, (String) value);
-                });
-            } catch (FileNotFoundException e1) {
-                log.warn("文件 " + absolutePath + " 没有找到");
-            } catch (Exception e1) {
-                log.error("启动时候，发生严重错误 [{}]", e.getMessage(), e);
-                throw new IllegalArgumentException("启动时候，发生严重错误" + e.getMessage());
-            }
+            log.error("文件 " + absolutePath + " 没有找到");
         } finally {
             if (null != inputStream) {
                 try {
@@ -97,25 +140,35 @@ public class FetchKeyValueUtils {
         try {
             log.info("config file location:{}", absolutePath);
             // 获取配置的文件
-            inputStream = classLoader.getResourceAsStream(absolutePath);
+            inputStream = getInputStreamFromFileSystem(absolutePath);
             // 设置值的操作
-            Map<String, Object> valueMap = new Yaml().load(inputStream);
+            Map<String, Object> valueMap = new Yaml().load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             // 设置值
             retMap.putAll(getYamlValues(valueMap, ""));
         } catch (Exception e) {
-            try {
-                // 出现异常 说明 没有那个配置文件 这个时候采用 二进制 文件流的方式 获取文件的配置
-                inputStream = new FileInputStream(absolutePath);
-                // 设置值的操作
-                Map<String, Object> valueMap = new Yaml().load(inputStream);
-                // 设置值
-                retMap.putAll(getYamlValues(valueMap, ""));
-            } catch (FileNotFoundException e1) {
-                log.warn("文件 " + absolutePath + " 没有找到");
-            } catch (Exception e1) {
-                log.error("启动时候，发生严重错误 [{}]", e.getMessage(), e);
-                throw new IllegalArgumentException("启动时候，发生严重错误" + e.getMessage());
+            log.warn("文件 " + absolutePath + " 没有找到");
+        } finally {
+            if (null != inputStream) {
+                try {
+                    // 关闭文件流
+                    inputStream.close();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
             }
+        }
+        return retMap;
+    }
+
+    private static synchronized Map<String, String> getKey2ValueMapFromYamlFile(InputStream inputStream) {
+        Map<String, String> retMap = new HashMap<>();
+        try {
+            // 设置值的操作
+            Map<String, Object> valueMap = new Yaml().load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            // 设置值
+            retMap.putAll(getYamlValues(valueMap, ""));
+        } catch (Exception e) {
+            // omit...
         } finally {
             if (null != inputStream) {
                 try {
@@ -179,5 +232,23 @@ public class FetchKeyValueUtils {
             return getKey2ValueMapFromYamlFile(configFile.getAbsolutePath());
         }
         return new HashMap<>();
+    }
+
+    public static Map<String, String> getKey2ValueMap(StreamVo streamVo) {
+        switch (streamVo.getTypeEnum()) {
+            case PROPERTIES: {
+                return getKey2ValueMapFromPropertiesFile(streamVo.getInputStream());
+            }
+            case YAML: {
+                return getKey2ValueMapFromYamlFile(streamVo.getInputStream());
+            }
+            case JSON: {
+                int idx = streamVo.getFileName().lastIndexOf(FileTypeEnum.JSON.getFileType());
+                String valueKey = streamVo.getFileName().substring(0, idx);
+                return getKey2ValueMapFromJSONFile(valueKey, streamVo.getInputStream());
+            }
+            default:
+                return new HashMap<>();
+        }
     }
 }

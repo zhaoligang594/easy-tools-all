@@ -13,7 +13,9 @@ import java.lang.reflect.Method;
  */
 public class LoggingJDKMethodInterceptor extends LoggingMethodInterceptorSupport implements InvocationHandler {
 
-    public LoggingJDKMethodInterceptor(ObjectMethodDefinition methodDefinition, Object target, EasyLoggingHandle easyLoggingHandle) {
+
+    public LoggingJDKMethodInterceptor(ObjectMethodDefinition methodDefinition,
+                                       Object target, EasyLoggingHandle easyLoggingHandle) {
         super(methodDefinition, target, easyLoggingHandle);
     }
 

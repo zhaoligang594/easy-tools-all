@@ -12,8 +12,9 @@ import java.io.Serializable;
  * create on 2017/11/15
  */
 public class ResponseResult<D> implements Serializable {
+
     private static final long serialVersionUID = -5290436355400748988L;
-    private int respCode;// 返回的操作码  200：说明操作成功  500：说明操作失败
+    private int code;// 返回的操作码  200：说明操作成功  500：说明操作失败
     private String message; // 返回的信息描述
     private D data; // 响应的数据的基本返回
 
@@ -21,8 +22,8 @@ public class ResponseResult<D> implements Serializable {
     private ResponseResult() {
     }
 
-    private ResponseResult(int respCode, String message, D data) {
-        this.respCode = respCode;
+    private ResponseResult(int code, String message, D data) {
+        this.code = code;
         this.message = message;
         this.data = data;
     }
@@ -50,12 +51,12 @@ public class ResponseResult<D> implements Serializable {
         return new ResponseResult<>(retCodeConstant.getCode(), message, data);
     }
 
-    public int getRespCode() {
-        return respCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRespCode(int respCode) {
-        this.respCode = respCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getMessage() {

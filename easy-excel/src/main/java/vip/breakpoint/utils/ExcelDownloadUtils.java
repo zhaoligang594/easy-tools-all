@@ -4,11 +4,9 @@ package vip.breakpoint.utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import vip.breakpoint.annotation.MParam;
 import vip.breakpoint.exception.EasyExcelException;
-import vip.breakpoint.utils.base.BaseExplore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.Map;
 /**
  * 下載文件操作
  */
-public abstract class ExcelDownloadUtils extends BaseExplore {
+public abstract class ExcelDownloadUtils {
 
     // 下载 excel
     public static <T> void downLoadExcelByCurrentData(HttpServletResponse response, List<T> data,
@@ -32,7 +30,7 @@ public abstract class ExcelDownloadUtils extends BaseExplore {
                                                       @MParam("是否下载模版") boolean isMould) throws IOException, EasyExcelException {
         if (null == data || data.size() == 0) throw new EasyExcelException("下载的数据不能是空");
         if (null == sheetName || "".equals(sheetName)) throw new EasyExcelException("sheetName is empty");
-        preSetCommonHeader(response);
+        ResponseUtils.preSetCommonHeader(response);
         OutputStream out = null;
         try {
             out = response.getOutputStream();
@@ -61,7 +59,7 @@ public abstract class ExcelDownloadUtils extends BaseExplore {
                                                       Map<String, List<T>> dataMapVal,
                                                       String downFileName, @MParam("是否下载模版") boolean isMould) throws IOException, EasyExcelException {
         if (null == dataMapVal || dataMapVal.size() == 0) throw new EasyExcelException("下载的数据不能是空");
-        preSetCommonHeader(response);
+        ResponseUtils.preSetCommonHeader(response);
         OutputStream out = null;
         try {
             out = response.getOutputStream();

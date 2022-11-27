@@ -38,13 +38,22 @@ public class WebConfigAdapter extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/images/**").addResourceLocations("classpath*:/images/");
-        registry.addResourceHandler("/css/**").addResourceLocations("classpath*:/css/");
-        registry.addResourceHandler("/js/**").addResourceLocations("classpath*:/js/");
-        registry.addResourceHandler("/swagger/**").addResourceLocations("classpath*:/static/swagger/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("classpath*:/images/");
+        registry.addResourceHandler("/css/**")
+                .addResourceLocations("classpath*:/css/");
+        registry.addResourceHandler("/js/**")
+                .addResourceLocations("classpath*:/js/");
+        registry.addResourceHandler("/swagger/**")
+                .addResourceLocations("classpath*:/static/swagger/");
+        registry.addResourceHandler("/swagger-resources/**")
+                .addResourceLocations("classpath*:/static/swagger-resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/doc.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
     }
 
     @Override

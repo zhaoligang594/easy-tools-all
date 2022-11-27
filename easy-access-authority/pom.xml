@@ -5,7 +5,7 @@
 
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-access-authority</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <name>easy-access-authority</name>
     <packaging>jar</packaging>
 
@@ -14,7 +14,7 @@
     <description>A tool for web interfaces access authority.</description>
 
     <properties>
-        <easy.version>1.0.1</easy.version>
+        <easy.version>1.1.0</easy.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-version>5.2.22.RELEASE</spring-version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -22,6 +22,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
+        <!-- swagger -->
+        <springfox-version>2.9.2</springfox-version>
     </properties>
 
     <licenses>
@@ -75,6 +77,29 @@
             <artifactId>easy-tool-utils</artifactId>
             <version>${easy.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-config-spring</artifactId>
+            <version>${easy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.9.6</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
         <dependency>
             <groupId>org.springframework</groupId>

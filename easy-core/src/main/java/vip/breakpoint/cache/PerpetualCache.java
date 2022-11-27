@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /**
@@ -17,6 +20,10 @@ public class PerpetualCache<T> implements Cache<T> {
 
     private final String id; // id
     private final Map<String, T> cache = new HashMap<String, T>();
+
+    private static final long DEFAULT_TRY_LOCK_TIME = 500;
+
+    private volatile ReadWriteLock readWriteLock;
 
     public PerpetualCache(String id) {
         this.id = id;
@@ -34,17 +41,49 @@ public class PerpetualCache<T> implements Cache<T> {
 
     @Override
     public void putObject(String key, T value) {
-        cache.put(key, value);
+        ReadWriteLock readWriteLock = getReadWriteLock();
+        Lock lock = readWriteLock.writeLock();
+        try {
+            if (lock.tryLock(DEFAULT_TRY_LOCK_TIME, TimeUnit.MILLISECONDS)) {
+                cache.put(key, value);
+            }
+        } catch (InterruptedException e) {
+            // omit...
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public T getObject(String key) {
-        return cache.get(key);
+        ReadWriteLock readWriteLock = getReadWriteLock();
+        Lock lock = readWriteLock.readLock();
+        try {
+            if (lock.tryLock(DEFAULT_TRY_LOCK_TIME, TimeUnit.MILLISECONDS)) {
+                return cache.get(key);
+            }
+        } catch (InterruptedException e) {
+            // omit...
+        } finally {
+            lock.unlock();
+        }
+        return null;
     }
 
     @Override
     public T removeObject(String key) {
-        return cache.remove(key);
+        ReadWriteLock readWriteLock = getReadWriteLock();
+        Lock lock = readWriteLock.writeLock();
+        try {
+            if (lock.tryLock(DEFAULT_TRY_LOCK_TIME, TimeUnit.MILLISECONDS)) {
+                return cache.remove(key);
+            }
+        } catch (InterruptedException e) {
+            // omit...
+        } finally {
+            lock.unlock();
+        }
+        return null;
     }
 
     @Override
@@ -54,12 +93,30 @@ public class PerpetualCache<T> implements Cache<T> {
 
     @Override
     public List<T> getAll() {
-        return new ArrayList<>(cache.values());
+        ReadWriteLock readWriteLock = getReadWriteLock();
+        Lock lock = readWriteLock.readLock();
+        try {
+            if (lock.tryLock(DEFAULT_TRY_LOCK_TIME, TimeUnit.MILLISECONDS)) {
+                return new ArrayList<>(cache.values());
+            }
+        } catch (InterruptedException e) {
+            // omit...
+        } finally {
+            lock.unlock();
+        }
+        return null;
     }
 
     @Override
     public ReadWriteLock getReadWriteLock() {
-        return null;
+        if (null == readWriteLock) {
+            synchronized (this) {
+                if (null == readWriteLock) {
+                    readWriteLock = new ReentrantReadWriteLock();
+                }
+            }
+        }
+        return readWriteLock;
     }
 
     @Override

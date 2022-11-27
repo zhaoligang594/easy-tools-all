@@ -8,8 +8,7 @@ import vip.breakpoint.supplier.value.StringValueSupplier;
  * 欢迎关注公众号 《代码废柴》
  */
 public enum StringConfigEnum implements StringValueSupplier {
-    TEST("test", "默認值", "测试"),
-    TEST_NAME("test.name", "默認值", "测试");
+    TEST("test", "默認值", "测试"),;
 
     private final String valueKey;
     private final String defaultValue;

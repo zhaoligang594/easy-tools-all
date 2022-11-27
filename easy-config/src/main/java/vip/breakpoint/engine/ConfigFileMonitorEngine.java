@@ -2,10 +2,9 @@ package vip.breakpoint.engine;
 
 import vip.breakpoint.config.ConfigFileMonitorConfig;
 import vip.breakpoint.enums.FileTypeEnum;
-import vip.breakpoint.listener.FileChangeListener;
+import vip.breakpoint.listener.ConfigChangeListener;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
-import vip.breakpoint.supplier.ValueSupplierFactory;
 import vip.breakpoint.utils.EasyStringUtils;
 
 import java.util.*;
@@ -87,12 +86,14 @@ public class ConfigFileMonitorEngine {
     /**
      * start the file monitor
      */
-    public static void startFileMonitorEngine(List<FileChangeListener> fileChangeListeners) {
-        startFileMonitorEngine(new ArrayList<>(), fileChangeListeners, null);
+    public static void startFileMonitorEngine(List<ConfigChangeListener> configChangeListeners) {
+        startFileMonitorEngine(new ArrayList<>(), configChangeListeners, null);
     }
 
-    public void setFileChangeListeners(List<FileChangeListener> fileChangeListeners) {
-        monitorConfig.setFileChangeListeners(fileChangeListeners);
+    public void setFileChangeListeners(List<ConfigChangeListener> configChangeListeners) {
+        if (null != configChangeListeners) {
+            monitorConfig.setFileChangeListeners(configChangeListeners);
+        }
     }
 
     public void setFileChangeExecutor(Executor executor) {
@@ -103,7 +104,7 @@ public class ConfigFileMonitorEngine {
      * start the file monitor
      */
     public static void startFileMonitorEngine(List<String> monitorPaths,
-                                              List<FileChangeListener> fileChangeListeners, Executor executor) {
+                                              List<ConfigChangeListener> configChangeListeners, Executor executor) {
         // create the ConfigFileMonitorEngine
         ConfigFileMonitorEngine engine = new ConfigFileMonitorEngine();
         // to set the default path
@@ -113,7 +114,7 @@ public class ConfigFileMonitorEngine {
         // monitor file type
         engine.setMonitorFileTypes(FileTypeEnum.PROPERTIES, FileTypeEnum.JSON, FileTypeEnum.YAML);
         // start the file monitor engine
-        engine.setFileChangeListeners(fileChangeListeners);
+        engine.setFileChangeListeners(configChangeListeners);
         engine.setFileChangeExecutor(executor);
         engine.startMonitorEngine();
     }
