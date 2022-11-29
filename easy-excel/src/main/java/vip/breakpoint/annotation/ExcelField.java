@@ -15,8 +15,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelField {
 
+    @AliasFor("name")
+    String value() default "";
+
     // 和 属性 的 汉语意思
-    String name();
+    String name() default "";
 
     // 日期的类型
     String datePattern() default "yyyy-MM-dd HH:mm:ss";
@@ -24,7 +27,7 @@ public @interface ExcelField {
     // 下拉列表的操作里面的 可以填写的 值
     String[] selectValues() default {};
 
-    //  order
+    //  排序 order
     int order() default 0;
 
     // 是否导出该列

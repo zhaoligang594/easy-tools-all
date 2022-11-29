@@ -2,6 +2,8 @@ package vip.breakpoint.factory;
 
 import net.sf.cglib.proxy.Enhancer;
 import vip.breakpoint.definition.ObjectMethodDefinition;
+import vip.breakpoint.handler.LoggingCGlibMethodInterceptor;
+import vip.breakpoint.handler.LoggingJDKMethodInterceptor;
 import vip.breakpoint.loghandle.EasyLoggingHandle;
 
 import java.lang.reflect.Proxy;
@@ -28,12 +30,11 @@ public final class LoggingFactory {
     public static Object getLoggingCGLibProxyObject(ClassLoader classLoader, ObjectMethodDefinition methodDefinition,
                                                     Object bean, Class<?> targetClass,
                                                     EasyLoggingHandle easyLoggingHandle) {
-
-        LoggingCGlibMethodInterceptor interceptor = new LoggingCGlibMethodInterceptor(methodDefinition, bean, easyLoggingHandle);
+        LoggingCGlibMethodInterceptor interceptor =
+                new LoggingCGlibMethodInterceptor(methodDefinition, bean, easyLoggingHandle);
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(targetClass);
         enhancer.setCallback(interceptor);
-
         return enhancer.create();
     }
 }

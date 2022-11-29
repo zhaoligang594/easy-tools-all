@@ -7,6 +7,8 @@ import vip.breakpoint.listener.ConfigChangeListenerPool;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.remote.ConfigChangeService;
+import vip.breakpoint.remote.bean.ConfigChangeVo;
+import vip.breakpoint.utils.EasyStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,21 +35,25 @@ public class ConfigChangeServiceImpl implements ConfigChangeService {
 
 
     @Override
-    public boolean doChangeConfig(final String configKey, final String configValue) {
+    public boolean doChangeConfig(ConfigChangeVo vo) {
         try {
-            log.info("the remote config value have change!!! configKey:{} , configValue:{} ", configKey, configValue);
+            if (EasyStringUtils.isBlank(vo.getConfigKey()) || EasyStringUtils.isBlank(vo.getConfigValue())) {
+                return false;
+            }
+            log.info("the remote config value have change!!! configKey:{} , configValue:{} ",
+                    vo.getConfigKey(), vo.getConfigValue());
             List<ConfigChangeListener> configChangeListeners = configChangeListenerPool.getConfigChangeListeners();
             if (null != configChangeListeners) {
                 for (ConfigChangeListener configChangeListener : configChangeListeners) {
                     Map<String, String> key2ValueMap = new HashMap<>();
-                    key2ValueMap.put(configKey, configValue);
+                    key2ValueMap.put(vo.getConfigKey(), vo.getConfigValue());
                     configChangeListener.doChangedConfigFileRefresh(ChangeTypeEnum.REMOTE, null, key2ValueMap);
                 }
             }
             return true;
         } catch (Exception e) {
             log.error("change the config value occur error configKey:{} , configValue:{} ",
-                    configKey, configValue, e);
+                    vo.getConfigKey(), vo.getConfigKey(), e);
             return false;
         }
     }

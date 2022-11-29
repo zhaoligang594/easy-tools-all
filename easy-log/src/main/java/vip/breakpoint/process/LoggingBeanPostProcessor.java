@@ -9,14 +9,20 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
-import vip.breakpoint.annotion.WebLogging;
+import vip.breakpoint.annotion.EasyLog;
 import vip.breakpoint.definition.ObjectMethodDefinition;
 import vip.breakpoint.loghandle.EasyLoggingHandle;
 import vip.breakpoint.factory.LoggingFactory;
+import vip.breakpoint.utils.EasyColUtils;
+import vip.breakpoint.utils.EasyStringUtils;
+import vip.breakpoint.utils.ReflectUtils;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
+ * 收集所有注解的方法
+ *
  * @author :breakpoint/赵立刚
  */
 public class LoggingBeanPostProcessor implements BeanDefinitionRegistryPostProcessor,
@@ -40,6 +46,7 @@ public class LoggingBeanPostProcessor implements BeanDefinitionRegistryPostProce
             Class<?> oriClass = bean.getClass();
             ObjectMethodDefinition methodDefinition = new ObjectMethodDefinition();
             this.setMethodDefinition(oriClass, methodDefinition);
+            // 是否需要被进行代理
             if (methodDefinition.isShouldProxy()) {
                 EasyLoggingHandle easyLoggingHandle;
                 try {
@@ -60,9 +67,19 @@ public class LoggingBeanPostProcessor implements BeanDefinitionRegistryPostProce
 
     private void setMethodDefinition(Class<?> clazz, ObjectMethodDefinition methodDefinition) {
         if (clazz != Object.class) {
-            WebLogging webLogging = clazz.getAnnotation(WebLogging.class);
-            if (null != webLogging) {
-                methodDefinition.addWebLogging(clazz, webLogging);
+            Map<Method, EasyLog> method2AnnMap = new HashMap<>();
+            // 获取到所有的方法
+            List<Method> methods = ReflectUtils.getMethodsFromClazz(clazz);
+            if (EasyColUtils.isNotEmpty(methods)) {
+                for (Method method : methods) {
+                    EasyLog annotation = method.getAnnotation(EasyLog.class);
+                    if (null != annotation) {
+                        method2AnnMap.put(method, annotation);
+                    }
+                }
+            }
+            if (!method2AnnMap.isEmpty()) {
+                methodDefinition.addCandidateMethods(method2AnnMap);
             }
             Class<?>[] interfaces = clazz.getInterfaces();
             for (Class<?> klass : interfaces) {
@@ -84,6 +101,7 @@ public class LoggingBeanPostProcessor implements BeanDefinitionRegistryPostProce
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
+        // 收集所有用户自定义的bean
         String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
         beanNamesSet.addAll(Arrays.asList(beanDefinitionNames));
     }

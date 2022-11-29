@@ -22,11 +22,11 @@
 <dependency>
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-core</artifactId>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
-目前的最新是 `1.1.0` ，基于JDK8，spring 5.X 。
+目前的最新是 `2.0.0` ，基于JDK8，spring 5.X 。
 
 更多组件请访问：[(MVN仓库地址)](https://mvnrepository.com/artifact/vip.breakpoint)
 

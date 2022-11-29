@@ -23,7 +23,7 @@
         <dependency>
             <groupId>vip.breakpoint</groupId>
             <artifactId>easy-config-spring</artifactId>
-            <version>1.1.0</version>
+            <version>2.0.0</version>
         </dependency>
 ```
 

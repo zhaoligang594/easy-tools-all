@@ -28,8 +28,8 @@ public class LoggingBeanDefinitionRegistrar implements ImportBeanDefinitionRegis
         AnnotationAttributes attributes =
                 AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(annType.getName(),
                         false));
-        if (null != attributes) {
-            int poolSize = attributes.getNumber("poolSize");
-        }
+//        if (null != attributes) {
+//            int poolSize = attributes.getNumber("poolSize");
+//        }
     }
 }

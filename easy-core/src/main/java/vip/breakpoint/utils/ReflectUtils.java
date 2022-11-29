@@ -1,6 +1,7 @@
 package vip.breakpoint.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,23 @@ import java.util.List;
  * 欢迎关注公众号 《代码废柴》
  */
 public class ReflectUtils {
+
+    // 获取一个类里面左右的方法
+    public static <T> List<Method> getMethodsFromClazz(Class<T> clazz) {
+        List<Method> res = new ArrayList<Method>();
+        Class<? super T> superclass = clazz.getSuperclass();
+//        if (null != superclass && !superclass.isInterface()) {
+//            // 将所有的 ExcelField 加入
+//            res.addAll(getMethodsFromClazz(superclass));
+//        }
+        if (!clazz.isInterface()) {
+            //Field[] declaredFields = clazz.getDeclaredFields();
+            Method[] methods = clazz.getMethods();
+            res.addAll(new ArrayList<>(Arrays.asList(methods)));
+        }
+        return res;
+    }
+
 
     /**
      * get all field

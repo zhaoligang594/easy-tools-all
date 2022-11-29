@@ -1,201 +1,232 @@
-### 一、项目解释：
+## 一、简单项目日志组件：easy-log组件
 
-#### 1.1 项目的主要功能
+### 1.1 背景
 
-* 该项目是一个日志的中间件，实现可插拔的日志打印。
-* 打印日志的范围主要是对于接口的方法进行打印。
+> 在项目中，需要打印的日志地方有很多，如果实现打印日志，还需要自己实现AOP来实现方法的日志。每一次都实现，非常的不方便。因此，这个组件解决的是快速的实现方法级别的日志操作。可以快速的记录方法的操作日志，方便用户更加的专注业务代码。
 
-#### 1.2 主要的使用范围
+### 1.2 核心功能
 
 * 无侵入的打印业务逻辑层的执行日志
-* 统一的实现，避免了其他实现的繁杂的配置以及实现的过程
 
-### 二、简单开始组件
+## 二、使用方法
 
-#### 2.1 引入依赖
-
-最新版本：
+### 2.1 引入最新的组件坐标到pom.xml中
 
 ```xml
 <dependency>
-  <groupId>vip.breakpoint</groupId>
-  <artifactId>logging-web</artifactId>
-  <version>1.1.0</version>
+    <groupId>vip.breakpoint</groupId>
+    <artifactId>easy-log</artifactId>
+    <version>XXX</version>
 </dependency>
 ```
 
-#### 2.2 首先在我们的配置类上开启日志功能
+?> 这里强力推荐使用最新的组件包。
 
-注解配置：
+### 2.2 启动类配置
 
 ```java
-@Configuration
-@ComponentScan(basePackages = {"vip.breakpoint.bean", "vip.breakpoint.service"})
-// 开启日志打印功能
-@EnableLoggingConfiguration
-@Import({MyAspectj.class})
-public class MainConfig {
+@EnableEasyLogging
+@EnableAccessLimit(ignorePaths = {"/sys", "/user"}, configFileSystemPaths = {"C:\\work\\idea_work"})
+@EnableAutoConfig(fileSystemPaths = {"C:\\work\\idea_work"})
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
 }
 ```
 
-xml配置：
+?> 上面的代码中，注解 `@EnableEasyLogging` 表明这个应用开启了日志的功能。
 
-```xml
-<!--  日志配置  -->
-    <bean class="vip.breakpoint.XmlEnableLoggingConfiguration"/>
-```
+### 2.3 方法级别配置
 
-#### 2.3 在我们的接口上使用配置打印日志的方法
-
-##### 2.3.1 接口上配置注解
+在需要打印日志的位置，加上如下的注解：
 
 ```java
-@WebLogging(methods = {"add"})
-public interface MyService {
-    int add(int a, int b);
-}
-```
-
-##### 2.3.2 实现类上配置注解
-
-```java
-/**
- * @author :breakpoint/赵立刚
- * @date : 2020/07/16
- */
-@Slf4j
+@Lazy
 @Service
-@WebLogging(methods = {"sub"})
-public class SubService {
+public class TestServiceImpl extends BaseService implements TestService {
 
-    public int sub(int a, int b) {
-        log.info("vip.breakpoint.service.SubService.sub");
-        //int i = 1 / 0;
-        return a - b;
+    @EasyConfig(value = "test001:[{\"age\":-1,\"name\":\"default name\"}]")
+    private List<TestUser> list2;
+
+    @EasyLog
+    @Override
+    public Object test() {
+        return list2;
+    }
+
+    @Override
+    public Object test2() {
+        return list;
     }
 }
 ```
 
-#### 2.4 自定义回调组件
+`@EasyLog` 注解定义了这个方法需要打印日志。下面就是一次输出的例子：
 
-> 继承 EasyLoggingHandleAdaptor 或者实现  EasyLoggingHandle
+```shell
+2022-11-29 20:02:14.831  INFO 22788 --- [io-8080-exec-10] v.b.h.LoggingCGlibMethodInterceptor      : request params:[[]],request method:[test], request time :[2022-11-29 20:02:14]
+2022-11-29 20:02:14.831  INFO 22788 --- [io-8080-exec-10] v.b.h.LoggingCGlibMethodInterceptor      : response params:[[]],request method:[test], complete time:[2022-11-29 20:02:14],return val:[[{"age":222,"name":"name is 程序员LEO1231222"}]]
+```
+
+## 三、自定义日志handle
+
+定义一个日志组件bean，并且实现下面的接口：
 
 ```java
 /**
+ * 日志回调
+ *
  * @author :breakpoint/赵立刚
- * @date : 2020/07/16
  */
-@Service
-public class MyEasyLoggingHandle extends EasyLoggingHandleAdaptor {
+public interface EasyLoggingHandle {
 
     /**
      * before invoke method process
      *
-     * @param methodName is methodName
-     * @param methodArgs is req args
+     * @param methodName  is methodName
+     * @param methodArgs  is req args
+     * @param annotations is annotations
      */
-    @Override
-    public void invokeBefore(String methodName, Object[] methodArgs) {
-      // 自己的业务逻辑书写的地方，在方法之前调用
-        System.out.println("vip.breakpoint.service.MyEasyLoggingHandle.invokeBefore");
-    }
+    void invokeBefore(String methodName, Object[] methodArgs, Annotation[] annotations);
 
     /**
      * after invoke method process
      *
-     * @param methodName is methodName
-     * @param methodArgs is req args
-     * @param resVal     is return value
+     * @param methodName  is methodName
+     * @param methodArgs  is req args
+     * @param resVal      is return value
+     * @param annotations is annotations
      */
+    void invokeAfter(String methodName, Object[] methodArgs, Object resVal, Annotation[] annotations);
+
+    /**
+     * when throw exception
+     *
+     * @param methodName  is methodName
+     * @param methodArgs  is req args
+     * @param e           is throws exception
+     * @param annotations is annotations
+     * @throws Throwable
+     */
+    void invokeOnThrowing(String methodName, Object[] methodArgs, Annotation[] annotations, Throwable e)
+            throws Throwable;
+
+}
+```
+
+或者可以继承日志的适配器：
+
+```java
+/**
+ * @author :breakpoint/赵立刚
+ */
+public abstract class EasyLoggingHandleAdaptor implements EasyLoggingHandle {
+
     @Override
-    public void invokeAfter(String methodName, Object[] methodArgs, Object resVal) {
-      // 自己的业务逻辑书写的地方，在方法之后调用
-        System.out.println("vip.breakpoint.service.MyEasyLoggingHandle.invokeAfter");
+    public void invokeBefore(String methodName,
+                             Object[] methodArgs, Annotation[] annotations) {
+        // for subclass implements
     }
 
     @Override
-    public void invokeOnThrowing(String methodName, Object[] methodArgs, Throwable e) throws Throwable {
-      	// 自己的业务逻辑书写的地方，在出现异常调用
-        super.invokeOnThrowing(methodName, methodArgs, e);
+    public void invokeAfter(String methodName, Object[] methodArgs,
+                            Object resVal, Annotation[] annotations) {
+        // for subclass implements
+    }
+
+    @Override
+    public void invokeOnThrowing(String methodName, Object[] methodArgs,
+                                 Annotation[] annotations, Throwable e) throws Throwable {
+        // for subclass implements
     }
 }
 ```
 
-#### 2.5 测试数据执行结果
+!> 下面是一个实现的例子：
 
-```shell
-# 执行方法前，logger 日志打印
-06:33:00.135 [main] INFO vip.breakpoint.factory.LoggingCGlibMethodInterceptor - request params:【[12,3]】||request method:【sub】|| request time :【2020-07-17 06:33:00】
-# 调用回调定义组件 回调 方法执行前
-vip.breakpoint.service.MyEasyLoggingHandle.invokeBefore
-## 调用 Spring自己的前置通知
-com.breakpoint.vip.aspectj.MyAspectj.pointcut.before
-## 调用 真正的方法
-06:33:00.153 [main] INFO vip.breakpoint.service.SubService - vip.breakpoint.service.SubService.sub
-## 调用 Spring自己的后置
-com.breakpoint.vip.aspectj.MyAspectj.pointcut.after
-## 调用 Spring自己的返回前通知
-com.breakpoint.vip.aspectj.MyAspectj.afterReturning
-## 执行方法后，logger 日志打印
-06:33:00.153 [main] INFO vip.breakpoint.factory.LoggingCGlibMethodInterceptor - request params:【[12,3]】||request method:【sub】|| complete time:【2020-07-17 06:33:00】||return val:【9】
-# 调用回调定义组件 回调 方法执行后
-vip.breakpoint.service.MyEasyLoggingHandle.invokeAfter
+```java
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import vip.breakpoint.loghandle.EasyLoggingHandleAdaptor;
+
+import java.lang.annotation.Annotation;
+
+/**
+ * @author : breakpoint/zlgtop@163.com
+ * create on 2022/12/02
+ * 欢迎关注公众号:代码废柴
+ */
+@Slf4j
+@Service
+public class LogHandle extends EasyLoggingHandleAdaptor {
+
+    @Override
+    public void invokeBefore(String methodName, Object[] methodArgs, Annotation[] annotations) {
+        log.info("invokeBefore");
+    }
+
+    @Override
+    public void invokeAfter(String methodName, Object[] methodArgs, Object resVal, Annotation[] annotations) {
+        log.info("invokeAfter");
+    }
+
+    @Override
+    public void invokeOnThrowing(String methodName, Object[] methodArgs, Annotation[] annotations, Throwable e) throws Throwable {
+        log.info("invokeOnThrowing");
+    }
+}
 ```
 
-### 三、项目依赖
-
-* JDK 1.8
-* Spring项目环境
-
-### 四、项目结构
+输出的日志：
 
 ```shell
-.
-├── README.md
-├── pic
-│   └── image-20200715171512729.png
-├── pom.xml
-└── src
-    └── main
-        └── java
-            └── vip
-                └── breakpoint
-                    ├── XmlEnableLoggingConfiguration.java
-                    ├── annotion
-                    │   ├── EnableLoggingConfiguration.java
-                    │   └── WebLogging.java
-                    ├── config
-                    │   └── LoggingBeanDefinitionRegistrar.java
-                    ├── definition
-                    │   └── ObjectMethodDefinition.java
-                    ├── exception
-                    │   └── MultiInterfaceBeansException.java
-                    ├── factory
-                    │   ├── EasyLoggingHandle.java
-                    │   ├── EasyLoggingHandleAdaptor.java
-                    │   ├── LoggingCGlibMethodInterceptor.java
-                    │   ├── LoggingFactory.java
-                    │   ├── LoggingJDKMethodInterceptor.java
-                    │   └── LoggingMethodInterceptorSupport.java
-                    ├── log
-                    │   ├── EventConstants.java
-                    │   ├── LoggingLevel.java
-                    │   ├── WebLogFactory.java
-                    │   └── adaptor
-                    │       ├── ConsoleLoggerImpl.java
-                    │       ├── DelegateLoggerImpl.java
-                    │       ├── Logger.java
-                    │       └── LoggerSupport.java
-                    └── process
-                        └── LoggingBeanPostProcessor.java
+2022-11-29 20:37:17.244  INFO 17176 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-29 20:37:17.244  INFO 17176 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-29 20:37:17.245  INFO 17176 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2022-11-29 20:37:17.261  INFO 17176 --- [nio-8080-exec-1] v.b.h.LoggingCGlibMethodInterceptor      : request params:[[]],request method:[test], request time :[2022-11-29 20:37:17]
+2022-11-29 20:37:17.262  INFO 17176 --- [pool-1-thread-1] com.zlg.test.demo.log.LogHandle          : invokeBefore
+2022-11-29 20:37:17.270  INFO 17176 --- [nio-8080-exec-1] v.b.h.LoggingCGlibMethodInterceptor      : response params:[[]],request method:[test], complete time:[2022-11-29 20:37:17],return val:[[{"age":25,"name":"name is 程序员冈刀"}]]
+2022-11-29 20:37:17.271  INFO 17176 --- [pool-1-thread-1] com.zlg.test.demo.log.LogHandle          : invokeAfter
 ```
 
-### 五、写在最后
+## 四、其他的配置
 
-由于作者水平有限，欢迎各位issue，以及提新增需求
+```java
+/**
+ * @author :breakpoint/赵立刚
+ */
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface EasyLog {
 
-### 六、视频介绍
+    /**
+     * 名字 默认选取方法的名字
+     *
+     * @return name
+     */
+    String name() default ""; //
 
-[日志中间件简介](https://www.bilibili.com/video/BV1ND4y1D7NL/)
+    /**
+     * 打印日志的时间格式
+     *
+     * @return pattern
+     */
+    String timePattern() default "yyyy-MM-dd HH:mm:ss"; // 日期的格式
 
-[https://www.bilibili.com/video/BV1ND4y1D7NL/](https://www.bilibili.com/video/BV1ND4y1D7NL/)
+    /**
+     * 是否在系统中打印日志
+     *
+     * @return true or false
+     */
+    boolean logInApp() default true;
+}
+```
+
+?> 上面是一个方法的所有的配置。可以配置是否打印日志[`logInApp()`]， 以及输出的时间的格和方法的名字配置。
+
+!> 以上就是 `easy-log` 组件的全部功能，由于作者水平有限，肯定会存在需要歧义的地方，如果你有任何的疑问，都可以联系本作者。同时也欢迎关注《代码废柴》公众号。

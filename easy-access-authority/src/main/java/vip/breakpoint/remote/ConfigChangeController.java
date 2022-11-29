@@ -1,11 +1,9 @@
 package vip.breakpoint.remote;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vip.breakpoint.annotation.AccessLimit;
 import vip.breakpoint.dto.ResponseResult;
+import vip.breakpoint.remote.bean.ConfigChangeVo;
 
 import javax.annotation.Resource;
 
@@ -23,8 +21,7 @@ public class ConfigChangeController {
 
     @AccessLimit(isLogIn = false, needToken = true)
     @RequestMapping(value = "/changeConfig", method = RequestMethod.POST)
-    public Object changeConfig(@RequestParam("configKey") String configKey,
-                               @RequestParam("configValue") String configValue) {
-        return ResponseResult.createOK(configChangeService.doChangeConfig(configKey, configValue));
+    public Object changeConfig(@RequestBody ConfigChangeVo vo) {
+        return ResponseResult.createOK(configChangeService.doChangeConfig(vo));
     }
 }

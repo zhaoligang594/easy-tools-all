@@ -1,5 +1,6 @@
 package vip.breakpoint.config;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -8,6 +9,7 @@ import org.springframework.lang.Nullable;
 import vip.breakpoint.annontation.EasyConfig;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
+import vip.breakpoint.utils.AopTargetUtils;
 import vip.breakpoint.utils.EasyStringUtils;
 import vip.breakpoint.utils.JavaTypeUtils;
 import vip.breakpoint.utils.ReflectUtils;
@@ -17,6 +19,8 @@ import vip.breakpoint.wrapper.SpringBeanWrapperPool;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +56,8 @@ public class EasyConfigSpringBeanPostProcessor implements BeanPostProcessor {
                 if (null != beanWrapper) {
                     // log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapperPool.addSpringBeanWrapper(beanWrapper.getValueKey(), beanWrapper);
+                    List<SpringBeanWrapper> targetBeanWrappers = getTargetBeanWrappers(beanWrapper);
+                    SpringBeanWrapperPool.addSpringBeanWrapper(beanWrapper.getValueKey(), new HashSet<>(targetBeanWrappers));
                 }
             }
             /*  @EasyConfig  */
@@ -67,6 +73,8 @@ public class EasyConfigSpringBeanPostProcessor implements BeanPostProcessor {
                 if (null != beanWrapper) {
                     // log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(beanWrapper.getValueKey(), beanWrapper);
+                    List<SpringBeanWrapper> targetBeanWrappers = getTargetBeanWrappers(beanWrapper);
+                    SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(beanWrapper.getValueKey(), new HashSet<>(targetBeanWrappers));
                 }
             }
         }
@@ -87,6 +95,53 @@ public class EasyConfigSpringBeanPostProcessor implements BeanPostProcessor {
                 wrapper.setValueType(typeByField[1]);
             }
             return wrapper;
+        }
+        return null;
+    }
+
+    private List<SpringBeanWrapper> getTargetBeanWrappers(SpringBeanWrapper obw) {
+        List<SpringBeanWrapper> retList = new ArrayList<>();
+        if (null != obw) {
+            Object bean = obw.getBean();
+            if (AopTargetUtils.isProxyByEasyLog(bean)) {
+                try {
+                    Object target = AopTargetUtils.getTargetFromEasyLogProxy(bean);
+                    SpringBeanWrapper wrapper = new SpringBeanWrapper(target, obw.getBeanName(), obw.getValueKey(),
+                            obw.getType(), obw.getValueField(), obw.isStatic());
+                    wrapper.setValueType(obw.getValueType());
+                    retList.add(wrapper);
+                    // spring proxy
+                    SpringBeanWrapper targetBeanWrapper = getTargetBeanWrapper(wrapper);
+                    if (null != targetBeanWrapper) {
+                        retList.add(targetBeanWrapper);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            // spring proxy
+            SpringBeanWrapper targetBeanWrapper = getTargetBeanWrapper(obw);
+            if (null != targetBeanWrapper) {
+                retList.add(targetBeanWrapper);
+            }
+        }
+        return retList;
+    }
+
+    private SpringBeanWrapper getTargetBeanWrapper(SpringBeanWrapper obw) {
+        if (null != obw) {
+            Object bean = obw.getBean();
+            if (AopUtils.isAopProxy(bean)) {
+                try {
+                    Object target = AopTargetUtils.getTarget(bean);
+                    SpringBeanWrapper wrapper = new SpringBeanWrapper(target, obw.getBeanName(), obw.getValueKey(),
+                            obw.getType(), obw.getValueField(), obw.isStatic());
+                    wrapper.setValueType(obw.getValueType());
+                    return wrapper;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }

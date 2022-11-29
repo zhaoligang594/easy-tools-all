@@ -28,6 +28,12 @@ public class SpringBeanWrapperPool {
         backUpBeanMap.put(valueKey, wrappers);
     }
 
+    public static void addSpringBeanWrapper2BackUp(String valueKey, Set<SpringBeanWrapper> wrappers) {
+        Set<SpringBeanWrapper> wrapperSet = backUpBeanMap.getOrDefault(valueKey, new HashSet<>());
+        wrapperSet.addAll(wrappers);
+        backUpBeanMap.put(valueKey, wrapperSet);
+    }
+
     public static void addSpringBeanWrapper(String valueKey, Set<SpringBeanWrapper> springBeanWrappers) {
         Set<SpringBeanWrapper> wrappers = valueKey2BeanMap.getOrDefault(valueKey, new HashSet<>());
         wrappers.addAll(springBeanWrappers);

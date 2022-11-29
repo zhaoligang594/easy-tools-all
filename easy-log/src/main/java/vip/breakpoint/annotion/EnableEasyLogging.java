@@ -13,6 +13,4 @@ import java.lang.annotation.*;
 @Documented
 @Import({LoggingBeanDefinitionRegistrar.class})
 public @interface EnableEasyLogging {
-    // 线程池大小
-    int poolSize() default 50;
 }

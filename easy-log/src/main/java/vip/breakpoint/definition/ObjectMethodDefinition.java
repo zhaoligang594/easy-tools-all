@@ -1,6 +1,6 @@
 package vip.breakpoint.definition;
 
-import vip.breakpoint.annotion.WebLogging;
+import vip.breakpoint.annotion.EasyLog;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -12,9 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ObjectMethodDefinition {
 
-    // : fixBug 出现异常的bug
-    private final Map<String, WebLogging> methodMap = new ConcurrentHashMap<String, WebLogging>();
-    private final Map<Class<?>, WebLogging> webLoggingMap = new ConcurrentHashMap<Class<?>, WebLogging>();
+    /**
+     * 记录所有的方法的map
+     */
+    private final Map<Method, EasyLog> method2AnnMap = new ConcurrentHashMap<Method, EasyLog>();
+
     private static final Object object = new Object();
     private static final Set<String> excludeMethod = new HashSet<String>();
 
@@ -30,43 +32,21 @@ public class ObjectMethodDefinition {
         excludeMethod.add("finalize");
     }
 
-    public boolean isHaveMethod(String methodName) {
-        return methodMap.containsKey(methodName);
+    public boolean isHaveMethod(Method method) {
+        return null != method2AnnMap.get(method);
     }
 
     public boolean isShouldProxy() {
-        return methodMap.size() > 0;
+        return method2AnnMap.size() > 0;
     }
 
-    private void putMethod(WebLogging webLogging, String... methods) {
-        for (String method : methods) {
-            methodMap.put(method, webLogging);
+    public void addCandidateMethods(Map<Method, EasyLog> method2AnnMap) {
+        if (null != method2AnnMap) {
+            this.method2AnnMap.putAll(method2AnnMap);
         }
     }
 
-    public void addWebLogging(Class<?> clazz, WebLogging webLogging) {
-        webLoggingMap.put(clazz, webLogging);
-        if (isContainAll(webLogging)) {
-            List<String> methodsParams = new ArrayList<>();
-            for (Method method : clazz.getMethods()) {
-                if (!excludeMethod.contains(method.getName())) {
-                    methodsParams.add(method.getName());
-                }
-            }
-            this.putMethod(webLogging, methodsParams.toArray(new String[0]));
-        } else {
-            this.putMethod(webLogging, webLogging.methods());
-        }
-    }
-
-    private boolean isContainAll(WebLogging webLogging) {
-        for (String method : webLogging.methods()) {
-            if ("*".equals(method.trim())) return true;
-        }
-        return false;
-    }
-
-    public WebLogging getWebLoggingByMethod(String methodName) {
-        return methodMap.get(methodName);
+    public EasyLog getEasyLogByMethod(Method method) {
+        return method2AnnMap.get(method);
     }
 }

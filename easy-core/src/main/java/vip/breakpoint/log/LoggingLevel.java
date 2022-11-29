@@ -6,6 +6,7 @@ package vip.breakpoint.log;
  * Created on 2021-02-05
  */
 public enum LoggingLevel {
+
     ERROR(EventConstants.ERROR_INT, "ERROR"),
     WARN(EventConstants.WARN_INT, "WARN"),
     INFO(EventConstants.INFO_INT, "INFO"),
