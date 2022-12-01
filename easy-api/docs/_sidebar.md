@@ -8,3 +8,5 @@
   * [5.easy-log](documents/easy-log.md)
   * [6.其他公共工具](documents/others.md)
 
+欢迎大家的使用！
+

@@ -13,6 +13,7 @@ import vip.breakpoint.annotion.EasyLog;
 import vip.breakpoint.definition.ObjectMethodDefinition;
 import vip.breakpoint.loghandle.EasyLoggingHandle;
 import vip.breakpoint.factory.LoggingFactory;
+import vip.breakpoint.utils.AopTargetUtils;
 import vip.breakpoint.utils.EasyColUtils;
 import vip.breakpoint.utils.EasyStringUtils;
 import vip.breakpoint.utils.ReflectUtils;
@@ -43,23 +44,28 @@ public class LoggingBeanPostProcessor implements BeanDefinitionRegistryPostProce
     public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName)
             throws BeansException {
         if (beanNamesSet.contains(beanName)) {
-            Class<?> oriClass = bean.getClass();
-            ObjectMethodDefinition methodDefinition = new ObjectMethodDefinition();
-            this.setMethodDefinition(oriClass, methodDefinition);
-            // 是否需要被进行代理
-            if (methodDefinition.isShouldProxy()) {
-                EasyLoggingHandle easyLoggingHandle;
-                try {
-                    easyLoggingHandle = applicationContext.getBean(EasyLoggingHandle.class);
-                } catch (BeansException e) {
-                    easyLoggingHandle = null;
+            try {
+                Object target = AopTargetUtils.getOriginTarget(bean);
+                Class<?> oriClass = target.getClass();
+                ObjectMethodDefinition methodDefinition = new ObjectMethodDefinition();
+                this.setMethodDefinition(oriClass, methodDefinition);
+                // 是否需要被进行代理
+                if (methodDefinition.isShouldProxy()) {
+                    EasyLoggingHandle easyLoggingHandle;
+                    try {
+                        easyLoggingHandle = applicationContext.getBean(EasyLoggingHandle.class);
+                    } catch (BeansException e) {
+                        easyLoggingHandle = null;
+                    }
+                    Object loggingProxyObject =
+                            LoggingFactory.getLoggingCGLibProxyObject(applicationContext.getClassLoader(),
+                                    methodDefinition, bean, oriClass, easyLoggingHandle);
+                    if (null != loggingProxyObject) {
+                        return loggingProxyObject;
+                    }
                 }
-                Object loggingProxyObject =
-                        LoggingFactory.getLoggingCGLibProxyObject(applicationContext.getClassLoader(),
-                                methodDefinition, bean, oriClass, easyLoggingHandle);
-                if (null != loggingProxyObject) {
-                    return loggingProxyObject;
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return bean;

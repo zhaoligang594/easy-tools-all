@@ -31,7 +31,7 @@
 <dependency>
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-config</artifactId>
-    <version>1.0.1</version>
+    <version>XXXXX</version>
 </dependency>
 
 ```

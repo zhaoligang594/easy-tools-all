@@ -3,6 +3,7 @@ package vip.breakpoint.handler;
 import org.springframework.lang.NonNull;
 import vip.breakpoint.annontation.EasyConfig;
 import vip.breakpoint.annotation.AccessLimit;
+import vip.breakpoint.config.ConfigCenter;
 import vip.breakpoint.enums.ResCodeEnum;
 import vip.breakpoint.exception.EasyToolException;
 import vip.breakpoint.service.AccessLimitService;
@@ -13,6 +14,8 @@ import vip.breakpoint.utils.ExploreWriteUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static vip.breakpoint.config.ConfigCenter.ENABLE_RBAC_KEY;
 
 /**
  * AccessLimit注解的处理类
@@ -63,6 +66,31 @@ public class AccessLimitHandler {
                 return false;
             }
         }
+        // 登录验证
+        if (methodAnnotation.isLogIn()) {
+            String tokenKey = TokenUtils.getTokenFromHeaderOrRequestParamOrCookie(request);
+            if (null == tokenKey || tokenKey.trim().equals("")) {
+                ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
+                        "您没有登录，无法操作");
+                return false;
+            }
+            if (!accessLimitService.checkUserLogin(tokenKey)) {
+                ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
+                        "您没有登录，无法操作");
+                return false;
+            }
+            // 是否支持 RBAC 的能力
+            Boolean enableRBAC = ConfigCenter.getValue(ENABLE_RBAC_KEY, Boolean.class);
+            if (null != enableRBAC && enableRBAC) {
+                //TODO  接口开启了RBAC的能力
+                if (!accessLimitService.checkUserRBAC(tokenKey)) {
+                    ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
+                            "您无权限，无法操作或者查看资源");
+                    return false;
+                }
+            }
+        }
+
         /*    限流防刷操作  end   */
         // 验证验证码是否正确
         if (methodAnnotation.isVerifyCode()) {
@@ -91,20 +119,6 @@ public class AccessLimitHandler {
             }
         }
         /*验证验证码是否正确  end*/
-        // 登录验证
-        if (methodAnnotation.isLogIn()) {
-            String tokenKey = TokenUtils.getTokenFromHeaderOrRequestParamOrCookie(request);
-            if (null == tokenKey || tokenKey.trim().equals("")) {
-                ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
-                        "您没有登录，无法操作");
-                return false;
-            }
-            if (!accessLimitService.checkUserLogin(tokenKey)) {
-                ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
-                        "您没有登录，无法操作");
-                return false;
-            }
-        }
         // 没有拦截 返回可以执行
         return true;
     }

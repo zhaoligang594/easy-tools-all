@@ -39,4 +39,12 @@ public interface AccessLimitService {
      * @return true or false
      */
     boolean checkUserLogin(String tokenKey);
+
+    /**
+     * 检验用户的RBAC
+     *
+     * @param tokenKey 用户token
+     * @return true or false
+     */
+    boolean checkUserRBAC(String tokenKey);
 }

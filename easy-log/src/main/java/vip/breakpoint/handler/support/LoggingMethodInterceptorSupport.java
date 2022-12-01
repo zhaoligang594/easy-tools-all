@@ -1,9 +1,11 @@
 package vip.breakpoint.handler.support;
 
+import static vip.breakpoint.config.ConfigCenter.ENABLE_LOG_IN_APP_KEY;
 import static vip.breakpoint.executor.WeblogThreadPoolExecutor.executeDoLog;
 
 import com.alibaba.fastjson.JSONObject;
 import vip.breakpoint.annotion.EasyLog;
+import vip.breakpoint.config.ConfigCenter;
 import vip.breakpoint.definition.ObjectMethodDefinition;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
@@ -51,8 +53,9 @@ public abstract class LoggingMethodInterceptorSupport {
             if (EasyStringUtils.isBlank(methodName)) {
                 methodName = method.getName();
             }
+            Boolean enableLogInApp = ConfigCenter.getValue(ENABLE_LOG_IN_APP_KEY, Boolean.class);
             SimpleDateFormat sdf = new SimpleDateFormat(easyLog.timePattern());
-            doLogBefore(methodName, args, easyLog, sdf);
+            doLogBefore(enableLogInApp, methodName, args, easyLog, sdf);
             try {
                 // 获取方法上面的注解信息
                 Annotation[] annotations = method.getAnnotations();
@@ -62,7 +65,7 @@ public abstract class LoggingMethodInterceptorSupport {
                     });
                 }
                 resVal = method.invoke(unProxyDelegate, args);
-                doLogAfter(methodName, args, resVal, easyLog, sdf);
+                doLogAfter(enableLogInApp, methodName, args, resVal, easyLog, sdf);
                 if (null != easyLoggingHandle) {
                     executeDoLog(resVal, (result) -> {
                         easyLoggingHandle.invokeAfter(method.getName(), args, result, annotations);
@@ -76,7 +79,7 @@ public abstract class LoggingMethodInterceptorSupport {
                 } else {
                     throwable = e;
                 }
-                doLogThrowable(methodName, args, easyLog, sdf, throwable);
+                doLogThrowable(enableLogInApp, methodName, args, easyLog, sdf, throwable);
                 if (null != easyLoggingHandle) {
                     easyLoggingHandle.invokeOnThrowing(method.getName(), args, method.getAnnotations(), throwable);
                 }
@@ -90,9 +93,9 @@ public abstract class LoggingMethodInterceptorSupport {
         return resVal;
     }
 
-    private void doLogThrowable(String methodName, Object[] args, EasyLog easyLog, SimpleDateFormat sdf,
+    private void doLogThrowable(Boolean enableLogInApp, String methodName, Object[] args, EasyLog easyLog, SimpleDateFormat sdf,
                                 Throwable throwable) {
-        if (easyLog.logInApp()) {
+        if (null != enableLogInApp && enableLogInApp && easyLog.logInApp()) {
             String sb = "request params:[" +
                     JSONObject.toJSONString(args) +
                     "],method:[" +
@@ -106,9 +109,9 @@ public abstract class LoggingMethodInterceptorSupport {
         }
     }
 
-    private void doLogAfter(String methodName, Object[] args, Object resVal, EasyLog easyLog,
+    private void doLogAfter(Boolean enableLogInApp, String methodName, Object[] args, Object resVal, EasyLog easyLog,
                             SimpleDateFormat sdf) {
-        if (easyLog.logInApp()) {
+        if (null != enableLogInApp && enableLogInApp && easyLog.logInApp()) {
             String sb = "response params:[" +
                     JSONObject.toJSONString(args) +
                     "],request method:[" +
@@ -122,9 +125,9 @@ public abstract class LoggingMethodInterceptorSupport {
         }
     }
 
-    private void doLogBefore(String methodName, Object[] args, EasyLog easyLog,
+    private void doLogBefore(Boolean enableLogInApp, String methodName, Object[] args, EasyLog easyLog,
                              SimpleDateFormat sdf) {
-        if (easyLog.logInApp()) {
+        if (null != enableLogInApp && enableLogInApp && easyLog.logInApp()) {
             String sb = "request params:[" +
                     JSONObject.toJSONString(args) +
                     "],request method:[" +

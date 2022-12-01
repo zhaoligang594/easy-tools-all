@@ -29,6 +29,14 @@ public @interface EnableAccessLimit {
      */
     boolean enableSwagger() default true;
 
+
+    /**
+     * 接口开启RBAC功能
+     *
+     * @return 开启或者关闭
+     */
+    boolean enableRBAC() default false;
+
     /**
      * 开启请求参数的 日期的解析
      */

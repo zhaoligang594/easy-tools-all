@@ -109,10 +109,11 @@ public class WebLimitInterceptor extends HandlerInterceptorAdapter {
                     referer = referer.substring(referer.indexOf("/"));
                 }
 
-                if (!EasyStringUtils.isBlank(referer)
+                if (EasyStringUtils.isNotBlank(referer)
                         && unCheckReferList.stream().anyMatch(referer::startsWith)
                         && uncheckURIList.stream().anyMatch(requestURI::contains)) {
                     // omit...
+                    log.info("the request invoke the interface!!");
                 } else {
                     ExploreWriteUtils.writeMessage(ResCodeEnum.ALERT, request, response,
                             "请在该接口方法上使用注解： @AccessLimit()");

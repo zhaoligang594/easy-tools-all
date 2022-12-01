@@ -51,4 +51,10 @@ public class DefaultAccessLimitServiceImpl implements AccessLimitService {
             return false;
         }
     }
+
+    @Override
+    public boolean checkUserRBAC(String tokenKey) {
+        // TODO checkUserRBAC
+        return false;
+    }
 }

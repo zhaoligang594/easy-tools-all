@@ -13,6 +13,8 @@ import vip.breakpoint.annotation.EnableAccessLimit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static vip.breakpoint.config.ConfigCenter.ENABLE_RBAC_KEY;
+
 /**
  * @author : breakpoint
  * create on 2022/10/16
@@ -52,6 +54,8 @@ public class EnableAccessAnnBeanDefinitionRegistrar implements ImportBeanDefinit
             String[] ignorePaths = attributes.getStringArray(IGNORE_PATHS_KEY);
             AnnConfig.fileSystemPaths.addAll(new ArrayList<>(Arrays.asList(fileSystemPaths)));
             AnnConfig.ignorePaths.addAll(new ArrayList<>(Arrays.asList(ignorePaths)));
+            boolean enableRBAC = attributes.getBoolean(ENABLE_RBAC_KEY);
+            ConfigCenter.addConfig(ENABLE_RBAC_KEY, enableRBAC);
         }
     }
 

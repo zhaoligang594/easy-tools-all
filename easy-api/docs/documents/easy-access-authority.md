@@ -23,9 +23,11 @@
 <dependency>
     <groupId>vip.breakpoint</groupId>
     <artifactId>easy-access-authority</artifactId>
-    <version>2.0.0</version>
+    <version>XXXXX</version>
 </dependency>
 ```
+
+建议使用最新的版本！！
 
 ### 2.2 启动类上加上注解
 

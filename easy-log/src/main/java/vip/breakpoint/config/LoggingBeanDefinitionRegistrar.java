@@ -6,9 +6,10 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.NonNull;
-import org.springframework.util.MultiValueMap;
 import vip.breakpoint.XmlEnableLoggingConfiguration;
 import vip.breakpoint.annotion.EnableEasyLogging;
+
+import static vip.breakpoint.config.ConfigCenter.ENABLE_LOG_IN_APP_KEY;
 
 /**
  * bean的注册类
@@ -28,8 +29,10 @@ public class LoggingBeanDefinitionRegistrar implements ImportBeanDefinitionRegis
         AnnotationAttributes attributes =
                 AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(annType.getName(),
                         false));
-//        if (null != attributes) {
-//            int poolSize = attributes.getNumber("poolSize");
-//        }
+        if (null != attributes) {
+            // 是否开启项目中的日志的能力
+            boolean enableLogInApp = attributes.getBoolean(ENABLE_LOG_IN_APP_KEY);
+            ConfigCenter.addConfig(ENABLE_LOG_IN_APP_KEY, enableLogInApp);
+        }
     }
 }
