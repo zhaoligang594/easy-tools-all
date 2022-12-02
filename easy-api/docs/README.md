@@ -1,4 +1,4 @@
-### 🐘 一、自定义组件API文档
+### 一、自定义组件API文档
 
 自定义组件是为Java平台语言服务的组件。
 
@@ -13,7 +13,7 @@
 7. easy-config：纯Java项目，简单的问题动态配置，用于不用重新启动项目就可以实现配置的动态更新。
 8. easy-config-spring：spring组件，可以实现动态配置变化而不需要项目的重新启动。
 
-### 🐘 二、版本
+### 二、版本
 
 #### 2.1 最新版本
 
@@ -30,7 +30,7 @@
 
 更多组件请访问：[(MVN仓库地址)](https://mvnrepository.com/artifact/vip.breakpoint)
 
-### 🐘 三、组件快速连接
+### 三、组件快速连接
 
 <font color='green' style='font-size:19px'>点击左侧导航，快速找到API文档◀️ 🐘 </font>
 
@@ -42,7 +42,7 @@
   * [6.其他公共工具](documents/others.md)
 
 
-### 🐘 四、联系方式
+### 四、联系方式
 
 <table>
   <tr>
