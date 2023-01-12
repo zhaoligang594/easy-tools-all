@@ -17,7 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class TypeConvertorUtils {
 
-    private static final Map<JavaTypeEnum, TypeConvertor<?, ?>> clazz2ConvertorMap = new ConcurrentHashMap<>();
+    private static final Map<JavaTypeEnum, TypeConvertor<?, ?>> clazz2ConvertorMap
+            = new ConcurrentHashMap<>();
 
     static {
         clazz2ConvertorMap.put(JavaTypeEnum.BOOLEAN, new BooleanTypeConvertor());

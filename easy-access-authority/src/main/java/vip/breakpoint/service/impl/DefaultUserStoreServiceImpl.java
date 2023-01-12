@@ -1,5 +1,6 @@
 package vip.breakpoint.service.impl;
 
+import vip.breakpoint.bean.LoginUserMsg;
 import vip.breakpoint.cache.LocalUserCache;
 import vip.breakpoint.exception.EasyToolException;
 import vip.breakpoint.service.UserStoreService;
@@ -17,18 +18,30 @@ import java.io.Serializable;
 public class DefaultUserStoreServiceImpl implements UserStoreService {
 
     @Override
-    public <T extends Serializable> boolean storeUserMessage(String userToken, T userMessage) throws EasyToolException {
+    public <T extends Serializable> boolean storeUserMessage(String userToken, T userMessage) {
         LocalUserCache.addUser(userToken, userMessage);
         return true;
     }
 
     @Override
-    public <T extends Serializable> T getUserMessageByUserToken(String userToken, Class<T> clazz) throws EasyToolException {
+    public <T extends Serializable> T getUserMessageByUserToken(String userToken, Class<T> clazz) {
         return LocalUserCache.getLoginUser(userToken, clazz);
     }
 
     @Override
-    public Object getUserMessageByUserToken(String userToken) throws EasyToolException {
+    public <T extends Serializable> boolean storeUserMessageV2(String userToken, LoginUserMsg<T> userMessage) {
+        LocalUserCache.addUser(userToken, userMessage);
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Serializable> LoginUserMsg<T> getUserMessageByUserTokenV2(String userToken, Class<T> clazz) {
+        return (LoginUserMsg<T>) LocalUserCache.getLoginUser(userToken, LoginUserMsg.class);
+    }
+
+    @Override
+    public Object getUserMessageByUserToken(String userToken) {
         return LocalUserCache.getLoginUser(userToken);
     }
 }

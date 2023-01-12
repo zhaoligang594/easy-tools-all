@@ -1,6 +1,6 @@
 package vip.breakpoint.remote;
 
-import vip.breakpoint.remote.bean.ConfigChangeVo;
+import vip.breakpoint.remote.bean.RemoteConfigVo;
 
 /**
  * @author : breakpoint/zlgtop@163.com
@@ -15,5 +15,5 @@ public interface ConfigChangeService {
      * @param vo 更细的配置
      * @return 是否操作成功
      */
-    boolean doChangeConfig(ConfigChangeVo vo);
+    boolean doChangeConfig(RemoteConfigVo vo);
 }

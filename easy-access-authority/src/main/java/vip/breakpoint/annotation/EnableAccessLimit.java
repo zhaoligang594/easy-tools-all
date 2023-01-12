@@ -19,7 +19,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @EnableAutoConfig
-@Import({EnableAccessBeanDefinitionRegistrar.class, EnableAccessAnnBeanDefinitionRegistrar.class, WebConfigAdapter.class})
+@Import({EnableAccessBeanDefinitionRegistrar.class,
+        EnableAccessAnnBeanDefinitionRegistrar.class,
+        WebConfigAdapter.class})
 public @interface EnableAccessLimit {
 
     /**

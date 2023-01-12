@@ -3,25 +3,15 @@ package vip.breakpoint.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import vip.breakpoint.condition.AccessLimitCondition;
-import vip.breakpoint.condition.ClickCondition;
-import vip.breakpoint.condition.UserStoreCondition;
-import vip.breakpoint.condition.VerifyCodeCondition;
+import org.springframework.core.annotation.Order;
+import vip.breakpoint.condition.*;
 import vip.breakpoint.handler.AccessLimitHandler;
 import vip.breakpoint.interceptor.WebLimitInterceptor;
 import vip.breakpoint.kaptcha.EasyKaptchaService;
 import vip.breakpoint.kaptcha.EasyKaptchaServiceImpl;
 import vip.breakpoint.kaptcha.EasyVerifyCodeController;
-import vip.breakpoint.monitor.EasyMonitorController;
-import vip.breakpoint.remote.ConfigChangeController;
-import vip.breakpoint.service.AccessLimitService;
-import vip.breakpoint.service.ClickLimitService;
-import vip.breakpoint.service.UserStoreService;
-import vip.breakpoint.service.VerifyCodeService;
-import vip.breakpoint.service.impl.DefaultAccessLimitServiceImpl;
-import vip.breakpoint.service.impl.DefaultClickLimitServiceImpl;
-import vip.breakpoint.service.impl.DefaultUserStoreServiceImpl;
-import vip.breakpoint.service.impl.DefaultVerifyCodeServiceImpl;
+import vip.breakpoint.service.*;
+import vip.breakpoint.service.impl.*;
 
 import java.util.ArrayList;
 
@@ -37,11 +27,21 @@ public class EnableAccessBeanConfig {
 
     // 获取操作限制的业务服务
     @Conditional({AccessLimitCondition.class})
+    @Order
     @Bean
     public AccessLimitService getAccessLimitService(UserStoreService userStoreService,
                                                     ClickLimitService clickLimitService,
-                                                    VerifyCodeService verifyCodeService) {
-        return new DefaultAccessLimitServiceImpl(userStoreService, clickLimitService, verifyCodeService);
+                                                    VerifyCodeService verifyCodeService,
+                                                    UserUriService userUriService) {
+        return new DefaultAccessLimitServiceImpl(userStoreService, clickLimitService,
+                verifyCodeService, userUriService);
+    }
+
+    @Conditional({UserUriCondition.class})
+    @Order
+    @Bean
+    public UserUriService getUserUriService() {
+        return new DefaultUserUriService();
     }
 
     // 用户请求的拦截器对象
@@ -55,6 +55,7 @@ public class EnableAccessBeanConfig {
 
     // 用户存储服务
     @Conditional({UserStoreCondition.class})
+    @Order
     @Bean
     public UserStoreService getUserStoreService() {
         return new DefaultUserStoreServiceImpl();
@@ -71,6 +72,7 @@ public class EnableAccessBeanConfig {
 
     // 点击限制服务
     @Conditional({ClickCondition.class})
+    @Order
     @Bean
     public ClickLimitService getClickLimitService() {
         return new DefaultClickLimitServiceImpl();
@@ -78,6 +80,7 @@ public class EnableAccessBeanConfig {
 
     // 验证码服务服务
     @Conditional({VerifyCodeCondition.class})
+    @Order
     @Bean
     public VerifyCodeService getVerifyCodeService() {
         return new DefaultVerifyCodeServiceImpl();
@@ -99,13 +102,4 @@ public class EnableAccessBeanConfig {
         return new SystemConfigController();
     }
 
-    @Bean
-    public ConfigChangeController getConfigChangeController() {
-        return new ConfigChangeController();
-    }
-
-    @Bean
-    public EasyMonitorController getEasyMonitorController() {
-        return new EasyMonitorController();
-    }
 }

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import vip.breakpoint.annotation.AccessLimit;
+import vip.breakpoint.dto.RemoteResult;
 import vip.breakpoint.dto.ResponseResult;
 
 /**
@@ -19,8 +20,7 @@ public class EasyMonitorController {
 
     @AccessLimit(isLogIn = false, needToken = true)
     @RequestMapping(value = "/status", method = RequestMethod.GET)
-    public Object status() {
-        return ResponseResult.createOK("UP");
+    public RemoteResult status() {
+        return RemoteResult.createOK("UP");
     }
-
 }

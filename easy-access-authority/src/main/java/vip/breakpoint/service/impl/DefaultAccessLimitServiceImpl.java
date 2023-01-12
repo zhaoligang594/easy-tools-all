@@ -1,11 +1,12 @@
 package vip.breakpoint.service.impl;
 
 import vip.breakpoint.annotation.AccessLimit;
+import vip.breakpoint.bean.LoginUserMsg;
+import vip.breakpoint.enums.UserRoleEnum;
 import vip.breakpoint.exception.EasyToolException;
-import vip.breakpoint.service.AccessLimitService;
-import vip.breakpoint.service.ClickLimitService;
-import vip.breakpoint.service.UserStoreService;
-import vip.breakpoint.service.VerifyCodeService;
+import vip.breakpoint.service.*;
+
+import java.io.Serializable;
 
 /**
  * 用户校验的操作
@@ -23,12 +24,16 @@ public class DefaultAccessLimitServiceImpl implements AccessLimitService {
 
     private final VerifyCodeService verifyCodeService;
 
+    private final UserUriService userUriService;
+
     public DefaultAccessLimitServiceImpl(UserStoreService userStoreService,
                                          ClickLimitService clickLimitService,
-                                         VerifyCodeService verifyCodeService) {
+                                         VerifyCodeService verifyCodeService,
+                                         UserUriService userUriService) {
         this.userStoreService = userStoreService;
         this.clickLimitService = clickLimitService;
         this.verifyCodeService = verifyCodeService;
+        this.userUriService = userUriService;
     }
 
     @Override
@@ -38,23 +43,30 @@ public class DefaultAccessLimitServiceImpl implements AccessLimitService {
     }
 
     @Override
-    public boolean isVerifyCodeCorrect(String verifyCodeKey, String reqVerifyCode) throws EasyToolException {
+    public boolean isVerifyCodeCorrect(String verifyCodeKey, String reqVerifyCode)
+            throws EasyToolException {
         return verifyCodeService.doVerifyCodeCorrect(verifyCodeKey, reqVerifyCode);
     }
 
     @Override
     public boolean checkUserLogin(String tokenKey) {
-        try {
-            Object ret = userStoreService.getUserMessageByUserToken(tokenKey);
-            return ret != null;
-        } catch (EasyToolException e) {
-            return false;
-        }
+        return null != userStoreService.getUserMessageByUserTokenV2(tokenKey, Serializable.class);
     }
 
     @Override
-    public boolean checkUserRBAC(String tokenKey) {
-        // TODO checkUserRBAC
+    public boolean checkUserRBAC(String tokenKey, String uri) {
+        // 获取到用户登录的信息
+        LoginUserMsg<Serializable> loginUserMsg =
+                userStoreService.getUserMessageByUserTokenV2(tokenKey, Serializable.class);
+        if (null != loginUserMsg) {
+            UserRoleEnum roleEnum =
+                    UserRoleEnum.getEnumByCode(loginUserMsg.getUserRoleCode());
+            if (UserRoleEnum.SUPER_ADMIN == roleEnum) {
+                return true;
+            }
+            return userUriService.checkAuthorityByRole(uri, roleEnum)
+                    || userUriService.checkAuthorityByUserId(uri, loginUserMsg.getUserIdToken());
+        }
         return false;
     }
 }

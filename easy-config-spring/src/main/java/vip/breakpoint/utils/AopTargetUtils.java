@@ -83,7 +83,7 @@ public class AopTargetUtils {
                 }
             } catch (Exception e) {
                 // occur error
-                return null;
+                return bean;
             }
         }
         return bean;

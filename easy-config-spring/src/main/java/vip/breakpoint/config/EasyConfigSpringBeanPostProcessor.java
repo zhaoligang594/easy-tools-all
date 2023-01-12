@@ -57,7 +57,8 @@ public class EasyConfigSpringBeanPostProcessor implements BeanPostProcessor {
                     // log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapperPool.addSpringBeanWrapper(beanWrapper.getValueKey(), beanWrapper);
                     List<SpringBeanWrapper> targetBeanWrappers = getTargetBeanWrappers(beanWrapper);
-                    SpringBeanWrapperPool.addSpringBeanWrapper(beanWrapper.getValueKey(), new HashSet<>(targetBeanWrappers));
+                    SpringBeanWrapperPool.addSpringBeanWrapper(beanWrapper.getValueKey(),
+                            new HashSet<>(targetBeanWrappers));
                 }
             }
             /*  @EasyConfig  */
@@ -74,7 +75,8 @@ public class EasyConfigSpringBeanPostProcessor implements BeanPostProcessor {
                     // log.info("the bean:{} added the SpringBeanWrapperPool and monitor it", beanName);
                     SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(beanWrapper.getValueKey(), beanWrapper);
                     List<SpringBeanWrapper> targetBeanWrappers = getTargetBeanWrappers(beanWrapper);
-                    SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(beanWrapper.getValueKey(), new HashSet<>(targetBeanWrappers));
+                    SpringBeanWrapperPool.addSpringBeanWrapper2BackUp(beanWrapper.getValueKey(),
+                            new HashSet<>(targetBeanWrappers));
                 }
             }
         }
@@ -106,14 +108,16 @@ public class EasyConfigSpringBeanPostProcessor implements BeanPostProcessor {
             if (AopTargetUtils.isProxyByEasyLog(bean)) {
                 try {
                     Object target = AopTargetUtils.getTargetFromEasyLogProxy(bean);
-                    SpringBeanWrapper wrapper = new SpringBeanWrapper(target, obw.getBeanName(), obw.getValueKey(),
-                            obw.getType(), obw.getValueField(), obw.isStatic());
-                    wrapper.setValueType(obw.getValueType());
-                    retList.add(wrapper);
-                    // spring proxy
-                    SpringBeanWrapper targetBeanWrapper = getTargetBeanWrapper(wrapper);
-                    if (null != targetBeanWrapper) {
-                        retList.add(targetBeanWrapper);
+                    if (null != target) {
+                        SpringBeanWrapper wrapper = new SpringBeanWrapper(target, obw.getBeanName(), obw.getValueKey(),
+                                obw.getType(), obw.getValueField(), obw.isStatic());
+                        wrapper.setValueType(obw.getValueType());
+                        retList.add(wrapper);
+                        // spring proxy
+                        SpringBeanWrapper targetBeanWrapper = getTargetBeanWrapper(wrapper);
+                        if (null != targetBeanWrapper) {
+                            retList.add(targetBeanWrapper);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

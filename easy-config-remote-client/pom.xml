@@ -2,74 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
     <groupId>vip.breakpoint</groupId>
-    <artifactId>easy-tool-utils</artifactId>
+    <artifactId>easy-config-remote-client</artifactId>
     <version>2.1.0.dev</version>
-    <name>easy-tool-utils</name>
+    <name>easy-config-remote-client</name>
     <packaging>jar</packaging>
-
+    <modelVersion>4.0.0</modelVersion>
     <url>https://github.com/zhaoligang594/easy-tools-all</url>
-
+    <description>配置中心的客户端，实现配置中心集中化。</description>
     <properties>
         <easy.version>2.1.0.dev</easy.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-version>5.2.22.RELEASE</spring-version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
     </properties>
-
-    <description>A Tool for Excel</description>
-
-    <dependencies>
-        <dependency>
-            <groupId>vip.breakpoint</groupId>
-            <artifactId>easy-core</artifactId>
-            <version>${easy.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <!--   fastjson2     -->
-        <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>2.0.12</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2-extension -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2-extension</artifactId>
-            <version>2.0.12</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.14.0-rc1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.14.0-rc1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.14.0-rc1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <licenses>
         <license>
@@ -114,6 +63,59 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <dependencies>
+        <!--   dependency tools    -->
+
+        <dependency>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-access-authority</artifactId>
+            <version>${easy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-tool-utils</artifactId>
+            <version>${easy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>vip.breakpoint</groupId>
+            <artifactId>easy-config-spring</artifactId>
+            <version>${easy.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <plugins>
@@ -186,4 +188,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

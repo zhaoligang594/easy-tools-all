@@ -82,8 +82,7 @@ public class AccessLimitHandler {
             // 是否支持 RBAC 的能力
             Boolean enableRBAC = ConfigCenter.getValue(ENABLE_RBAC_KEY, Boolean.class);
             if (null != enableRBAC && enableRBAC) {
-                //TODO  接口开启了RBAC的能力
-                if (!accessLimitService.checkUserRBAC(tokenKey)) {
+                if (!accessLimitService.checkUserRBAC(tokenKey, request.getRequestURI())) {
                     ExploreWriteUtils.writeMessage(ResCodeEnum.FAIL, request, response,
                             "您无权限，无法操作或者查看资源");
                     return false;

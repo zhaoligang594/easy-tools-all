@@ -7,7 +7,7 @@ package vip.breakpoint.remote.bean;
  * create on 2022/11/29
  * 欢迎关注公众号:代码废柴
  */
-public class ConfigChangeVo {
+public class RemoteConfigVo {
 
     /**
      * 配置的 key

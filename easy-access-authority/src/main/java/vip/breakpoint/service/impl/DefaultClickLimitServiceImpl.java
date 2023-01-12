@@ -18,7 +18,8 @@ public class DefaultClickLimitServiceImpl implements ClickLimitService {
     }
 
     @Override
-    public boolean isCanAccessByClickLimit(String requestURI, String ip, String host, AccessLimit methodAnnotation) {
+    public boolean isCanAccessByClickLimit(String requestURI, String ip, String host,
+                                           AccessLimit methodAnnotation) {
         boolean ret = true;
         String clickKey = getClickKey(requestURI, ip, host);
         ClickIntervalInfo intervalInfo = UserClickCache.get(clickKey);

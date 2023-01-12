@@ -7,7 +7,7 @@ import vip.breakpoint.listener.ConfigChangeListenerPool;
 import vip.breakpoint.log.WebLogFactory;
 import vip.breakpoint.log.adaptor.Logger;
 import vip.breakpoint.remote.ConfigChangeService;
-import vip.breakpoint.remote.bean.ConfigChangeVo;
+import vip.breakpoint.remote.bean.RemoteConfigVo;
 import vip.breakpoint.utils.EasyStringUtils;
 
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class ConfigChangeServiceImpl implements ConfigChangeService {
 
 
     @Override
-    public boolean doChangeConfig(ConfigChangeVo vo) {
+    public boolean doChangeConfig(RemoteConfigVo vo) {
         try {
             if (EasyStringUtils.isBlank(vo.getConfigKey()) || EasyStringUtils.isBlank(vo.getConfigValue())) {
                 return false;

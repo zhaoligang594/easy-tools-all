@@ -44,7 +44,8 @@ public interface AccessLimitService {
      * 检验用户的RBAC
      *
      * @param tokenKey 用户token
+     * @param uri      请求的资源路径
      * @return true or false
      */
-    boolean checkUserRBAC(String tokenKey);
+    boolean checkUserRBAC(String tokenKey, String uri);
 }
