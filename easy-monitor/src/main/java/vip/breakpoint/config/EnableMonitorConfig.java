@@ -20,7 +20,7 @@ import vip.breakpoint.service.impl.RemoteConfigServiceImpl;
  * 欢迎关注公众号:代码废柴
  */
 @Configuration
-public class EnableAutoRemoteConfig {
+public class EnableMonitorConfig {
 
 
     // remote app monitor

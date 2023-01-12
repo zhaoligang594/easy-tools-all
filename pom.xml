@@ -17,7 +17,7 @@
         <module>easy-log</module>
         <module>easy-config</module>
         <module>easy-config-spring</module>
-        <module>easy-config-remote-client</module>
+        <module>easy-monitor</module>
     </modules>
 
     <packaging>pom</packaging>
