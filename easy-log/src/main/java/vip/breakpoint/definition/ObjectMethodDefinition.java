@@ -37,7 +37,7 @@ public class ObjectMethodDefinition {
     }
 
     public boolean isShouldProxy() {
-        return method2AnnMap.size() > 0;
+        return !method2AnnMap.isEmpty();
     }
 
     public void addCandidateMethods(Map<Method, EasyLog> method2AnnMap) {

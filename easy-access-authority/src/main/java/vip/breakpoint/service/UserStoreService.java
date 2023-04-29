@@ -52,7 +52,8 @@ public interface UserStoreService {
      *
      * @param userToken token
      * @param <T>       包装类
-     * @return LoginUserMsg<T> 返回用户的登录信息
+     * @param clazz     类型
+     * @return LoginUserMsg 返回用户的登录信息
      */
     <T extends Serializable> LoginUserMsg<T> getUserMessageByUserTokenV2(String userToken, Class<T> clazz);
 

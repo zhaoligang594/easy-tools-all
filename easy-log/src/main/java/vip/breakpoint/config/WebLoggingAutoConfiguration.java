@@ -1,7 +1,9 @@
 package vip.breakpoint.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import vip.breakpoint.condition.LoggingBPPCondition;
 import vip.breakpoint.process.LoggingBeanPostProcessor;
 
 /**
@@ -11,7 +13,8 @@ import vip.breakpoint.process.LoggingBeanPostProcessor;
 @Configuration
 public class WebLoggingAutoConfiguration {
 
-    @Bean
+    @Conditional(LoggingBPPCondition.class)
+    @Bean("loggingBeanPostProcessor")
     public static LoggingBeanPostProcessor loggingBeanPostProcessor() {
         return new LoggingBeanPostProcessor();
     }

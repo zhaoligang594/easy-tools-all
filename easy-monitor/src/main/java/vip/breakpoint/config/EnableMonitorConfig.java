@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import vip.breakpoint.condition.RestTemplateCondition;
-import vip.breakpoint.controller.ConfigChangeController;
-import vip.breakpoint.monitor.EasyMonitorController;
+import vip.breakpoint.controller.EasyMonitorController;
 import vip.breakpoint.remote.RemoteService;
 import vip.breakpoint.remote.impl.RemoteServiceImpl;
 import vip.breakpoint.service.LocalConfigService;
@@ -22,16 +21,10 @@ import vip.breakpoint.service.impl.RemoteConfigServiceImpl;
 @Configuration
 public class EnableMonitorConfig {
 
-
     // remote app monitor
     @Bean
     public EasyMonitorController getEasyMonitorController() {
         return new EasyMonitorController();
-    }
-
-    @Bean
-    public ConfigChangeController getConfigChangeController() {
-        return new ConfigChangeController();
     }
 
     @Conditional({RestTemplateCondition.class})

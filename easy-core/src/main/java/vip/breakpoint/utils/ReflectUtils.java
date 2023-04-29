@@ -13,18 +13,14 @@ import java.util.List;
  */
 public class ReflectUtils {
 
-    // 获取一个类里面左右的方法
+    // 获取一个类里面所有的方法
     public static <T> List<Method> getMethodsFromClazz(Class<T> clazz) {
         List<Method> res = new ArrayList<Method>();
-        Class<? super T> superclass = clazz.getSuperclass();
-//        if (null != superclass && !superclass.isInterface()) {
-//            // 将所有的 ExcelField 加入
-//            res.addAll(getMethodsFromClazz(superclass));
-//        }
-        if (!clazz.isInterface()) {
-            //Field[] declaredFields = clazz.getDeclaredFields();
+        if (null != clazz && !clazz.isInterface()) {
             Method[] methods = clazz.getMethods();
             res.addAll(new ArrayList<>(Arrays.asList(methods)));
+            Class<? super T> superclass = clazz.getSuperclass();
+            res.addAll(getMethodsFromClazz(superclass));
         }
         return res;
     }

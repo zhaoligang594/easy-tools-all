@@ -17,7 +17,8 @@ public class ResponseUtils {
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token,token,is");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Access-Control-Expose-Headers", "*");
-        response.setHeader("Access-Control-Request-Headers", "Origin, X-Requested-With, content-Type, Accept, Authorization");
+        response.setHeader("Access-Control-Request-Headers", "Origin, X-Requested-With, " +
+                "content-Type, Accept, Authorization");
         response.setCharacterEncoding("UTF-8");
     }
 }

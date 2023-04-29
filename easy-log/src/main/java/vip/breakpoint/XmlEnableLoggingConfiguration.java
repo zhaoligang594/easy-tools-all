@@ -1,6 +1,8 @@
 package vip.breakpoint;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -22,8 +24,12 @@ public class XmlEnableLoggingConfiguration implements BeanDefinitionRegistryPost
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)
             throws BeansException {
-
-        registry.registerBeanDefinition(LoggingBeanPostProcessor.class.getName(),
-                new RootBeanDefinition(LoggingBeanPostProcessor.class));
+        String beanName = "loggingBeanPostProcessor";
+        try {
+            registry.getBeanDefinition(beanName);
+        } catch (NoSuchBeanDefinitionException e) {
+            registry.registerBeanDefinition(LoggingBeanPostProcessor.class.getName(),
+                    new RootBeanDefinition(LoggingBeanPostProcessor.class));
+        }
     }
 }

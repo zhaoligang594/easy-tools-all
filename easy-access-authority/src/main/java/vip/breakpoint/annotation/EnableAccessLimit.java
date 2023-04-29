@@ -41,6 +41,8 @@ public @interface EnableAccessLimit {
 
     /**
      * 开启请求参数的 日期的解析
+     *
+     * @return 返回是否解析日期
      */
     boolean enableDateParamParser() default true;
 

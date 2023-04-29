@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <groupId>vip.breakpoint</groupId>
-    <artifactId>easy-config-remote-client</artifactId>
+    <artifactId>easy-monitor</artifactId>
     <version>2.1.0.dev</version>
-    <name>easy-config-remote-client</name>
+    <name>easy-monitor</name>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <url>https://github.com/zhaoligang594/easy-tools-all</url>
-    <description>配置中心的客户端，实现配置中心集中化。</description>
+    <description>应用的监控组件</description>
     <properties>
         <easy.version>2.1.0.dev</easy.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +43,7 @@
                 <role>Software Developer Engineer</role>
                 <role>Java Research Developer Engineer</role>
             </roles>
-            <organization>Meituan tech company, Beijing, China</organization>
+            <organization>Alibaba tech company, Hang Zhou, China</organization>
             <timezone>+8:00</timezone>
         </developer>
     </developers>

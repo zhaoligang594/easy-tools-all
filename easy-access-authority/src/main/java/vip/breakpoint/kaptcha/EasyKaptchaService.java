@@ -18,6 +18,7 @@ public interface EasyKaptchaService {
      *
      * @param verifySize 验证码的长度
      * @return 返回验证码的数据
+     * @throws IOException 抛出异常
      */
     Map<String, String> generateVerifyCode(int verifySize) throws IOException;
 }

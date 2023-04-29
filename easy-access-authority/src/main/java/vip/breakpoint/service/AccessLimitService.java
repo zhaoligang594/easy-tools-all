@@ -29,6 +29,7 @@ public interface AccessLimitService {
      * @param verifyCodeKey 验证码的KEY
      * @param reqVerifyCode 用户传递过来的验证信息
      * @return true or false
+     * @throws EasyToolException 异常
      */
     boolean isVerifyCodeCorrect(String verifyCodeKey, String reqVerifyCode) throws EasyToolException;
 

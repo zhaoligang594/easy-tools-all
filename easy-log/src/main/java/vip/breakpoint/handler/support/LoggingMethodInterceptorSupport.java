@@ -43,7 +43,7 @@ public abstract class LoggingMethodInterceptorSupport {
     }
 
     // real invoke process
-    protected Object invokeMethod(Object proxy, Method method, Object[] args) throws Throwable {
+    protected Object executeMethod(Object proxy, Method method, Object[] args) throws Throwable {
         // ret value
         Object resVal;
         // 查看是否需要进行被处理
